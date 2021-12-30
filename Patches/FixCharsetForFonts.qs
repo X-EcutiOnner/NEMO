@@ -94,7 +94,7 @@ function FixCharsetForFonts()
 
     // Allocate space for newCharSetTable and codes
     var size = ins.hexlength();
-    var free = exe.findZeros(size + 4);
+    var free = alloc.find(size + 4);
     if (free === -1)
         return "Failed in Step 3 - No enough free space";
 
@@ -106,7 +106,7 @@ function FixCharsetForFonts()
 
     code = " E9" + jump.packToHex(4) + " 90 90";
 
-    exe.insert(free, size + 4, ins, PTYPE_HEX);
+    pe.insertHexAt(free, size + 4, ins);
     pe.replaceHex(offset, code);
 
     return true;
