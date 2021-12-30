@@ -28,7 +28,7 @@ function hooks_addPostEndHook(patchAddr, text, vars)
         "_ret:",
         asm.hexToAsm(matchObj.retCode));
 
-    var data = exe.insertAsmText(text, vars);
+    var data = pe.insertAsmText(text, vars);
     var free = data[0]
 
     consoleLog("hooks.addPostEndHook: add jump to own code");
@@ -211,7 +211,7 @@ function hooks_initHookInternal(offset, matchFunc, storageKey, data)
     {
         if (typeof(vars) === "undefined")
             vars = {};
-        var asmObj = exe.insertAsmTextObj(text, vars, 5);
+        var asmObj = pe.insertAsmTextObj(text, vars, 5);
         asmObj.patch = patch.getName();
         if (typeof(weight) === "undefined")
             asmObj.weight = 10000;
@@ -272,7 +272,7 @@ function hooks_applyFinal(obj, dryRun)
     function entryToAsm(obj)
     {
         if (typeof(obj.code) === "undefined")
-            return exe.insertAsmTextObj(obj.text, obj.vars, 5, dryRun);
+            return pe.insertAsmTextObj(obj.text, obj.vars, 5, dryRun);
         else
             return obj;
     }
@@ -326,7 +326,7 @@ function hooks_applyFinal(obj, dryRun)
                     break;
                 case hooks.jmpTypes.IMPORT:
                     var freeVa = pe.rawToVa(obj.allEntries[0].free);
-                    var importOffset = exe.insertDWord(freeVa);
+                    var importOffset = pe.insertDWord(freeVa);
                     obj.importOffsetPatchedVa = pe.rawToVa(importOffset);
                     pe.directReplaceDWord(obj.patchAddr, obj.importOffsetPatchedVa);
                     break;
@@ -345,7 +345,7 @@ function hooks_applyFinal(obj, dryRun)
                     if (typeof(srcObj.importOffsetPatchedVa) === "undefined")
                     {
                         var freeVa = pe.rawToVa(srcObj.allEntries[0].free);
-                        var importOffset = exe.insertDWord(freeVa);
+                        var importOffset = pe.insertDWord(freeVa);
                         srcObj.importOffsetPatchedVa = pe.rawToVa(importOffset);
                     }
                     pe.directReplaceDWord(obj.patchAddr, srcObj.importOffsetPatchedVa);
@@ -378,7 +378,7 @@ function hooks_applyFinal(obj, dryRun)
 
 function hooks_applyAllFinal()
 {
-    storage.zero = exe.findZeros(0x1000);
+    storage.zero = alloc.find(0x1000);
 /*
     // alternative mapping
     storage.zero = pe.sectionRaw(DIFF)[1] - 1024;
