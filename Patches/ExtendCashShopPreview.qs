@@ -109,7 +109,7 @@ function ExtendCashShopPreview()
         "stolenCode": stolenCode
     };
 
-    var data = exe.insertAsmFile("ExtendCashShopPreview_" + name, vars);
+    var data = pe.insertAsmFile("ExtendCashShopPreview_" + name, vars);
 
     consoleLog("add jump to own code");
     pe.setJmpRaw(offset1, data.free);
