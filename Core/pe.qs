@@ -607,6 +607,120 @@ function pe_insertAt(insertAddr, size, code)
     return alloc.reserve(insertAddr, size);
 }
 
+function pe_insertAsmText(commands, vars, freeSpace)
+{
+    if (typeof(freeSpace) === "undefined")
+        freeSpace = 0;
+    var size = asm.textToHexLength(commands, vars) + freeSpace;
+    var free = alloc.find(size);
+    if (free === -1)
+        fatalError("Failed in pe.insertAsmText - Not enough free space");
+
+    var obj = asm.textToObjRaw(free, commands, vars);
+    for (var f = 0; f < freeSpace; f ++)
+        obj = obj + " 00";
+    pe.insertHexAt(free, obj.code);
+    return [free, obj.code, obj.vars];
+}
+
+function pe_insertAsmTextObj(commands, vars, freeSpace, dryRun)
+{
+    if (typeof(freeSpace) === "undefined")
+        freeSpace = 0;
+    if (typeof(dryRun) === "undefined")
+        dryRun = false;
+    var size = asm.textToHexLength(commands, vars) + freeSpace;
+    if (patch.getState() !== 2)
+    {
+        var free = alloc.find(size);
+        if (free === -1)
+            fatalError("Failed in pe.insertAsmTextObj - Not enough free space");
+    }
+    else
+    {
+        if (storage.zero == 0)
+            fatalError("Failed in pe.insertAsmTextObj - Not enough free space");
+        free = storage.zero;
+    }
+
+    var obj = asm.textToObjRaw(free, commands, vars);
+    for (var f = 0; f < freeSpace; f ++)
+        obj = obj + " 00";
+
+    if (dryRun !== true)
+    {
+        if (patch.getState() !== 2)
+        {
+            pe.insertHexAt(free, obj.code);
+        }
+        else
+        {
+            pe.directReplace(free, obj.code);
+            storage.zero = storage.zero + size;
+        }
+    }
+    obj.free = free;
+    obj.isFinal = false;
+    return obj;
+}
+
+function pe_insertAsmFile(fileName, vars, freeSpace, dryRun)
+{
+    var commands = asm.load(fileName);
+    return pe_insertAsmTextObj(commands, vars, freeSpace, dryRun);
+}
+
+function pe_insertDWord(value, dryRun)
+{
+    if (typeof(dryRun) === "undefined")
+        dryRun = false;
+
+    var size = 4;
+    if (patch.getState() !== 2)
+    {
+        var free = alloc.find(size);
+        if (free === -1)
+            fatalError("Failed in pe.insertDWord - Not enough free space");
+    }
+    else
+    {
+        if (storage.zero == 0)
+            fatalError("Failed in pe.insertDWord - Not enough free space");
+        free = storage.zero;
+    }
+    var obj = asm.textToObjRaw(free, "long " + value, {});
+    if (dryRun !== true)
+    {
+        if (patch.getState() !== 2)
+        {
+            pe.insertHexAt(free, obj.code);
+        }
+        else
+        {
+            pe.directReplace(free, obj.code);
+            storage.zero = storage.zero + size;
+        }
+    }
+    return free;
+}
+
+function pe_insertHex(value)
+{
+    var size = value.hexlength();
+    var free = alloc.find(size);
+    if (free === -1)
+        fatalError("Failed in pe.insertHex - Not enough free space");
+
+    var res = alloc.reserve(free, size);
+    if (res === false)
+        return false;
+    res = pe.replaceHex(free, value);
+    if (res === false)
+        return false;
+
+    return free;
+}
+
 function registerPe()
 {
     pe.importTable = undefined;
@@ -662,4 +776,9 @@ function registerPe()
     pe.setShortJmpRaw = pe_setShortJmpRaw;
     pe.insertAt = pe_insertAt;
     pe.insertHexAt = pe_insertHexAt;
+    pe.insertAsmText = pe_insertAsmText;
+    pe.insertAsmTextObj = pe_insertAsmTextObj;
+    pe.insertAsmFile = pe_insertAsmFile;
+    pe.insertDWord = pe_insertDWord;
+    pe.insertHex = pe_insertHex;
 }

@@ -528,6 +528,96 @@ On success return true.
 
 On error return false.
 
+### pe.insertAsmText
+
+``pe.insertAsmText(commands, vars, freeSpace)``
+
+Insert assembler code in free block in binary.
+
+| Argument | Description |
+| -------- | ----------- |
+| commands  | Assembler text with commands |
+| vars      | Variables for assembler text |
+| freeSpace | How many bytes reserve after asm code. If freeSpace missing then reserved 0 bytes |
+
+If fail trigger exception.
+
+If success, return array.
+
+Array index 0 contains raw address where bytes was stored.
+
+Array index 1 contains bytes sequence.
+
+Array index 2 contains variables generated from assembler.
+
+### pe.insertAsmTextObj
+
+``pe.insertAsmTextObj(commands, vars, freeSpace, dryRun)``
+
+Insert assembler code in free block in binary.
+
+| Argument | Description |
+| -------- | ----------- |
+| commands  | Assembler text with commands |
+| vars      | Variables for assembler text |
+| freeSpace | How many bytes reserve after asm code. If freeSpace missing then reserved 0 bytes |
+| dryRun    | If true, not run actual insertion of asm code. If missing dryRun considered false |
+
+If fail trigger exception.
+
+If success, return object.
+
+| Field    | Description |
+| -------- | ----------- |
+| bytes    | Bytes sequence |
+| code     | Bytes in hex format |
+| vars     | Variables |
+| free     | Raw address where block was inserted |
+
+### pe.insertAsmFile
+
+``pe.insertAsmFile(fileName, vars, freeSpace, dryRun)``
+
+Insert assembler code from given file name in free block in binary.
+
+| Argument | Description |
+| -------- | ----------- |
+| fileName | File name with assembler code |
+| vars     | Variables for assembler text |
+| freeSpace | How many bytes reserve after asm code. If freeSpace missing then reserved 0 bytes |
+| dryRun   | If true, not run actual insertion of asm code. If missing dryRun considered false |
+
+File with code loaded by mask: "Patches/" + fileName + ".asm"
+
+If fail trigger exception.
+
+If success, return object.
+
+| Field    | Description |
+| -------- | ----------- |
+| bytes    | Bytes sequence |
+| code     | Bytes in hex format |
+| vars     | Variables |
+| free     | Raw address where block was inserted |
+
+### pe.insertDWord
+
+``pe.insertDWord(value, dryRun)``
+
+Insert given dword value into free block in binary.
+
+Return raw address where dword was inserter.
+
+### pe.insertHex
+
+``pe.insertHex(value)``
+
+Allocate space and insert given hex value.
+
+Return raw address of inserted value.
+
+On error throw exception.
+
 ### pe.setValue
 
 ``pe.setValue(offset, offset2, value)``
