@@ -79,7 +79,7 @@ function UseDefaultBrowser()
 
     //Step 2d - Find free space to inject our code
     var size = code.hexlength();
-    var free = exe.findZeros(size + 4);
+    var free = alloc.find(size + 4);
     if (free === -1)
         return "Failed in Step 2d - Not enough free space.";
 
@@ -92,7 +92,7 @@ function UseDefaultBrowser()
       ;
 
     pe.replaceHex(coffset, call);
-    exe.insert(free, size+4, code, PTYPE_HEX);
+    pe.insertHexAt(free, size + 4, code);
 
     //Step 3a - Find offset where calling ROWebBrowser
     code =
