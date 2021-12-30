@@ -178,7 +178,7 @@ function RouletteLimitChanger(tableId, varName, text, def)
                 "jmpAddr": pe.fetchRelativeValue(offset, obj.jmpAddrOffset),
                 "value": newValue
             };
-            var data = exe.insertAsmFile("RoulletteLimit1", vars);
+            var data = pe.insertAsmFile("RoulletteLimit1", vars);
         }
         else
         {
@@ -189,7 +189,7 @@ function RouletteLimitChanger(tableId, varName, text, def)
                 "continueAddr": continueAddr,
                 "value": newValue
             };
-            var data = exe.insertAsmFile("RoulletteLimit2", vars);
+            var data = pe.insertAsmFile("RoulletteLimit2", vars);
         }
 
         consoleLog("add jump to own code");
