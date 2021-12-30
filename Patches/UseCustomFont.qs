@@ -24,12 +24,12 @@ function UseCustomFont()
   //Step 2c - Otherwise Insert the font in the xdiff section
   if (free === -1)
   {
-    free = exe.findZeros(newFont.length + 1);
+    free = alloc.find(newFont.length + 1);
 
     if (free === -1)
       return "Failed in Step 2 - Not enough free space";
 
-    exe.insert(free, newFont.length + 1, '$newFont', PTYPE_STRING);
+    pe.insertAt(free, newFont.length + 1, newFont);
   }
 
   var freeRva = pe.rawToVa(free);
