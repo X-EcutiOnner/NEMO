@@ -143,14 +143,14 @@ function PacketEncryptionKeys(varname, index)
 
     //Step 4b - Allocate space for code.
     var csize = code.hexlength();
-    var free = exe.findZeros(csize);
+    var free = alloc.find(csize);
     if (free === -1)
       return "Failed in Step 4 - Not Enough Free Space";
 
     PEncInsert = pe.rawToVa(free);
 
     //Step 4c - Insert it
-    exe.insert(free, csize, code, PTYPE_HEX);
+    pe.insertHexAt(free, csize, code);
 
     //Step 4d - Hijack info.ovrAddr to jmp to PEncInsert
     code = " E9" + (PEncInsert - pe.rawToVa(info.ovrAddr + 5)).packToHex(4);//JMP PEncInsert
@@ -242,7 +242,7 @@ function _PacketEncryptionKeys(index)
   var csize = code.hexlength();
 
   //Srep 2d - Insert the code
-  exe.insert(pe.vaToRaw(PEncInsert), csize, code, PTYPE_HEX);
+  pe.insertHexAt(pe.vaToRaw(PEncInsert), csize, code);
 
   //Step 2e - Hijack info.ovrAddr to jmp to PEncInsert
   code = " E9" + (PEncInsert - pe.rawToVa(info.ovrAddr + 5)).packToHex(4);//JMP PEncInsert
