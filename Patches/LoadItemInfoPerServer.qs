@@ -168,7 +168,7 @@ function LoadItemInfoPerServer()
   ;
 
   //Step 6b - Allocate space for it
-  var free = exe.findZeros(code.hexlength());
+  var free = alloc.find(code.hexlength());
   if (free === -1)
     return "Failed in Step 6 - Not enough space available";
 
@@ -187,7 +187,7 @@ function LoadItemInfoPerServer()
   pe.replaceHex(mainInject, "E9" + offset.packToHex(4));
 
   //Step 6e - Inject to allocated space
-  exe.insert(free, code.hexlength(), code, PTYPE_HEX);
+  pe.insertHexAt(free, code.hexlength(), code);
 
   //Step 7a - Prep code for calling the iteminfo loader upon server select
   code =
@@ -208,7 +208,7 @@ function LoadItemInfoPerServer()
     code = code.replace("E8", "FF 15");
 
   //Step 7b - Allocate space for it
-  free = exe.findZeros(code.hexlength());
+  free = alloc.find(code.hexlength());
   if (free === -1)
     return "Failed in Step 7 - Not enough space available";
 
@@ -241,7 +241,7 @@ function LoadItemInfoPerServer()
     pe.replaceByte(allocInject + 5, 0x90);
 
   //Step 7e - Inject to allocated space
-  exe.insert(free, code.hexlength(), code, PTYPE_HEX);
+  pe.insertHexAt(free, code.hexlength(), code);
 
   return true;
 }
