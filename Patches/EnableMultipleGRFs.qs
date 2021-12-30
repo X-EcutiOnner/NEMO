@@ -177,7 +177,7 @@ function EnableMultipleGRFs()
     }
 
     //Step 5c - Find free space to inject our code
-    var free = exe.findZeros(size + 8);
+    var free = alloc.find(size + 8);
     if (free === -1)
         return "Failed in Step 3 - Not enough free space";
 
@@ -217,7 +217,7 @@ function EnableMultipleGRFs()
     code = code + " 00".repeat(8);
 
     //Step 6 - Insert everything.
-    exe.insert(free, size + 8, code, PTYPE_HEX);
+    pe.insertHexAt(free, size + 8, code);
 
     //Step 7 - Find offset of rdata.grf (if present zero it out)
     offset = pe.stringRaw("rdata.grf");
