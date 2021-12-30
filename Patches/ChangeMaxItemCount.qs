@@ -33,13 +33,12 @@ function ChangeMaxItemCount(value)
       var newString = "/" + value  ;
 
       //Step 1b - Allocate space for New Format String.
-      var free = exe.findZeros(newString.length);
+      var free = alloc.find(newString.length);
       if (free === -1)
         return "Failed in Step 1 - Not enough free space";
 
       //Step 1c - Insert the new format string
-      exe.insert(free, newString.length, newString, PTYPE_STRING);
-
+      pe.insertAt(free, newString.length, newString);
 
       //Step 2 - Find the max item count.
       var code =
