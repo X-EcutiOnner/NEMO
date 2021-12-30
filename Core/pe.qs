@@ -618,7 +618,7 @@ function pe_insertAsmText(commands, vars, freeSpace)
 
     var obj = asm.textToObjRaw(free, commands, vars);
     for (var f = 0; f < freeSpace; f ++)
-        obj = obj + " 00";
+        obj.code = obj.code + " 00";
     alloc.reserve(free, size);
     pe.replaceHex(free, obj.code);
 
@@ -647,7 +647,7 @@ function pe_insertAsmTextObj(commands, vars, freeSpace, dryRun)
 
     var obj = asm.textToObjRaw(free, commands, vars);
     for (var f = 0; f < freeSpace; f ++)
-        obj = obj + " 00";
+        obj.code = obj.code + " 00";
 
     if (dryRun !== true)
     {
