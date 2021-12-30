@@ -55,11 +55,11 @@ function SendClientFlags()
     }
 
     consoleLog("replace g_client_version usage");
-    var free = exe.findZeros(4);
+    var free = alloc.find(4);
     if (free === -1)
         return "Not enough free space";
 
-    exe.insert(free, 4, flags.packToHex(4), PTYPE_HEX);
+    pe.insertHexAt(free, 4, flags.packToHex(4));
     var freeVaHex = (pe.rawToVa(free)).packToHex(4);
 
     for (var i = 0; i < offsets.length; i ++)
