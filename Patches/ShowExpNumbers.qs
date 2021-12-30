@@ -188,7 +188,7 @@ function ShowExpNumbers()
 
   //Step 4d - Allocate space for it
   var size = code.hexlength();
-  var free = exe.findZeros(size);
+  var free = alloc.find(size);
   if (free === -1)
     return "Failed in Step 4 - Not enough free space";
 
@@ -207,7 +207,7 @@ function ShowExpNumbers()
   code = ReplaceVarHex(code, 7, pe.rawToVa(injectAddr + 5) - (freeRva + size));
 
   //Step 5a - Insert the new code into the allocated area
-  exe.insert(free, size, code, PTYPE_HEX);
+  pe.insertHexAt(free, size, code);
 
   //Step 5b - Replace the CALL at injectAddr with a JMP to our new code.
   pe.replaceHex(injectAddr, "E9" + (freeRva - pe.rawToVa(injectAddr + 5)).packToHex(4));
