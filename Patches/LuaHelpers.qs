@@ -458,7 +458,7 @@ function InjectLuaFiles(origFile, nameList, free, loadBefore)
     consoleLog("Set own code into exe");
     if (typeof(free) === "undefined" || free === -1)
     {
-        var obj = exe.insertAsmTextObj(text, vars);
+        var obj = pe.insertAsmTextObj(text, vars);
         var free = obj.free;
     }
     else
