@@ -48,10 +48,10 @@ function MoveShieldToTopPatch(floatAddr, offset, offset2, patchAddrOffset, conti
         "FF E0" +                // jmp eax
         "";
 
-    var free = exe.findZeros(code.hexlength());
+    var free = alloc.find(code.hexlength());
     if (free === -1)
         throw "Not enough free space";
-    exe.insert(free, code.hexlength(), code, PTYPE_HEX);
+    pe.insertHexAt(free, code.hexlength(), code);
 
     // step 5 - add jump to own code
     pe.setJmpRaw(patchAddr, free);
@@ -60,13 +60,13 @@ function MoveShieldToTopPatch(floatAddr, offset, offset2, patchAddrOffset, conti
 function MoveShieldToTop()
 {
     // step 1 -  add float number
-    var floatAddr = exe.findZeros(4);
+    var floatAddr = alloc.find(4);
     if (floatAddr === -1)
         return "Not enough free space";
     var code =
 //        floatToHex(0.0005);
         floatToHex(0.001);
-    exe.insert(floatAddr, 4, code, PTYPE_HEX);
+    pe.insertHexAt(floatAddr, 4, code);
     floatAddr = pe.rawToVa(floatAddr);
 
     // step 2 - search block for patching in CPc_RenderBodyLayer
