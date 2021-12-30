@@ -117,7 +117,7 @@ function EnableDNSSupport()
     var size = dnscode.hexlength();
 
     //Step 3c - Allocate space for it
-    var free = exe.findZeros(size); // Free space of enable multiple grf + space for dns support
+    var free = alloc.find(size); // Free space of enable multiple grf + space for dns support
     if (free === -1)
         return "Failed in Step 3 - Not enough free space";
 
@@ -149,7 +149,7 @@ function EnableDNSSupport()
     dnscode = ReplaceVarHex(dnscode, 8, offset);
 
     //Step 5 - Insert the code
-    exe.insert(free, size, dnscode, PTYPE_HEX);
+    pe.insertHexAt(free, size, dnscode);
 
     return true;
 }
