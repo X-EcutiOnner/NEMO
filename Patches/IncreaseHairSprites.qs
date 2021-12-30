@@ -169,7 +169,7 @@ function IncreaseHairSprites()
     patchOffset = tableCodeOffset + patchOffset;
 
     consoleLog("step 6 - allocate strings with hair id");
-    var free = exe.findZeros(bufSize);
+    var free = alloc.find(bufSize);
     if (free === -1)
         return "Failed in step 6 - not enough free space";
     var data = "";
@@ -180,7 +180,7 @@ function IncreaseHairSprites()
     if (data.hexlength() !== bufSize)
         return "Failed in step 6 - wrong allocated buffer";
 
-    exe.insert(free, bufSize, data, PTYPE_HEX);
+    pe.insertHexAt(free, bufSize, data);
     var tableStrings = pe.rawToVa(free);  // index = id * bytesPerString
 
     consoleLog("step 7 - search female hair table and location for jump");
