@@ -36,12 +36,7 @@ function ChangeItemInfo()
         return "Patch Cancelled - New value is same as old";
 
     //Step 2b - Allocate space for the new name
-    var free = alloc.find(myfile.length);
-    if (free === -1)
-        return "Failed in Step 2 - Not enough free space";
-
-    //Step 3 - Insert the new name and replace the iteminfo reference
-    pe.insertAt(free, myfile.length, myfile);
+    var free = pe.insert(myfile);
     pe.replaceDWord(offset + 1, pe.rawToVa(free));
 
     return true;
