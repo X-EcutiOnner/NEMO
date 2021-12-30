@@ -30,11 +30,11 @@ function CustomWindowTitle()
         return "Patch Cancelled - New Title is same as old";
 
     consoleLog("Store new title");
-    var newTitle = exe.findZeros(title.length);
+    var newTitle = alloc.find(title.length);
     if (newTitle === -1)
         return "Not enough free space";
 
-    exe.insert(newTitle, title.length, title, PTYPE_STRING);
+    pe.insertAt(newTitle, title.length, title);
 
     consoleLog("Search title usage");
     var code = " C7 05 ?? ?? ?? 00" + titleOffset.packToHex(4); //MOV DWORD PTR DS:[g_title], OFFSET addr; ASCII "Ragnarok"
