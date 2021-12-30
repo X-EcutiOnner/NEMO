@@ -31,13 +31,13 @@ function LoadCustomLuaBeforeAfterFiles()
 
     consoleLog("allocate buffer");
 
-    var free = exe.findZeros(300);
+    var free = alloc.find(300);
     if (free === -1)
         return "Not enough free space";
     var str = "";
     for (var i = 0; i < 300; i ++)
         str = str + "\x00";
-    exe.insert(free, 300, str, PTYPE_STRING);
+    pe.insertAt(free, 300, str);
     var buffer = pe.rawToVa(free);
 
     consoleLog("Prepare own code");
@@ -53,7 +53,7 @@ function LoadCustomLuaBeforeAfterFiles()
         "stolenCode": matchObj.stolenCode
     }
 
-    var data = exe.insertAsmFile("", vars);
+    var data = pe.insertAsmFile("", vars);
 
     consoleLog("add jump to own code");
     pe.setJmpRaw(offset, data.free);
