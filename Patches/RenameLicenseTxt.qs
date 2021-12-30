@@ -24,12 +24,12 @@ function RenameLicenseTxt()
   txtFile += "\x00";
 
   //Step 2b - Allocate space for the new name
-  var free = exe.findZeros(txtFile.length);
+  var free = alloc.find(txtFile.length);
   if (free === -1)
     return "Failed in Step 2 - Not enough free space";
 
   //Step 2c - Insert the new name
-  exe.insert(free, txtFile.length, txtFile, PTYPE_STRING);
+  pe.insertAt(free, txtFile.length, txtFile);
 
   //Step 2d - Update the reference to point to new name
   pe.replaceDWord(offset + 6, pe.rawToVa(free));
@@ -43,12 +43,12 @@ function RenameLicenseTxt()
   txtFile = "No EULA text file. (" + txtFile.replace("..\\", "").replace("\x00", ")\x00");
 
   //Step 3c - Allocate space for the error string
-  free = exe.findZeros(txtFile.length);
+  free = alloc.find(txtFile.length);
   if (free === -1)
     return "Failed in Step 3 - Not enough free space";
 
   //Step 3d - Insert the string
-  exe.insert(free, txtFile.length, txtFile, PTYPE_STRING);
+  pe.insertAt(free, txtFile.length, txtFile);
 
   //Step 3e - Update all the Error string references
   var prefixes = [" 6A 20 68", " BE", " BF"];
