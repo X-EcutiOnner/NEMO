@@ -349,7 +349,7 @@ function registerLua()
 
         if (typeof(free) === "undefined" || free === -1)
         {
-            var obj = exe.insertAsmTextObj(loadObj.asmText, loadObj.vars);
+            var obj = pe.insertAsmTextObj(loadObj.asmText, loadObj.vars);
             var free = obj.free;
         }
         else
