@@ -63,7 +63,7 @@ function EnableEmblemForBG_Small(offset)
         "drawAddr": pe.rawToVa(offset + drawOffset),
         "CSession_IsSiegeMode": pe.fetchRelativeValue(offset, [IsSiegeModeOffset, 4]),
     };
-    var data = exe.insertAsmFile("", vars);
+    var data = pe.insertAsmFile("", vars);
 
     consoleLog("Change call to CSession_IsSiegeMode to jmp to own code");
     pe.setJmpRaw(offset + patchOffset, data.free);
