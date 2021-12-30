@@ -22,12 +22,12 @@ function UseTildeForMatk()
   {
 
     //Step 2b - If not present allocate space for a new one
-    offset = exe.findZeros(8);//Size of the above
+    offset = alloc.find(8);//Size of the above
     if (offset === -1)
       return "Failed in Step 2 - Not enough free space";
 
     //Step 2c - Insert the string in allocated space
-    exe.insert(offset, 8, "%d ~ %d", PTYPE_STRING);
+    pe.insertAt(offset, 8, "%d ~ %d");
 
     //Step 2d - Get its RVA
     offset = pe.rawToVa(offset);
