@@ -37,105 +37,27 @@ function exe_setNopsRange(patchStartAddr, patchEndAddr)
 
 function exe_insertAsmText(commands, vars, freeSpace)
 {
-    if (typeof(freeSpace) === "undefined")
-        freeSpace = 0;
-    var size = asm.textToHexLength(commands, vars) + freeSpace;
-    var free = exe.findZeros(size);
-    if (free === -1)
-        fatalError("Failed in exe.insertAsm - Not enough free space");
-
-    var obj = asm.textToObjRaw(free, commands, vars);
-    exe.insert(free, size, obj.code, PTYPE_HEX);
-    return [free, obj.code, obj.vars];
+    reportLegacy("Please replace exe.insertAsmText to pe.insertAsmText");
 }
 
 function exe_insertAsmTextObj(commands, vars, freeSpace, dryRun)
 {
-    if (typeof(freeSpace) === "undefined")
-        freeSpace = 0;
-    if (typeof(dryRun) === "undefined")
-        dryRun = false;
-    var size = asm.textToHexLength(commands, vars) + freeSpace;
-    if (patch.getState() !== 2)
-    {
-        var free = exe.findZeros(size);
-        if (free === -1)
-            fatalError("Failed in exe.insertAsm - Not enough free space");
-    }
-    else
-    {
-        if (storage.zero == 0)
-            fatalError("Failed in exe.insertAsm - Not enough free space");
-        free = storage.zero;
-    }
-
-    var obj = asm.textToObjRaw(free, commands, vars);
-    if (dryRun !== true)
-    {
-        if (patch.getState() !== 2)
-        {
-            exe.insert(free, size, obj.code, PTYPE_HEX);
-        }
-        else
-        {
-            pe.directReplace(free, obj.code);
-            storage.zero = storage.zero + size;
-        }
-    }
-    obj.free = free;
-    obj.isFinal = false;
-    return obj;
+    reportLegacy("Please replace exe.insertAsmTextObj to pe.insertAsmTextObj");
 }
 
 function exe_insertAsmFile(fileName, vars, freeSpace, dryRun)
 {
-    var commands = asm.load(fileName);
-    return exe_insertAsmTextObj(commands, vars, freeSpace, dryRun);
+    reportLegacy("Please replace exe.insertAsmFile to pe.insertAsmFile");
 }
 
 function exe_insertDWord(value, dryRun)
 {
-    if (typeof(dryRun) === "undefined")
-        dryRun = false;
-
-    var size = 4;
-    if (patch.getState() !== 2)
-    {
-        var free = exe.findZeros(size);
-        if (free === -1)
-            fatalError("Failed in exe.insertDWord - Not enough free space");
-    }
-    else
-    {
-        if (storage.zero == 0)
-            fatalError("Failed in exe.insertDWord - Not enough free space");
-        free = storage.zero;
-    }
-    var obj = asm.textToObjRaw(free, "long " + value, {});
-    if (dryRun !== true)
-    {
-        if (patch.getState() !== 2)
-        {
-            exe.insert(free, size, obj.code, PTYPE_HEX);
-        }
-        else
-        {
-            pe.directReplace(free, obj.code);
-            storage.zero = storage.zero + size;
-        }
-    }
-    return free;
+    reportLegacy("Please replace exe.insertDWord to pe.insertDWord");
 }
 
 function exe_insertHex(value)
 {
-    var size = value.hexlength();
-    var free = exe.findZeros(size);
-    if (free === -1)
-        fatalError("Failed in exe.insertHex - Not enough free space");
-
-    exe.insert(free, size, value, PTYPE_HEX);
-    return free;
+    reportLegacy("Please replace exe.insertHex to pe.insertHex");
 }
 
 function exe_replaceAsmText(patchAddr, commands, vars)
@@ -151,11 +73,6 @@ function exe_replaceAsmFile(fileName, vars)
 function exe_match(code, useMask, addrRaw)
 {
     reportLegacy("Please replace exe.match to pe.match");
-
-    var offset = exe.find(code, PTYPE_HEX, useMask, "\xAB", addrRaw, addrRaw + 1);
-    if (offset !== addrRaw)
-        return false;
-    return true;
 }
 
 function exe_fetchValue(offset, offset2)
