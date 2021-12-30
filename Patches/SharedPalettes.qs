@@ -53,12 +53,12 @@ function SharedPalettes(prefix, newString)
     return "Failed in Step 1 - Format String reference missing";
 
   //Step 2a - Allocate space for New Format String - Original address don't have enough space for some scenarios.
-  var free = exe.findZeros(newString.length);
+  var free = alloc.find(newString.length);
   if (free === -1)
     return "Failed in Step 2 - Not enough free space";
 
   //Step 2b - Insert the new format string
-  exe.insert(free, newString.length, newString, PTYPE_STRING);
+  pe.insertAt(free, newString.length, newString);
 
   //Step 3 - Replace with new one's address
   pe.replaceHex(offset + 1, pe.rawToVa(free).packToHex(4));
