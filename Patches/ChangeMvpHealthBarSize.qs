@@ -80,7 +80,7 @@ function ChangeMvpHealthBarSize()
       ;
 
     var size = ins.hexlength();
-    var free = exe.findZeros(size + 4);
+    var free = alloc.find(size + 4);
     if (free === -1)
         return "Failed in Step 3";
 
@@ -89,7 +89,7 @@ function ChangeMvpHealthBarSize()
 
     code = " E9" + offset.packToHex(4) + " 90";
 
-    exe.insert(free, size + 4, ins, PTYPE_HEX);
+    pe.insertHexAt(free, size + 4, ins);
     pe.replaceHex(offset1, code);
 
     return true;
