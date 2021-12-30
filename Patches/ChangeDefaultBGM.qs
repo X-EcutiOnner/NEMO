@@ -18,12 +18,12 @@ function ChangeDefaultBGM()
     if (myfile === org_name)
         return "Patch Cancelled - New value is same as old";
 
-    var free = exe.findZeros(myfile.length);
+    var free = alloc.find(myfile.length);
     if (free === -1)
         return "Failed in Step 2 - Not enough free space";
 
-    exe.insert(free, myfile.length, "$newBGMPath", PTYPE_STRING);
-    pe.replaceDWord(offset+1, pe.rawToVa(free));
+    pe.insertAt(free, myfile.length, myfile);
+    pe.replaceDWord(offset + 1, pe.rawToVa(free));
 
     return true;
 }
