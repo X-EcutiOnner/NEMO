@@ -126,7 +126,7 @@ function DisableMultipleWindows()
     var csize = code.hexlength();
 
     consoleLog("Step 2c - Allocate space to store the code");
-    var free = exe.findZeros(csize);
+    var free = alloc.find(csize);
     if (free === -1)
         return "Failed in Step 2 - Not enough free space";
 
@@ -152,7 +152,7 @@ function DisableMultipleWindows()
     code = ReplaceVarHex(code, 7, offset);
 
     consoleLog("Step 2f - Insert the code to allocated space");
-    exe.insert(free, csize, code, PTYPE_HEX);
+    pe.insertHexAt(free, csize, code);
 
     return true;
 }
