@@ -85,12 +85,12 @@ function ShowRegisterButton()
   + " C3"                   //RETN
 
   //Step 3c - Allocate space for the code
-  var free = exe.findZeros(code.hexlength());
+  var free = alloc.find(code.hexlength());
   if (free === -1)
     return "Failed in Step 3 - Not enough free space";
 
   //Step 3d - Insert it
-  exe.insert(free, code.hexlength(), code, PTYPE_HEX);
+  pe.insertHexAt(free, code.hexlength(), code);
 
   //Step 3e - Change the CModeMgr::Quit CALL with a CALL to our function
   pe.replaceDWord(offset2 - 4, pe.rawToVa(free) - pe.rawToVa(offset2));
