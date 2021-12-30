@@ -48,7 +48,7 @@ function DisableNagleAlgorithm()
   var size = code.hexlength();
 
   //Step 2a - Allocate Free Space for adding the code above.
-  var free = exe.findZeros(size);
+  var free = alloc.find(size);
   if (free === -1)
     return "Failed in Step 2 - Not enough free space";
 
@@ -65,7 +65,7 @@ function DisableNagleAlgorithm()
   code = ReplaceVarHex(code, 4, imports.ptrValidated("GetProcAddress", "KERNEL32.dll"));
 
   //Step 2d - Insert the code to allocated area
-  exe.insert(free, size, code, PTYPE_HEX);
+  pe.insertHexAt(free, size, code);
 
   //Step 3a - Find all JMP DWORD PTR to ws2_32.socket function
   var offsets = pe.findCodes(" FF 25" + sockFunc.packToHex(4));
