@@ -281,7 +281,7 @@ function SkipHiddenMenuButtons()
         "regName": regName,
         "stolenCode": pe.fetchHex(patchAddr, stoleSize)
     };
-    var data = exe.insertAsmFile("", vars);
+    var data = pe.insertAsmFile("", vars);
 
     consoleLog("add jump to own code");
     pe.setJmpRaw(patchAddr, data.free);
