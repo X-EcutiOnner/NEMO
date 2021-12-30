@@ -112,7 +112,7 @@ function UseCustomDLL()
   dirSize += 20;//Accomodate for IAT End Entry
 
   //Step 3b - Allocate space for the above and below
-  var free = exe.findZeros(strSize + dirSize);
+  var free = alloc.find(strSize + dirSize);
   if (free === -1)
     return "Failed in Step 3 - Not enough free space";
 
@@ -143,7 +143,7 @@ function UseCustomDLL()
   dirTableData = dirData + dirTableData + finalValue;
 
   //Step 4a - Insert the new table and strings
-  exe.insert(free, strSize + dirSize, strData + dirEntryData + dirTableData, PTYPE_HEX);
+  pe.insertHexAt(free, strSize + dirSize, strData + dirEntryData + dirTableData);
 
   //Step 4b - Change the PE Table Import Data Directory Address
   var PEoffset = pe.find("50 45 00 00");
