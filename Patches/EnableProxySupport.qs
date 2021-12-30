@@ -88,7 +88,7 @@ function EnableProxySupport()
   var csize = code.hexlength();
 
   //Step 3b - Allocate space for Adding the code.
-  offset = exe.findZeros(0x4 + csize); //First 4 bytes are for g_saveIP
+  offset = alloc.find(0x4 + csize); //First 4 bytes are for g_saveIP
   if (offset === -1)
     return "Failed in Step 3 - Not enough free space";
 
@@ -105,7 +105,7 @@ function EnableProxySupport()
   pe.replaceDWord(offset2 + 1, offsetRva + 4 - pe.rawToVa(offset2 + 5));
 
   //Step 4b - Add our code to the client
-  exe.insert(offset, 4 + csize, " 00 00 00 00" + code, PTYPE_HEX); //4 NULLs for g_saveIP filler
+  pe.insertHexAt(offset, 4 + csize, " 00 00 00 00" + code); //4 NULLs for g_saveIP filler
 
   return true;
 }
