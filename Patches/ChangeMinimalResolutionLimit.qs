@@ -166,7 +166,7 @@ function ChangeMinimalResolutionLimit()
         "codeIns": codeIns
     };
 
-    var data = exe.insertAsmFile("", vars);
+    var data = pe.insertAsmFile("", vars);
     pe.setJmpRaw(offset, data.free);
 
     return true;
