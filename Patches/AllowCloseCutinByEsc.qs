@@ -117,10 +117,10 @@ function AllowCloseCutinByEsc()
         "C3";                   // RETN
 
     var codeLen = newCode.hexlength();
-    var free = exe.findZeros(codeLen);
+    var free = alloc.find(codeLen);
     var freeRva = pe.rawToVa(free);
 
-    exe.insert(free, codeLen, newCode, PTYPE_HEX);
+    pe.insertHexAt(free, codeLen, newCode);
 
     pe.replaceHex(checkFuncOffset - 1, "E9" + (freeRva - pe.rawToVa(checkFuncOffset) - 4).packToHex(4)); // replace call to check function into own function
     return true;
