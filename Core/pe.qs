@@ -713,16 +713,21 @@ function pe_insertHex(value)
     var size = value.hexlength();
     var free = alloc.find(size);
     if (free === -1)
-        fatalError("Failed in pe.insertHex - Not enough free space");
+        fatalError("Failed in pe.insertHex - cant find");
 
     var res = alloc.reserve(free, size);
     if (res === false)
-        return false;
+        fatalError("Failed in pe.insertHex - cant reserve");
     res = pe.replaceHex(free, value);
     if (res === false)
-        return false;
+        fatalError("Failed in pe.insertHex - cant replace");
 
     return free;
+}
+
+function pe_insert(value)
+{
+    return pe.insertHex(value.toHex());
 }
 
 function registerPe()
@@ -785,4 +790,5 @@ function registerPe()
     pe.insertAsmFile = pe_insertAsmFile;
     pe.insertDWord = pe_insertDWord;
     pe.insertHex = pe_insertHex;
+    pe.insert = pe_insert;
 }
