@@ -317,7 +317,7 @@ function CustomAuraLimits()
 
   //Step 6b - Allocate space for it
   var size = code.hexlength() + 8 * idLvlTable.length + 4 + tblSize;
-  var free = exe.findZeros(size);
+  var free = alloc.find(size);
   if (free === -1)
     return "Failed in Step 6 - Not enough free space";
 
@@ -344,7 +344,7 @@ function CustomAuraLimits()
   }
 
   //Step 7a - Insert the function and table data
-  exe.insert(free, size, code + tblAddrData + " 00 00 00 00" + tblData, PTYPE_HEX);
+  pe.insertHexAt(free, size, code + tblAddrData + " 00 00 00 00" + tblData);
 
   if (directComparison)
   {
