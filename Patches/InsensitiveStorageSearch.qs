@@ -80,7 +80,7 @@ function InsensitiveStorageSearch()
   size = size + strings[1].length + 1;
 
   //Find free space to inject our code
-  var free = exe.findZeros(size + 8);
+  var free = alloc.find(size + 8);
   if (free === -1)
     return "Failed in Step 3 - Not enough free space";
 
@@ -106,7 +106,7 @@ function InsensitiveStorageSearch()
   code = code + " 90 90 90 90"; //Separate strings from other patches
 
   //Insert everything
-  exe.insert(free, code.hexlength(), code, PTYPE_HEX);
+  pe.insertHexAt(free, code.hexlength(), code);
 
   //Prepare the code for jump
   code =
