@@ -65,7 +65,7 @@ function EnableCustomShields()
 
   //Step 2a -  Allocate space considering maximum code size possible
   var funcName = "ReqShieldName\x00";
-  var free = exe.findZeros(funcName.length + 0xB + 0x50 + 0x12);
+  var free = alloc.find(funcName.length + 0xB + 0x50 + 0x12);
   if (free === -1)
     return "Failed in Part 2 - Not enough free space";
 
@@ -105,7 +105,7 @@ function EnableCustomShields()
   code += (pe.rawToVa(retReq) - pe.rawToVa(free + code.hexlength() + 4)).packToHex(4);
 
   //Step 2c - Insert the code
-  exe.insert(free, code.hexlength(), code, PTYPE_HEX);
+  pe.insertHexAt(free, code.hexlength(), code);
 
   //Step 2c - Create regPush & JMP at hookReq to the code
   code = regPush + " E9";
@@ -171,7 +171,7 @@ function EnableCustomShields()
 
   //Step 4a - Allocate space for code considering max size
   funcName = "GetShieldID\x00";
-  free = exe.findZeros(funcName.length + 0x5 + 0x3D + 0x4);
+  free = alloc.find(funcName.length + 0x5 + 0x3D + 0x4);
   if (free === -1)
     return "Failed in Part 4 - Not enough free space";
 
@@ -194,7 +194,7 @@ function EnableCustomShields()
   ;
 
   //Step 4c - Insert the code
-  exe.insert(free, code.hexlength(), code, PTYPE_HEX);
+  pe.insertHexAt(free, code.hexlength(), code);
 
   //Step 4d - Create a JMP at hookMap to the code
   pe.replaceHex(hookMap, "E9" + (pe.rawToVa(free + funcName.length) - pe.rawToVa(hookMap + 5)).packToHex(4));
