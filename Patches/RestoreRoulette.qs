@@ -42,7 +42,7 @@ function RestoreRoulette()
   ;
 
   //Step 3b - Allocate space for it
-  var free = exe.findZeros(code.hexlength());
+  var free = alloc.find(code.hexlength());
   if (free === -1)
     return "Failed in Step 3 - Not enough free space";
 
@@ -55,7 +55,7 @@ function RestoreRoulette()
   code = ReplaceVarHex(code, 4, pe.rawToVa(offset2) - (refAddr + 20));// (PUSH + MOV + CALL + JMP)
 
   //Step 4 - Insert the code and create the JMP to it.
-  exe.insert(free, code.hexlength(), code, PTYPE_HEX);
+  pe.insertHexAt(free, code.hexlength(), code);
   pe.replaceHex(offset, "E9" + (pe.rawToVa(free) - pe.rawToVa(offset + 5)).packToHex(4));
 
   return true;
