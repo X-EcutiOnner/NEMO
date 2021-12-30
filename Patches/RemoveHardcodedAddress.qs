@@ -173,10 +173,10 @@ function RemoveHardcodedAddress20207(overrideAddr, retAddr, clientinfo_addr, cli
 
     consoleLog("create format string %s:%s");
 
-    var free = exe.findZeros(6);
+    var free = alloc.find(6);
     if (free === -1)
         return "Not enough free space";
-    exe.insert(free, 6, "%s:%s", PTYPE_STRING);
+    pe.insertAt(free, 6, "%s:%s");
     var formatVaHex = pe.rawToVa(free).packToHex(4);
 
     consoleLog("create code for build new connection string");
