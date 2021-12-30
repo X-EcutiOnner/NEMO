@@ -101,12 +101,12 @@ function DCToLoginWindow()
   ;
 
   //Step 3b - Allocate space for the code
-  var free = exe.findZeros(code.hexlength());
+  var free = alloc.find(code.hexlength());
   if (free === -1)
     return "Failed in Part 3 - Not enough free space";
 
   //Step 3c - Insert at allocated location
-  exe.insert(free, code.hexlength(), code, PTYPE_HEX);
+  pe.insertHexAt(free, code.hexlength(), code);
 
   //Step 3d - Change the MOV ECX to a JMP to above code
   pe.replaceHex(offset, " 90 E9" + (pe.rawToVa(free) - pe.rawToVa(offset + 6)).packToHex(4));
@@ -199,12 +199,12 @@ function DCToLoginWindow()
   ;
 
   //Step 5b - Allocate space for the code
-  free = exe.findZeros(code.hexlength());
+  free = alloc.find(code.hexlength());
   if (free === -1)
     return "Failed in Part 5 - Not enough free space";
 
   //Step 5c - Insert to allocated location
-  exe.insert(free, code.hexlength(), code, PTYPE_HEX);
+  pe.insertHexAt(free, code.hexlength(), code);
 
   //Step 5d - Replace the code at offset with JMP to our code.
   pe.replaceHex(joffset, " E9" + (pe.rawToVa(free) - pe.rawToVa(joffset + 5)).packToHex(4));
