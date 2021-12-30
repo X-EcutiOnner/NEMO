@@ -76,12 +76,12 @@ function LoadCustomClientInfo()
         return "Patch Cancelled - File name length should between 9 to 14 char";
 
     //Step 2b - Allocate space for the new name
-    var free = exe.findZeros(myfile.length);
+    var free = alloc.find(myfile.length);
     if (free === -1)
         return "Failed in Step 2b - Not enough free space";
 
     //Step 3 - Insert the new name and replace the clientinfo reference
-    exe.insert(free, myfile.length, "$newclientinfo", PTYPE_STRING);
+    pe.insertAt(free, myfile.length, myfile);
     if (xmmPTR)
     {
         pe.replaceHex(offset1+3, pe.rawToVa(free).packToHex(4));
