@@ -598,7 +598,7 @@ function pe_insertHexAt(insertAddr, size, code)
 
 function pe_insertAt(insertAddr, size, code)
 {
-    checkArgs("pe.insertHexAt", arguments, [["Number", "Number", "String"]]);
+    checkArgs("pe.insertAt", arguments, [["Number", "Number", "String"]]);
     var res = pe.replace(insertAddr, code);
     if (res === false)
         return false;
@@ -619,7 +619,9 @@ function pe_insertAsmText(commands, vars, freeSpace)
     var obj = asm.textToObjRaw(free, commands, vars);
     for (var f = 0; f < freeSpace; f ++)
         obj = obj + " 00";
-    pe.insertHexAt(free, obj.code);
+    alloc.reserve(free, size);
+    pe.replaceHex(free, obj.code);
+
     return [free, obj.code, obj.vars];
 }
 
@@ -651,7 +653,8 @@ function pe_insertAsmTextObj(commands, vars, freeSpace, dryRun)
     {
         if (patch.getState() !== 2)
         {
-            pe.insertHexAt(free, obj.code);
+            alloc.reserve(free, size);
+            pe.replaceHex(free, obj.code);
         }
         else
         {
@@ -693,7 +696,8 @@ function pe_insertDWord(value, dryRun)
     {
         if (patch.getState() !== 2)
         {
-            pe.insertHexAt(free, obj.code);
+            alloc.reserve(free, size);
+            pe.replaceHex(free, obj.code);
         }
         else
         {

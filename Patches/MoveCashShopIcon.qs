@@ -133,7 +133,7 @@ function MoveCashShopIcon()
         "yCoord": yCoord
     };
 
-    var obj = exe.insertAsmTextObj(text, vars);
+    var obj = pe.insertAsmTextObj(text, vars);
     var free = obj.free;
 
     consoleLog("Step 3b - Change the 0xBB subtraction with a call to our code");
