@@ -498,13 +498,30 @@ On success return bytes in hex format from assembler text.
 
 ### pe.insertHexAt
 
-``pe.insertHexAt(rawAddr, code)``
+``pe.insertHexAt(rawAddr, size, code)``
 
-Insert code in hex format at given raw address.
+Insert bytes in hex format at given raw address.
 
 | Argument | Description |
 | -------- | ----------- |
 | rawAddr  | Address where insert data |
+| size     | Inserted block size. Size can be bigger than real code size |
+| code     | Hex code of data to insert |
+
+On success return true.
+
+On error return false.
+
+### pe.insertAt
+
+``pe.insertAt(rawAddr, size, code)``
+
+Insert bytes at given raw address.
+
+| Argument | Description |
+| -------- | ----------- |
+| rawAddr  | Address where insert data |
+| size     | Inserted block size. Size can be bigger than real code size |
 | code     | Hex code of data to insert |
 
 On success return true.

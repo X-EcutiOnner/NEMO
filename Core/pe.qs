@@ -585,13 +585,26 @@ function pe_setShortJmpRaw(patchAddr, jmpAddrRaw, cmd)
     pe_setShortJmpVa(patchAddr, pe.rawToVa(jmpAddrRaw), cmd);
 }
 
-function pe_insertHexAt(insertAddr, code)
+function pe_insertHexAt(insertAddr, size, code)
 {
-    checkArgs("pe.insertHexAt", arguments, [["Number", "String"]]);
-    var res = pe.replaceHex(addrRaw, data.toHex());
+    checkArgs("pe.insertHexAt", arguments, [["Number", "Number", "String"]]);
+    var res = pe.replaceHex(insertAddr, code);
     if (res === false)
         return false;
-    return alloc.reserve(insertAddr);
+    if (size < code.hexlength())
+        fatalError("pe.insertHexAt: size smaller than code real size");
+    return alloc.reserve(insertAddr, size);
+}
+
+function pe_insertAt(insertAddr, size, code)
+{
+    checkArgs("pe.insertHexAt", arguments, [["Number", "Number", "String"]]);
+    var res = pe.replace(insertAddr, code);
+    if (res === false)
+        return false;
+    if (size < code.length)
+        fatalError("pe.insertAt: size smaller than code real size");
+    return alloc.reserve(insertAddr, size);
 }
 
 function registerPe()
@@ -647,5 +660,6 @@ function registerPe()
     pe.setNopsValueRange = pe_setNopsValueRange;
     pe.setShortJmpVa = pe_setShortJmpVa;
     pe.setShortJmpRaw = pe_setShortJmpRaw;
+    pe.insertAt = pe_insertAt;
     pe.insertHexAt = pe_insertHexAt;
 }
