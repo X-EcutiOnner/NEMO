@@ -48,7 +48,7 @@ function ShowReplayButton()
       ;
 
     var size = ins.hexlength();
-    var free = exe.findZeros(size + 4);
+    var free = alloc.find(size + 4);
     if (free === -1)
         return "Failed in Step 2.7 - No enough free space";
 
@@ -56,7 +56,7 @@ function ShowReplayButton()
 
     code = " E9" + (pe.rawToVa(free) - pe.rawToVa(offset + 5)).packToHex(4);
 
-    exe.insert(free, size + 4, ins, PTYPE_HEX);
+    pe.insertHexAt(free, size + 4, ins);
     pe.replaceHex(offset, code);
 
   }
@@ -136,7 +136,7 @@ function ShowReplayButton()
   ;
 
   //Step 4b - Allocate space for it
-  var free = exe.findZeros(code.hexlength());
+  var free = alloc.find(code.hexlength());
   if (free === -1)
     return "Failed in Step 4 - Not enough free space";
 
@@ -147,7 +147,7 @@ function ShowReplayButton()
   code = ReplaceVarHex(code, 2, pe.rawToVa(offset) - (freeRva + code.hexlength()));
 
   //Step 4d - Insert in allocated space
-  exe.insert(free, code.hexlength(), code, PTYPE_HEX);
+  pe.insertHexAt(free, code.hexlength(), code);
 
   //Step 4e - Create a JMP to our code from ShowMsg
   pe.replaceHex(offset - 5, "E9" + (freeRva - pe.rawToVa(offset)).packToHex(4));
@@ -288,7 +288,7 @@ function _SRB_FixupButton(btnImg, suffix, suffix2)
   else
   {//VC9 & VC10
     //Step .5a - For previous client there is not enough space so we allocate space for our code
-    var free = exe.findZeros(size);
+    var free = alloc.find(size);
     if (free === -1)
       return "5 - Not enough free space";
 
@@ -296,7 +296,7 @@ function _SRB_FixupButton(btnImg, suffix, suffix2)
     code = ReplaceVarHex(code, 1, pe.rawToVa(retAddr) - pe.rawToVa(free + size));
 
     //Step .5c - Insert the code
-    exe.insert(free, size, code, PTYPE_HEX);
+    pe.insertHexAt(free, size, code);
 
     //Step .5d - Create a JMP to our code at jmpAddr
     pe.replaceHex(jmpAddr, "E9" + (pe.rawToVa(free) - pe.rawToVa(jmpAddr + 5)).packToHex(4));
