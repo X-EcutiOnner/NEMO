@@ -256,7 +256,7 @@ function CustomExpBarLimits()
   ;
 
   consoleLog("Step 5b - Allocate space for the table to use in the above code");
-  var free = exe.findZeros(tblSize);
+  var free = alloc.find(tblSize);
   if (free === -1)
     return "Failed in Step 5 - Not enough free space";
 
@@ -298,7 +298,7 @@ function CustomExpBarLimits()
   pe.replaceHex(baseBegin, code + " FF 00 FF 00" + tblAddrData);
 
   consoleLog("Step 6c - Insert the table at allocated location.");
-  exe.insert(free, tblSize, tblData, PTYPE_HEX);
+  pe.insertHexAt(free, tblSize, tblData);
 
   return true;
 }
