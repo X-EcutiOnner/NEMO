@@ -122,7 +122,7 @@ function EnableMultipleGRFsV2()
     var size = strcode.length + grfs.length * template.hexlength() + 2;
 
     //Step 4c - Allocate space to inject
-    var free = exe.findZeros(size);
+    var free = alloc.find(size);
     if (free === -1)
         return "Failed in Step 4 - Not enough free space";
 
@@ -148,7 +148,7 @@ function EnableMultipleGRFsV2()
     pe.replaceDWord(fnoffset + addpackOffset, freeRva - pe.rawToVa(fnoffset + addpackOffset + 4));
 
     //Step 5 - Insert everything.
-    exe.insert(free, size, code, PTYPE_HEX);
+    pe.insertHexAt(free, size, code);
 
     //Step 6 - Find offset of rdata.grf (if present zero it out)
     offset = pe.stringRaw("rdata.grf");
