@@ -113,7 +113,7 @@ function EnableSkills(oldPatn, newPatn, patchID, funcName, isPlayerFn)
     else
     {
         consoleLog("Step 4.1 - Find Free space for insertion considering max size");
-        var free = exe.findZeros(funcName.length + 0x3D + 1);//for RETN
+        var free = alloc.find(funcName.length + 0x3D + 1);//for RETN
         if (free === -1)
             return "Failed in Step 4 - Not enough free space";
 
@@ -128,7 +128,7 @@ function EnableSkills(oldPatn, newPatn, patchID, funcName, isPlayerFn)
         ;
 
         consoleLog("Step 4.3 - Insert at free space");
-        exe.insert(free, code.hexlength(), code, PTYPE_HEX);
+        pe.insertHexAt(free, code.hexlength(), code);
 
         consoleLog("Step 4.4 - Prep code which calls the above");
         code =
