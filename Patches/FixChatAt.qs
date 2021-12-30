@@ -70,7 +70,7 @@ function FixChatAt()
     var csize = code.hexlength();
 
     //Step 3b - Allocate space for it.
-    var free = exe.findZeros(csize);
+    var free = alloc.find(csize);
     if (free === -1)
       return "Failed in Step 3 - Not enough free space";
 
@@ -82,7 +82,7 @@ function FixChatAt()
     pe.replaceDWord(offset + 3, pe.rawToVa(free) - pe.rawToVa(offset + 7));
 
     //Step 4c - Insert our function
-    exe.insert(free, csize, code, PTYPE_HEX);
+    pe.insertHexAt(free, csize, code);
   }
 
   return true;
