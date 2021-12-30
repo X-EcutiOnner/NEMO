@@ -232,7 +232,7 @@ function AutoMute()
 
   //Find free space
   var size = buffer.hexlength() + code.hexlength() + 4;
-  var free = exe.findZeros(size + 8);
+  var free = alloc.find(size + 8);
   if (free === -1)
     return "Failed in Step 4 - Not enough free space";
 
@@ -279,12 +279,11 @@ function AutoMute()
   }
 
   //Insert the code & jump
-  exe.insert(free, size, ins, PTYPE_HEX);
+  pe.insertHexAt(free, size, ins);
 
   code = " E8" + ((freeRva + 16) - pe.rawToVa(jumpAddr + 5)).packToHex(4);
 
   pe.replaceHex(jumpAddr, code);
-
 
   return true;
 }
