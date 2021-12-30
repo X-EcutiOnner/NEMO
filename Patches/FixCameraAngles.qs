@@ -86,7 +86,7 @@ function FixCameraAngles(newvalue)
         offset2 += angleOffset;
 
         consoleLog("Step 2b - Find Space to allocate the new angle");
-        var free = exe.insertHex(newvalue);
+        var free = pe.insertHex(newvalue);
 
         consoleLog("Step 3b - Replace angleAddr reference with the allocated address");
         pe.replaceDWord(offset2, pe.rawToVa(free));
