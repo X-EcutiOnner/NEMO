@@ -175,7 +175,7 @@ function RemoveJobsFromBooking()
 
   //Step 3b - Allocate space for the IDs and the Function
   var size = idSet.length * 2 + code.hexlength();
-  var free = exe.findZeros(size);
+  var free = alloc.find(size);
   if (free === -1)
     return "Failed in Step 3 - Not enough free space"
 
@@ -187,7 +187,7 @@ function RemoveJobsFromBooking()
   code = ReplaceVarHex(code, 3, retAddr);
 
   //Step 4a - Insert the data and function in Allocated space
-  exe.insert(free, size, idSet.join("") + code, PTYPE_HEX);
+  pe.insertHexAt(free, size, idSet.join("") + code);
 
   //Step 4b - Change the MsgStr CALL with a CALL to our function.
   pe.replaceDWord(offset, (freeRva + idSet.length * 2) - pe.rawToVa(offset + 4));
