@@ -24,12 +24,12 @@ function UseCustomAuraSprites()
   var strings = ["effect\\aurafloat.tga", "effect\\auraring.bmp"];
   var code = strings.join("\x00") + "\x00";
 
-  var free = exe.findZeros(code.length);
+  var free = alloc.find(code.length);
   if (free === -1)
     return "Failed in Step 1 - Not enough free space";
 
   //Step 1d - Insert the strings into the allocated area
-  exe.insert(free, code.length, code.toHex(), PTYPE_HEX);
+  pe.insertHexAt(free, code.length, code.toHex());
 
   var afloat = pe.rawToVa(free).packToHex(4);
   var aring = pe.rawToVa(free + strings[0].length + 1).packToHex(4);
