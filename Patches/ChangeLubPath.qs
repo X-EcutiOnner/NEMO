@@ -239,11 +239,11 @@ function ChangeLubPath(old_path, new_path)
     if (old_path === new_path)
         return "Patch Cancelled - New value is same as old";
 
-    var free = exe.findZeros(new_path.length);
+    var free = alloc.find(new_path.length);
     if (free === -1)
         return "Failed in Step 2 - Not enough free space";
 
-    exe.insert(free, new_path.length, new_path, PTYPE_STRING);
+    pe.insertAt(free, new_path.length, new_path);
     pe.replaceDWord(offset + 1, pe.rawToVa(free));
 
     return true;
