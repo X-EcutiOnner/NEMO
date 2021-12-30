@@ -337,11 +337,11 @@ function _IHL_InjectComparison(rcode, ptr, min, limit, opsize)
     ;
 
     //Step 1b - Allocate space for it.
-    var free = exe.findZeros(code.hexlength());
+    var free = alloc.find(code.hexlength());
 
     //Step 1c - Insert the code in allocated space
     if (free !== -1)
-        exe.insert(free, code.hexlength(), code, PTYPE_HEX);
+        pe.insertHexAt(free, code.hexlength(), code);
 
     return free;
 }
@@ -394,7 +394,7 @@ function _IHL_UpdateScrollBar(oldLimit, newLimit)
     ;
 
     //Step 2b - Allocate space for it
-    var free = exe.findZeros(code.hexlength());
+    var free = alloc.find(code.hexlength());
     if (free === -1)
         return -2;
 
@@ -404,7 +404,7 @@ function _IHL_UpdateScrollBar(oldLimit, newLimit)
     code = ReplaceVarHex(code, 1, func - (freeRva + code.hexlength() - 1));
 
     //Step 3a - Insert to allocated space
-    exe.insert(free, code.hexlength(), code, PTYPE_HEX);
+    pe.insertHexAt(free, code.hexlength(), code);
 
     //Step 3b - Create a NOP sequence + CALL to the above at each of the matches
     for (var i = 0; i < offsets.length; i++)
