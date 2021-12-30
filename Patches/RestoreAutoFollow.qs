@@ -128,7 +128,7 @@ function RestoreAutoFollow()
         "CGameMode_ProcessInput": CGameMode_ProcessInput
     };
 
-    var data = exe.insertAsmFile("", vars);
+    var data = pe.insertAsmFile("", vars);
 
     consoleLog("add jump to own code");
     pe.setJmpRaw(offset + patchOffset, data.free, "call");
