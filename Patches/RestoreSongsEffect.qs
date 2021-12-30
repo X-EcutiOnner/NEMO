@@ -130,7 +130,7 @@ function RestoreSongsEffect()
 
     var case1Offset = ins.hexlength();
     var size = case1Offset + (effectID.length * 16);
-    var free = exe.findZeros(size + 4);
+    var free = alloc.find(size + 4);
     if (free === -1)
         return "Failed in Step 4 - No enough free space";
 
@@ -162,7 +162,7 @@ function RestoreSongsEffect()
     //Step 4f - Inject the code
     code = " E9" + (freeRva - pe.rawToVa(patchAddr + 5)).packToHex(4);
 
-    exe.insert(free, size, ins, PTYPE_HEX);
+    pe.insertHexAt(free, size, ins);
     pe.replaceHex(patchAddr, code);
 
     //Step 5 - Modify indirect switch table
