@@ -74,14 +74,14 @@ function ChangeMerchantStoreUrl()
 
     //Step 3 - find free space
     var size = ins.hexlength();
-    var free = exe.findZeros(size);
+    var free = alloc.find(size);
     if (free === -1)
         return "Failed in Step 3 - Not enough free space";
 
     var freeRva = pe.rawToVa(free);
 
     //Step 4 - Insert and replace everything
-    exe.insert(free, size, ins, PTYPE_HEX);
+    pe.insertHexAt(free, size, ins);
 
     pe.replaceByte(offset1 + urlLen1, saveUrl.length);
     pe.replaceByte(offset1 + urlLen2, loadUrl.length);
