@@ -15,7 +15,7 @@ function IncreaseHairLimits()
         return "Failed in Step 1 - PUSH count is wrong";
 
     var index = 1; // Assumption : The last one is the one we need. Previously there was only one match but recent clients have 2
-    if (exe.getClientDate() >= 20180528)
+    if (pe.getDate() >= 20180528)
         index = 0;  // for 20180528+ it's first one
     refOffset = refOffset[index];
 
@@ -181,7 +181,7 @@ function IncreaseHairLimits()
         }
         case 4:
         {
-            if (exe.getClientDate() < 20130605)
+            if (pe.getDate() < 20130605)
             { //VC9
                 var code2 = " 83 BB ?? ?? 00 00 00"; //CMP DWORD PTR DS:[EBX + hSPtr], 0
                 cmpLoc = 0;
