@@ -306,5 +306,5 @@ function Enable64kHairstyle_()
     var code = "\\\xB8\xD3\xB8\xAE\xC5\xEB\\%s\\%s_%s.%s"; // "\머리통\%s\%s_%s.%s";
     var offset = pe.stringRaw(code);
     // non for doram clients
-    return (exe.getClientDate() > 20111102 && offset === -1);
+    return (pe.getDate() > 20111102 && offset === -1);
 }
