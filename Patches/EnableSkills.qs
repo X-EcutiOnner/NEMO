@@ -67,7 +67,7 @@ function EnableMerceSkills() //Incomplete
 function EnableSkills(oldPatn, newPatn, patchID, funcName, isPlayerFn)
 {
     consoleLog("Step 1.1 - Prep the code to find the Skill ID checker function");
-    if (exe.getClientDate() < 20100817)
+    if (pe.getDate() < 20100817)
         var code = oldPatn; //VC6
     else
         var code = newPatn; //VC9+
@@ -192,7 +192,7 @@ function LoadSkillTypeLua(id, offset)
     if (SKL.Prefix === "")
     {
         SKL.Prefix = "Lua Files\\SkillInfo";
-        if (exe.getClientDate() >= 20100817)
+        if (pe.getDate() >= 20100817)
             SKL.Prefix += "z";
     }
 
