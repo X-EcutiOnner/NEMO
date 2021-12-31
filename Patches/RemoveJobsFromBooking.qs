@@ -74,7 +74,7 @@ function RemoveJobsFromBooking()
     }
 
     case 2: {
-      if (exe.getClientDate() < 20140000)
+      if (pe.getDate() < 20140000)
       { //VC9
         code =
           " FF 15 ?? ?? ?? 00" //CALL DWORD PTR DS:[<&MSVCP#.$basic*>]
