@@ -7,7 +7,7 @@ function DCToLoginWindow()
 {
 
   //Step 1a - Sanity Check. Make Sure Restore Login Window is enabled.
-  if (getActivePatches().indexOf(40) === -1 && exe.getClientDate() < 20181113)
+  if (getActivePatches().indexOf(40) === -1 && pe.getDate() < 20181113)
     return "Patch Cancelled - Restore Login Window patch is necessary but not enabled";
 
   //Step 1b - Find the MsgString ID references of "Sorry the character you are trying to use is banned for testing connection." - common in Login/Char & Map server DC
@@ -207,5 +207,5 @@ function DCToLoginWindow()
 //==========================================================================//
 function DCToLoginWindow_()
 {
-  return (exe.getClientDate() > 20100730);
+  return (pe.getDate() > 20100730);
 }
