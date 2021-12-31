@@ -32,7 +32,7 @@ function DisableHShield()
     consoleLog("Step 1d - Replace the JZ + XOR with XOR + INC of EAX to return 1 without initializing AhnLab");
     pe.replaceHex(offset, "33 C0 40 90 ");
 
-    if ((exe.getClientDate() >= 20090000 && exe.getClientDate() <= 20110228) && !IsSakray())
+    if ((pe.getDate() >= 20090000 && pe.getDate() <= 20110228) && !IsSakray())
     {
         consoleLog("Step 2a - Search pattern 'HackShield Error'");
         var code =
@@ -152,7 +152,7 @@ function DisableHShield()
             pe.replaceByte(offset2 + code.hexlength() - 1, 0xEB);
     }
 
-    if (exe.getClientDate() > 20140700)
+    if (pe.getDate() > 20140700)
         return true;
 
     consoleLog("Step 5a - Search address of the 'aossdk.dll'");
