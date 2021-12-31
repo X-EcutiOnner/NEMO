@@ -76,6 +76,7 @@ function registerTables()
     table.roulette_bronze_step = 75;
     table.UINewMakeCharWnd_OnCreate = 78;
     table.UINewMakeCharWnd_OnCreate_ret = 79;
+    table.UIWindowMgr_TextOutSerial = 80;
 
     registerTableFunctions();
 }

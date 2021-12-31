@@ -1,3 +1,20 @@
+//
+// Copyright (C) 2022  Andrei Karas (4144)
+//
+// Hercules is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+
 //############################################################
 //# Purpose: Modify the Serial Display function to reset EAX #
 //#          and thereby skip showing the serial number      #
@@ -5,33 +22,8 @@
 
 function RemoveSerialDisplay()
 {
-
-  //Step 1a - Prep comparison code
-  var code1 =
-    " 83 C0 ??"          //ADD EAX, const1
-  + " 3B 41 ??"          //CMP EAX, DWORD PTR DS:[EAX+const2]
-  + " 0F 8C ?? 00 00 00" //JL addr
-  + " 56"                //PUSH ESI
-  ;
-
-  var code2 = " 6A 00"; //PUSH 0
-
-  //Step 1b - Find the code
-  var offset = pe.findCode(code1 + " 57" + code2); //New Client
-
-  if (offset === -1)
-    offset = pe.findCode(code1 + code2); //Older client
-
-  if (offset === -1)
-    return "Failed in Step 1";
-
-  //Step 2 - Overwrite ADD and CMP statements with the following. Since EAX is 0, the JL will always Jump
-  // NOP
-  // XOR EAX, EAX
-  // CMP EAX, 1
-  pe.replaceHex(offset, " 90 31 C0 83 F8 01");
-
-  return true;
+    pe.replaceAsmFile(table.getRawValidated(table.UIWindowMgr_TextOutSerial));
+    return true;
 }
 
 //=================================//
@@ -39,5 +31,5 @@ function RemoveSerialDisplay()
 //=================================//
 function RemoveSerialDisplay_()
 {
-  return (pe.getDate() > 20101116);
+    return (pe.getDate() > 20101116);
 }
