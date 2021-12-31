@@ -361,7 +361,7 @@ function FetchPacketKeyInfo()
   if (!f.open(APP_PATH + "/Input/PacketKeyMap.txt") )
     return "PKI: Unable to open map file";
 
-  var cdate = exe.getClientDate();
+  var cdate = pe.getDate();
   while (!f.eof())
   {
     //Step 5b - Iterate through file and look for any entry for the clients date. Extract the keys after the clientdate
