@@ -82,5 +82,5 @@ function EnableMailBox()
 //================================================//
 function EnableMailBox_()
 {
-  return (exe.getClientDate() >= 20130320 || exe.getClientDate() <= 20140800);
+  return (pe.getDate() >= 20130320 || pe.getDate() <= 20140800);
 }
