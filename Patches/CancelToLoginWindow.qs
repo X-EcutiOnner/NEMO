@@ -119,7 +119,7 @@ function CancelToLoginWindow()
         if (pe.fetchHex(offset - 2, 2) === " 6a 00")
         {
             // do this change only for some 2017+ clients.
-            if (exe.getClientDate() > 20170000)
+            if (pe.getDate() > 20170000)
             {
                 offset -= 2;
             }
@@ -198,5 +198,5 @@ function CancelToLoginWindow()
 //==========================================================================//
 function CancelToLoginWindow_()
 {
-    return (exe.getClientDate() > 20100803);
+    return (pe.getDate() > 20100803);
 }
