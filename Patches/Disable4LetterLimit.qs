@@ -25,7 +25,7 @@ function Disable4LetterUsernameLimit()
 function Disable4LetterLimit(index)
 { //Some old clients dont have the ID Check
 
-  if (!IsZero() && exe.getClientDate() < 20181113)
+  if (!IsZero() && pe.getDate() < 20181113)
   { //Old clients
 
     //Step 1a - Find all Text Size comparisons with 4 chars.
