@@ -38,5 +38,5 @@ function DisableLoginEncryption()
 //=================================//
 function DisableLoginEncryption_()
 {
-  return (exe.getClientDate() < 20100803);
+  return (pe.getDate() < 20100803);
 }
