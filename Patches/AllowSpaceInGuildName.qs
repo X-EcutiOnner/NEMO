@@ -76,5 +76,5 @@ function AllowSpaceInGuildName()
 //==============================//
 function AllowSpaceInGuildName_()
 {
-    return (exe.getClientDate() >= 20120207);
+    return (pe.getDate() >= 20120207);
 }
