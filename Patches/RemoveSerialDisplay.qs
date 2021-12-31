@@ -39,5 +39,5 @@ function RemoveSerialDisplay()
 //=================================//
 function RemoveSerialDisplay_()
 {
-  return (exe.getClientDate() > 20101116);
+  return (pe.getDate() > 20101116);
 }
