@@ -10,7 +10,7 @@ function DisableWalkToDelay()
 function SetWalkToDelay()
 {
     var value1 = exe.getUserInput("$walkDelay", XTYPE_WORD, _("Number Input"), _("Enter the new walk delay (0-1000) - snaps to closest valid value"), 150, 0, 1000);
-    if (exe.getClientDate() > 20170329)
+    if (pe.getDate() > 20170329)
     {
         var value2 = exe.getUserInput("$walkDelay2", XTYPE_WORD, _("Number Input"), _("Enter the new walk delay 2 (0-1000) - snaps to closest valid value"), 150, 0, 1000);
     }
@@ -241,7 +241,7 @@ function ChangeWalkToDelay(value1, value2)
         }
     }
 
-    if (exe.getClientDate() > 20170329)
+    if (pe.getDate() > 20170329)
     {
         consoleLog("Step 1b - Search the second delay addition");
         var code =
@@ -265,5 +265,5 @@ function ChangeWalkToDelay(value1, value2)
 //=======================================================//
 function ChangeWalkToDelay_()
 {
-    return (exe.getClientDate() > 20020729);
+    return (pe.getDate() > 20020729);
 }
