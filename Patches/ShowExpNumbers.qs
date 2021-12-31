@@ -117,7 +117,7 @@ function ShowExpNumbers()
 
   //Step 3e - Check if Extra PUSH 0 is there (only for clients > 20140116)
   var extraPush = "";
-  if (exe.getClientDate() > 20140116)
+  if (pe.getDate() > 20140116)
     extraPush = " 6A 00";
   //Step 3f - Check if Extra PUSH 0 is there (only for 2020 clients 20200325)
   var extraPush2 = "";
