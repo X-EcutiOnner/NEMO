@@ -498,10 +498,12 @@ function pe_replaceAsmText(patchAddr, commands, vars)
     return obj;
 }
 
-function pe_replaceAsmFile(fileName, vars)
+function pe_replaceAsmFile(patchAddr, fileName, vars)
 {
+    if (typeof(vars) === "undefined")
+        vars = {}
     var commands = asm.load(fileName);
-    return pe_replaceAsmText(commands, vars);
+    return pe_replaceAsmText(patchAddr, commands, vars);
 }
 
 function pe_setValue(offset, offset2, value)
