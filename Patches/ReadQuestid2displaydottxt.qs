@@ -5,22 +5,21 @@
 
 function ReadQuestid2displaydottxt()
 {
-
     //Step 1a - Find address of questID2display.txt
-    var offset = pe.stringVa("questID2display.txt");
-    if (offset === -1)
-        return "Failed in Step 1 - questID2display not found";
+    var txtHex = pe.stringHex4("questID2display.txt");
 
     //Step 1b - Find its reference
     var code =
-        " 6A 00"                    //PUSH 0
-      + " 68" + offset.packToHex(4) //PUSH addr2 ; "questID2display.txt"
-    ;
-    offset = pe.findCode(code);//VC9+ Clients
+        " 6A 00" +       // PUSH 0
+        " 68" + txtHex;  // PUSH addr2 ; "questID2display.txt"
+    var offset = pe.findCode(code);//VC9+ Clients
 
     if (offset === -1)
     {
-        code = code.replace(" 00", " 00 8D ?? ??");//Insert LEA reg32, [LOCAL.x] after PUSH 0
+        code =
+            " 6A 00" +       // PUSH 0
+            " 8D ?? ??" +    // LEA reg32, [LOCAL.x]
+            " 68" + txtHex;  // PUSH addr2 ; "questID2display.txt"
         offset = pe.findCode(code);//Older Clients
     }
 
