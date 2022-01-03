@@ -20,7 +20,7 @@
 //##################################################################
 function RestoreSongsEffect()
 {
-    //Step 1a - Find CSkill::OnProcess
+    consoleLog("Step 1a - Find CSkill::OnProcess");
     var code =
         " E8 ?? ?? ?? ??"       //0 call CGameActor::GetJob
       + " 83 C0 82"             //5 add eax,-7E
@@ -42,10 +42,10 @@ function RestoreSongsEffect()
     logVaVar("CSkill_OnProcess switch1", offset, switch1Offset);
     logVaVar("CSkill_OnProcess switch2", offset, switch2Offset);
 
-    //Step 1b - Get the address of indirect switch table
+    consoleLog("Step 1b - Get the address of indirect switch table");
     var iswTable = pe.fetchDWord(offset + switch1Offset);
 
-    //Step 2 - Find & borrow the code of LandProtector
+    consoleLog("Step 2 - Find & borrow the code of LandProtector");
     code =
         " 83 BE ?? ?? 00 00 00"    //0 cmp dword ptr [esi+3E0],00
       + " 0F 85 ?? ?? ?? ??"       //7 jne addr
@@ -101,7 +101,7 @@ function RestoreSongsEffect()
     var patchAddr = offset + patchOffset;
     var retAddr = pe.rawToVa(patchAddr + 5).packToHex(4);
 
-    //Step 3 - get skill id offset
+    consoleLog("Step 3 - get skill id offset");
     code =
         " B8 ?? ?? 00 00"     //0 mov eax,1094h
       + " 75 06"              //5 jne short
@@ -117,10 +117,10 @@ function RestoreSongsEffect()
     var sidOffset = pe.fetchHex(offset + jobOffset[0], jobOffset[1]);
     logField("CGameActor::m_job", offset, jobOffset);
 
-    //Step 4a - Prepare effectID list
+    consoleLog("Step 4a - Prepare effectID list");
     var effectID = [242, 278, 279, 280, 281, 282, 283, 284, 285, 277, 286, 287, 288, 289, 290, 291, 292, 293, 294];
 
-    //Step 4b - Prepare the code to insert
+    consoleLog("Step 4b - Prepare the code to insert");
     var ins =
         " 50"                   //push eax
       + " 8B 86" + sidOffset    //mov eax,[esi+250]
@@ -134,12 +134,12 @@ function RestoreSongsEffect()
     if (free === -1)
         return "Failed in Step 4 - No enough free space";
 
-    //Step 4c - Find free space
+    consoleLog("Step 4c - Find free space");
     var freeRva = pe.rawToVa(free);
     var swTable = free + case1Offset + (effectID.length * 12);
     ins = ins.replace(" XX XX XX XX", pe.rawToVa(swTable).packToHex(4));
 
-    //Step 4d - Add switch cases
+    consoleLog("Step 4d - Add switch cases");
     for (var i = 0; i < effectID.length; i++)
     {
         code =
@@ -152,20 +152,20 @@ function RestoreSongsEffect()
         ins += code;
     }
 
-    //Step 4e - Add switch address table
+    consoleLog("Step 4e - Add switch address table");
     for (var i = 0; i < effectID.length; i++)
     {
         var swAddr = free + case1Offset + (i * 12);
         ins += pe.rawToVa(swAddr).packToHex(4);
     }
 
-    //Step 4f - Inject the code
+    consoleLog("Step 4f - Inject the code");
     code = " E9" + (freeRva - pe.rawToVa(patchAddr + 5)).packToHex(4);
 
     pe.insertHexAt(free, size, ins);
     pe.replaceHex(patchAddr, code);
 
-    //Step 5 - Modify indirect switch table
+    consoleLog("Step 5 - Modify indirect switch table");
     var firstUnitID = 126;
     var LPUnirID = 157;
     var firstSongUnitID = 158;
