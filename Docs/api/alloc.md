@@ -4,8 +4,14 @@
 
 ## Functions
 
+### alloc.find
+
+``alloc.find(size)``
+
+Search free area in exe with given size.
+
 ### alloc.reserve
 
-``alloc.reserve(size)``
+``alloc.reserve(rawAddr, size)``
 
-Mark part of free area in exe as used.
+Mark free area at address rawAddr in exe as used.
