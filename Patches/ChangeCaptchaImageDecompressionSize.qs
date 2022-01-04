@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2018-2021  Andrei Karas (4144)
+// Copyright (C) 2018-2022  Andrei Karas (4144)
 // Copyright (C) 2021 Asheraf
 //
 // Hercules is free software: you can redistribute it and/or modify
