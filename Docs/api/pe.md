@@ -794,3 +794,8 @@ Return PE header raw address.
 
 Return PE optional header raw address.
 
+### pe.getDate
+
+``pe.getDate()``
+
+Return PE file build date in format YYYYMMDD as integer.
