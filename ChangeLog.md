@@ -1,3 +1,22 @@
+# 2021-01-05 Different updates
+
+## Patches
+
+- Fix patch [Remove Serial Display](http://nemo.herc.ws/patches/RemoveSerialDisplay/#success-clients). (fix by @4144).
+- Fix patch [Always Load Client Plugins](http://nemo.herc.ws/patches/AlwaysLoadClientPlugins/#success-clients) for old clients. (fix by @4144).
+
+## For devs
+
+- Add function for insert data at address: pe.insertAt.
+- Add functions for insert in any free space: pe.insert, pe.insertHex.
+- Add function for get exe build date: pe.getDate.
+- Copy insert functions from exe object into pe object.
+
+## Other
+
+- Update copyright year.
+- Update tables.
+
 # 2021-12-28 Different updates
 
 ## Patches
