@@ -1,3 +1,9 @@
+# 2022-01-06 Functions fixes
+
+## Other
+
+- Fixed new assembler insert functions.
+
 # 2022-01-05 Different updates
 
 ## Patches
