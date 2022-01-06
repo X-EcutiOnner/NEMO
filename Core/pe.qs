@@ -619,10 +619,7 @@ function pe_insertAsmText(commands, vars, freeSpace)
         fatalError("Failed in pe.insertAsmText - Not enough free space");
 
     var obj = asm.textToObjRaw(free, commands, vars);
-    for (var f = 0; f < freeSpace; f ++)
-        obj.code = obj.code + " 00";
-    alloc.reserve(free, size);
-    pe.replaceHex(free, obj.code);
+    pe.insertHexAt(free, size, obj.code);
 
     return [free, obj.code, obj.vars];
 }
@@ -648,15 +645,12 @@ function pe_insertAsmTextObj(commands, vars, freeSpace, dryRun)
     }
 
     var obj = asm.textToObjRaw(free, commands, vars);
-    for (var f = 0; f < freeSpace; f ++)
-        obj.code = obj.code + " 00";
 
     if (dryRun !== true)
     {
         if (patch.getState() !== 2)
         {
-            alloc.reserve(free, size);
-            pe.replaceHex(free, obj.code);
+            pe.insertHexAt(free, size, obj.code);
         }
         else
         {
