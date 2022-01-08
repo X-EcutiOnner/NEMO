@@ -491,11 +491,27 @@ function pe_replace(addrRaw, data)
     return pe.replaceHex(addrRaw, data.toHex());
 }
 
-function pe_replaceAsmText(patchAddr, commands, vars)
+function pe_resizeHexCode(code, codeLen)
 {
-    var obj = asm.textToHexRaw(patchAddr, commands, vars);
-    pe.replaceHex(patchAddr, obj);
-    return obj;
+    if (typeof(codeLen) !== "undefined")
+    {
+        var sz = code.hexlength();
+        if (sz > codeLen)
+            fatalError("Existing code bigger than requested");
+        for (var i = 0; i < codeLen - sz; i ++)
+        {
+            code = code + " 90";
+        }
+    }
+    return code;
+}
+
+function pe_replaceAsmText(patchAddr, commands, vars, codeLen)
+{
+    var code = asm.textToHexRaw(patchAddr, commands, vars);
+    code = pe.resizeHexCode(code, codeLen);
+    pe.replaceHex(patchAddr, code);
+    return code;
 }
 
 function pe_replaceAsmFile(patchAddr, fileName, vars)
@@ -526,17 +542,7 @@ function pe_setJmpVa(patchAddr, jmpAddrVa, cmd, codeLen)
         "offset": jmpAddrVa,
     };
     var code = asm.textToHexRaw(patchAddr, cmd + " offset", vars);
-    if (typeof(codeLen) !== "undefined")
-    {
-        var sz = code.hexlength();
-        if (sz > codeLen)
-            fatalError("Jmp Code bigger than requested");
-        for (var i = 0; i < codeLen - sz; i ++)
-        {
-            code = code + " 90";
-        }
-    }
-
+    code = pe.resizeHexCode(code, codeLen);
     if (patch.getState() !== 2)
         pe.replaceHex(patchAddr, code);
     else
@@ -787,4 +793,5 @@ function registerPe()
     pe.insertDWord = pe_insertDWord;
     pe.insertHex = pe_insertHex;
     pe.insert = pe_insert;
+    pe.resizeHexCode = pe_resizeHexCode;
 }

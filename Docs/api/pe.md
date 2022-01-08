@@ -470,7 +470,10 @@ Patch dword at given raw address.
 
 ### pe.replaceAsmText
 
-``pe.replaceAsmText(patchAddr, commands, vars)``
+```
+pe.replaceAsmText(patchAddr, commands, vars)
+pe.replaceAsmText(patchAddr, commands, vars, codeLen)
+```
 
 Replace bytes at raw address patchAddr to given assembler code.
 
@@ -479,6 +482,7 @@ Replace bytes at raw address patchAddr to given assembler code.
 | patchAddr| Raw address where code should be stored |
 | commands | Assembler text with commands |
 | vars     | Variables for assembler text |
+| codeLen  | Requested code len. If need add nops at end |
 
 On success return bytes in hex format from assembler text.
 
@@ -799,3 +803,12 @@ Return PE optional header raw address.
 ``pe.getDate()``
 
 Return PE file build date in format YYYYMMDD as integer.
+
+
+### pe.resizeHexCode
+
+``pe.resizeHexCode(code, codeLen)``
+
+Resize given hex code bytes to size of codeLen bytes.
+
+If given code len is bigger than codeLen then throw exception.
