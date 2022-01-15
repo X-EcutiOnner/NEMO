@@ -488,7 +488,10 @@ On success return bytes in hex format from assembler text.
 
 ### pe.replaceAsmFile
 
-``pe.replaceAsmFile(fileName, commands, vars)``
+```
+pe.replaceAsmFile(fileName, commands, vars)
+pe.replaceAsmFile(fileName, commands, vars, codeLen)
+```
 
 Replace bytes at raw address patchAddr to assembler code from given file name.
 
@@ -497,6 +500,7 @@ Replace bytes at raw address patchAddr to assembler code from given file name.
 | fileName | File name with assembler code |
 | commands | Assembler text with commands |
 | vars     | Variables for assembler text |
+| codeLen  | Requested code len. If need add nops at end |
 
 On success return bytes in hex format from assembler text.
 
