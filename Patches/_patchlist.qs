@@ -744,4 +744,8 @@ registerPatch(422, "ChangeRouletteSilverLimit", "Change minimal silver amount fo
 
 registerPatch(423, "ChangeRouletteBronzeLimit", "Change minimal bronze amount for start roulette", "Roulette", 0, "4144", "Also need change this limit in emulator side", false);
 
+// 424 reserved
+
+// 425 reserved
+
 GlobalPostInit();

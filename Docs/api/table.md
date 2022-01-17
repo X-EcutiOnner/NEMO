@@ -38,11 +38,31 @@ Returns variable value as raw address.
 
 ### table.getRawValidated
 
-``table_getRawValidated(varId)``
+``table.getRawValidated(varId)``
 
 If variable not exists throw error.
 
 Returns variable value as raw address.
+
+### table.getAny
+
+```
+table.getAny(var1, ...)
+```
+
+If all variables not exists return 0.
+
+Returns first existing variable value as is or virtual address.
+
+### table.getAnyValidated
+
+```
+table.getAnyValidated(var1, ...)
+```
+
+If all variables not exists throw error.
+
+Returns first existing variable value as is or virtual address.
 
 
 ### table.getSessionAbsHex4

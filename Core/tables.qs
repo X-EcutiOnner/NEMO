@@ -117,6 +117,25 @@ function table_getHex4(varId)
     return table.get(varId).packToHex(4);
 }
 
+function table_getAny(vars)
+{
+    for (var i = 0; i < vars.length; i ++)
+    {
+        var value = table.get(vars[i]);
+        if (value > 0)
+            return value;
+    }
+    return 0;
+}
+
+function table_getAnyValidated(vars)
+{
+    var value = table_getAny(vars);
+    if (value > 0)
+        return value;
+    throw "All variables not exists";
+}
+
 function table_getSessionAbsHex4(varId)
 {
     checkArgs("table.getSessionAbsHex4", arguments, [["Number"]]);
@@ -156,6 +175,8 @@ function registerTableFunctions()
     table.getHex4 = table_getHex4;
     table.getRaw = table_getRaw;
     table.getRawValidated = table_getRawValidated;
+    table.getAny = table_getAny;
+    table.getAnyValidated = table_getAnyValidated;
     table.getSessionAbsHex4 = table_getSessionAbsHex4;
     table.varToHook = table_varToHook;
 }
