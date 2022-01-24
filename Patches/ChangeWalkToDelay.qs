@@ -25,9 +25,9 @@ function SetWalkToDelay()
 //# Purpose: Find the walk delay and replace it with the value specified #
 //########################################################################
 
-function ChangeWalkToDelay(value1, value2)
+function ChangeWalkToDelay_Match()
 {
-    consoleLog("Step 1a - Search the first delay addition");
+    consoleLog("Search the first delay addition");
     var timeGetTimeHex = imports.ptrHexValidated("timeGetTime", "winmm.dll");
 
     var code = [
@@ -42,6 +42,7 @@ function ChangeWalkToDelay(value1, value2)
             "83 8B ?? ?? ?? 00 00 ",      // 32 cmp [eax+CPlayer.m_proceedType], 0
             {
                 "delayOffset": [14, 4],
+                "delayCmdOffset": [12, 6],
                 "leftBtnClickTickOffset": [8, 4],
                 "worldOffset": [22, 4],
                 "playerOffset": [31, 1],
@@ -60,6 +61,7 @@ function ChangeWalkToDelay(value1, value2)
             "83 B8 ?? ?? ?? 00 00 ",      // 34 cmp [eax+CPlayer.m_proceedType], 0
             {
                 "delayOffset": [22, 4],
+                "delayCmdOffset": [20, 6],
                 "leftBtnClickTickOffset": [10, 4],
                 "worldOffset": [16, 4],
                 "playerOffset": [30, 1],
@@ -78,6 +80,7 @@ function ChangeWalkToDelay(value1, value2)
             "85 C0 ",                     // 38 test eax, eax
             {
                 "delayOffset": [14, 4],
+                "delayCmdOffset": [12, 6],
                 "leftBtnClickTickOffset": [8, 4],
                 "worldOffset": [22, 4],
                 "playerOffset": [31, 1],
@@ -96,6 +99,7 @@ function ChangeWalkToDelay(value1, value2)
             "39 B8 ?? ?? ?? 00 ",         // 34 cmp [eax+CPlayer.m_proceedType], edi
             {
                 "delayOffset": [22, 4],
+                "delayCmdOffset": [20, 6],
                 "leftBtnClickTickOffset": [10, 4],
                 "worldOffset": [16, 4],
                 "playerOffset": [30, 1],
@@ -113,6 +117,7 @@ function ChangeWalkToDelay(value1, value2)
             "83 B8 ?? ?? ?? 00 00 ",      // 32 cmp [eax+CPlayer.m_proceedType], 0
             {
                 "delayOffset": [20, 4],
+                "delayCmdOffset": [18, 6],
                 "leftBtnClickTickOffset": [8, 4],
                 "worldOffset": [14, 4],
                 "playerOffset": [28, 1],
@@ -130,6 +135,7 @@ function ChangeWalkToDelay(value1, value2)
             "83 B8 ?? ?? ?? 00 00 ",      // 32 cmp [eax+CPlayer.m_proceedType], 0
             {
                 "delayOffset": [14, 4],
+                "delayCmdOffset": [12, 6],
                 "leftBtnClickTickOffset": [8, 4],
                 "worldOffset": [22, 4],
                 "playerOffset": [31, 1],
@@ -147,6 +153,7 @@ function ChangeWalkToDelay(value1, value2)
             "83 B8 ?? ?? ?? 00 00 ",      // 32 cmp [eax+CPlayer.m_proceedType], 0
             {
                 "delayOffset": [14, 4],
+                "delayCmdOffset": [12, 6],
                 "leftBtnClickTickOffset": [8, 4],
                 "worldOffset": [22, 4],
                 "playerOffset": [31, 1],
@@ -166,6 +173,7 @@ function ChangeWalkToDelay(value1, value2)
             "83 B8 ?? ?? ?? 00 00 ",      // 45 cmp [eax+CPlayer.m_proceedType], 0
             {
                 "delayOffset": [20, 4],
+                "delayCmdOffset": [18, 6],
                 "leftBtnClickTickOffset": [8, 4],
                 "worldOffset": [28, 4],
                 "playerOffset": [40, 1],
@@ -189,6 +197,7 @@ function ChangeWalkToDelay(value1, value2)
             "83 B8 ?? ?? ?? 00 00 ",      // 45 cmp [eax+CPlayer.m_proceedType], 0
             {
                 "delayOffset": [20, 4],
+                "delayCmdOffset": [18, 6],
                 "leftBtnClickTickOffset": [8, 4],
                 "worldOffset": [28, 4],
                 "playerOffset": [40, 1],
@@ -210,6 +219,7 @@ function ChangeWalkToDelay(value1, value2)
             "83 B8 ?? ?? ?? 00 00 ",      // 32 cmp [eax+CPlayer.m_proceedType], 0
             {
                 "delayOffset": [14, 4],
+                "delayCmdOffset": [12, 6],
                 "leftBtnClickTickOffset": [8, 4],
                 "worldOffset": [22, 4],
                 "playerOffset": [31, 1],
@@ -220,13 +230,9 @@ function ChangeWalkToDelay(value1, value2)
     var offsetObj = pe.findAnyCode(code);
 
     if (offsetObj === -1)
-        return "Failed in Step 1a - Pattern not found";
+        throw "Failed in Step 1a - Pattern not found";
 
     var offset = offsetObj.offset;
-
-    consoleLog("Step 2a - Replace the first offset value");
-    pe.setValue(offset, offsetObj.delayOffset, value1);
-
     logField("CGameMode::m_leftBtnClickTick", offset, offsetObj.leftBtnClickTickOffset);
     logField("CGameMode::m_world", offset, offsetObj.worldOffset);
     logField("CWorld::m_player", offset, offsetObj.playerOffset);
@@ -241,20 +247,62 @@ function ChangeWalkToDelay(value1, value2)
         }
     }
 
+    var obj = hooks.createHookObj();
+//    obj.patchAddr = offset;
+    obj.stolenCode = "";
+    obj.stolenCode1 = "";
+    obj.retCode = "";
+    obj.endHook = false;
+
+    obj.offset = offset;
+    obj.delayOffset = offsetObj.delayOffset;
+    obj.delayCmdOffset = offsetObj.delayCmdOffset;
+    return obj;
+}
+
+function ChangeWalkToDelay_Match2()
+{
+    consoleLog("Search the second delay addition");
+    var code =
+        "81 C1 5E 01 00 00 " +  // 00 add ecx, 15Eh ; 350ms
+        "3B C1 " ;              // 06 cmp eax, ecx
+    var delayOffset = [2, 4];
+    var delayCmdOffset = [0, 6];
+    var reg = "ecx";
+    var offset = pe.findCode(code);
+
+    if (offset === -1)
+        throw "Failed in second delay search: Pattern not found";
+
+    var obj = hooks.createHookObj();
+//    obj.patchAddr = offset;
+    obj.stolenCode = "";
+    obj.stolenCode1 = "";
+    obj.retCode = "";
+    obj.endHook = false;
+
+    obj.offset = offset;
+    obj.delayOffset = delayOffset;
+    obj.delayCmdOffset = delayCmdOffset;
+    obj.reg = reg;
+    return obj;
+}
+
+function ChangeWalkToDelay(value1, value2)
+{
+    var offsetObj = ChangeWalkToDelay_Match();
+    var offset = offsetObj.offset;
+
+    consoleLog("Replace the first offset value");
+    pe.setValue(offset, offsetObj.delayOffset, value1);
+
     if (pe.getDate() > 20170329)
     {
-        consoleLog("Step 1b - Search the second delay addition");
-        var code =
-            "81 C1 5E 01 00 00 " +  // 00 add ecx, 15Eh ; 350ms
-            "3B C1 " ;              // 06 cmp eax, ecx
-        var delayOffset = [2, 4];
-        var offset = pe.findCode(code);
+        offsetObj = ChangeWalkToDelay_Match2();
+        offset = offsetObj.offset;
 
-        if (offset === -1)
-            return "Failed in Step 1b - Pattern not found";
-
-        consoleLog("Step 2b - Replace the second offset value");
-        pe.setValue(offset, delayOffset, value2);
+        consoleLog("Replace the second offset value");
+        pe.setValue(offset, offsetObj.delayOffset, value2);
     }
 
     return true;
