@@ -35,12 +35,13 @@ Remove patched data for given patch.
 
 
 ## Legacy functions
-
 Better not use this functions. This functions working with bugs or can be removed in future.
 
 ### exe.fetchDWord
 
 ``exe.fetchDWord(rawAddr)``
+
+Outdated.
 
 Read dword from given address.
 
@@ -48,17 +49,25 @@ Read dword from given address.
 
 ``exe.fetchQWord(rawAddr)``
 
+Outdated.
+
 Read qword from given address.
 
 ### exe.fetchWord
 
 ``exe.fetchWord(rawAddr)``
 
+Outdated.
+
 Read word from given address.
 
 ### exe.fetchUByte
 
+Outdated.
+
 ``exe.fetchUByte(rawAddr)``
+
+Outdated.
 
 Read unsigned byte from given address.
 
@@ -66,11 +75,15 @@ Read unsigned byte from given address.
 
 ``exe.fetchByte(rawAddr)``
 
+Outdated.
+
 Read signed byte from given address.
 
 ### exe.fetchHex
 
 ``exe.fetchHex(rawAddr, size)``
+
+Outdated.
 
 Read hex bytes from given address.
 
@@ -78,8 +91,9 @@ Read hex bytes from given address.
 
 ``exe.fetch(addr, size)``
 
-Read null terminated string from given address.
+Outdated.
 
+Read null terminated string from given address.
 
 ### exe.findCode
 
@@ -89,6 +103,8 @@ exe.findCode(code, codeType)
 exe.findCode(code, codeType, useMask)
 exe.findCode(code, codeType, useMask, mask)
 ```
+
+Outdated.
 
 Search first hex bytes pattern in main executable section.
 
@@ -102,6 +118,8 @@ exe.findCodes(code, codeType)
 exe.findCodes(code, codeType, useMask)
 exe.findCodes(code, codeType, useMask, mask)
 ```
+
+Outdated.
 
 Search all hex bytes pattern in main executable section.
 
@@ -118,6 +136,8 @@ exe.find(code, codeType, useMask, mask, start)
 exe.find(code, codeType, useMask, mask, start, finish)
 ```
 
+Outdated.
+
 Search first hex bytes pattern in whole binary.
 
 Recommended to switch to pe.find
@@ -133,6 +153,8 @@ exe.findAll(code, codeType, useMask, mask, start)
 exe.findAll(code, codeType, useMask, mask, start, finish)
 ```
 
+Outdated.
+
 Search all hex bytes pattern in whole binary.
 
 Recommended to switch to pe.findAll
@@ -145,11 +167,15 @@ exe.findString(pattern, addrType)
 exe.findString(pattern, addrType, prefixZero)
 ```
 
+Outdated.
+
 Find string in whole binary.
 
 ### exe.Raw2Rva
 
 ``exe.Raw2Rva(rawAddr)``
+
+Outdated.
 
 Convert raw address into virtual address.
 
@@ -161,6 +187,8 @@ Recommended to switch to pe.rawToVa
 
 ``exe.Rva2Raw(vaAddr)``
 
+Outdated.
+
 Convert virtual address into raw address.
 
 If address wrong, return -1.
@@ -171,6 +199,8 @@ Recommended to switch to pe.vaToRaw
 
 ``exe.getROffset(section)``
 
+Outdated.
+
 Return raw address of given section.
 
 Recommended to switch to pe.sectionRaw(section)[0]
@@ -179,11 +209,15 @@ Recommended to switch to pe.sectionRaw(section)[0]
 
 ``exe.getRSize(section)``
 
+Outdated.
+
 Return raw size of given section.
 
 ### exe.getVOffset
 
 ``exe.getVOffset(section)``
+
+Outdated.
 
 Return rva address of given section.
 
@@ -193,11 +227,15 @@ Recommended to switch to pe.sectionVa(section)[0]
 
 ``exe.getVSize(section)``
 
+Outdated.
+
 Return virtual size of given section.
 
 ### exe.getPEOffset
 
 ``exe.getPEOffset()``
+
+Outdated.
 
 Return PE header raw address.
 
@@ -205,23 +243,13 @@ Return PE header raw address.
 
 ``exe.getImageBase()``
 
+Outdated.
+
 Return image base.
 
 ### exe.match
 
-``exe.match(code, useMask, rawAddr)``
-
-Check is given bytes can be matched to given raw address.
-
-| Argument | Description |
-| -------- | ----------- |
-| code     | Matched hex bytes |
-| useMask  | Flag for enable use mask in matching |
-| rawAddr  | Raw address for check with given bytes |
-
-If given bytes matched, return true.
-
-In other case return false.
+Please use pe.match
 
 ### exe.fetchValue
 
@@ -237,18 +265,7 @@ Please use pe.fetchRelativeValue
 
 ### exe.fetchHexBytes
 
-``exe.fetchHexBytes(offset, offset2)``
-
-Allow fetch hex bytes from binary with raw address offset plus offset2.
-
-In offset2 also exists size of fetched value in bytes.
-
-| Argument | Description |
-| -------- | ----------- |
-| offset   | Raw address (int) |
-| offset2  | additional offset and size (two ints) |
-
-On success return fetched bytes in hex string format.
+Please use pe.fetchHexBytes
 
 ### exe.replace
 
@@ -323,90 +340,20 @@ Insert custom block of bytes at address returned by exe.findZeros.
 
 ### exe.insertAsmText
 
-``exe.insertAsmText(commands, vars, freeSpace)``
-
-Insert assembler code in free block in binary.
-
-| Argument | Description |
-| -------- | ----------- |
-| commands  | Assembler text with commands |
-| vars      | Variables for assembler text |
-| freeSpace | How many bytes reserve after asm code. If freeSpace missing then reserved 0 bytes |
-
-If fail trigger exception.
-
-If success, return array.
-
-Array index 0 contains raw address where bytes was stored.
-
-Array index 1 contains bytes sequence.
-
-Array index 2 contains variables generated from assembler.
+Please use pe.insertAsmText
 
 ### exe.insertAsmTextObj
 
-``exe.insertAsmTextObj(commands, vars, freeSpace, dryRun)``
-
-Insert assembler code in free block in binary.
-
-| Argument | Description |
-| -------- | ----------- |
-| commands  | Assembler text with commands |
-| vars      | Variables for assembler text |
-| freeSpace | How many bytes reserve after asm code. If freeSpace missing then reserved 0 bytes |
-| dryRun    | If true, not run actual insertion of asm code. If missing dryRun considered false |
-
-If fail trigger exception.
-
-If success, return object.
-
-| Field    | Description |
-| -------- | ----------- |
-| bytes    | Bytes sequence |
-| code     | Bytes in hex format |
-| vars     | Variables |
-| free     | Raw address where block was inserted |
+Please use pe.insertAsmTextObj
 
 ### exe.insertAsmFile
 
-``exe.insertAsmFile(fileName, vars, freeSpace, dryRun)``
-
-Insert assembler code from given file name in free block in binary.
-
-| Argument | Description |
-| -------- | ----------- |
-| fileName | File name with assembler code |
-| vars     | Variables for assembler text |
-| freeSpace | How many bytes reserve after asm code. If freeSpace missing then reserved 0 bytes |
-| dryRun   | If true, not run actual insertion of asm code. If missing dryRun considered false |
-
-File with code loaded by mask: "Patches/" + fileName + ".asm"
-
-If fail trigger exception.
-
-If success, return object.
-
-| Field    | Description |
-| -------- | ----------- |
-| bytes    | Bytes sequence |
-| code     | Bytes in hex format |
-| vars     | Variables |
-| free     | Raw address where block was inserted |
+Please use pe.insertAsmFile
 
 ### exe.insertDWord
 
-``exe.insertDWord(value, dryRun)``
-
-Insert given dword value into free block in binary.
-
-Return raw address where dword was inserter.
+Please use pe.insertDWord
 
 ### exe.insertHex
 
-``exe.insertHex(value)``
-
-Allocate space and insert given hex value.
-
-Return raw address of inserted value.
-
-On error throw exception.
+Please use pe.insertHex
