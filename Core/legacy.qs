@@ -17,11 +17,6 @@
 
 function reportLegacy(text)
 {
-    var enableLegacy = true;
-
-    if (typeof(enableLegacy) !== "undefined")
-        return;
-
     if (typeof(console2) !== "undefined")
         console2.logLegacy(text);
     throw text;
