@@ -748,4 +748,6 @@ registerPatch(423, "ChangeRouletteBronzeLimit", "Change minimal bronze amount fo
 
 // 425 reserved
 
+registerPatch(426, "SetWalkToDelayCmd", "Change Walk To Delay from chat.", "Fix", 16, "4144", "Allow enable/disable walk delay from chat command", false);
+
 GlobalPostInit();
