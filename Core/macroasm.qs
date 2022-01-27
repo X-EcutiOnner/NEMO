@@ -22,6 +22,7 @@ function macroAsm_create(addrVa, commands, vars)
     obj.text = commands;
     obj.vars = vars;
     obj.defines = {};
+    obj.condition = undefined
     obj.line = "";
     obj.update = false;
     obj.reparse = false;
@@ -101,6 +102,16 @@ function macroAsm_replaceCmds(obj)
             continue;
         }
         macroAsm_invokeMacroses(obj, i, macroAsm.macroses1);
+        if (typeof(obj.condition) !== "undefined")
+        {
+            var cond = obj.condition;
+            if (!(cond in obj.vars))
+            {
+                obj.reparse = false;
+                i ++;
+                continue;
+            }
+        }
         if (obj.reparse === false && (obj.line[0] === "%" || obj.line[0] === "#"))
             macroAsm_invokeMacroses(obj, i, macroAsm.macroses2);
         if (obj.reparse === false)
@@ -131,6 +142,14 @@ function macroAsm_addMacroses()
     function parse_cmd_arg(cmd, line)
     {
         cmd = cmd + " ";
+        var idx = line.indexOf(cmd);
+        if (idx !== 0 && idx !== 1)
+            return false;
+        return line.substring(cmd.length).trim();
+    }
+
+    function parse_cmd_arg0(cmd, line)
+    {
         var idx = line.indexOf(cmd);
         if (idx !== 0 && idx !== 1)
             return false;
@@ -377,6 +396,20 @@ function macroAsm_addMacroses()
         obj.line = "";
     }
 
+    function macro_ifdef(obj, cmd, arg)
+    {
+        obj.condition = arg;
+        obj.line = "";
+        consoleLog("set obj.condition: " + arg);
+    }
+
+    function macro_endif(obj, cmd)
+    {
+        obj.condition = undefined;
+        obj.line = "";
+        consoleLog("reset obj.condition: " + cmd);
+    }
+
     function assign_var(obj, varName, value)
     {
         if (varName in obj.vars)
@@ -393,9 +426,11 @@ function macroAsm_addMacroses()
         [macro_removeComments, undefined,    undefined,        undefined],
         [macro_replaceVars,    undefined,    undefined,        undefined],
         [macro_replaceDefs,    undefined,    undefined,        undefined],
+        [macro_endif,          "%endif",     parse_cmd_arg0,   undefined],
     ];
 
     macroAsm.macroses2 = [
+        [macro_ifdef,          "%ifdef",     parse_cmd_arg,    undefined],
         [macro_def,            "%def",       parse_cmd_argEq,  undefined],
         [macro_include,        "%include",   parse_cmd_arg,    undefined],
         [macro_instAsm,        "%insasm",    parse_cmd_arg,    check_arg_var],

@@ -158,3 +158,19 @@ Assign to variable address of import function
 Any arguments except FUNC can be missing.
 
 If VAR argument missing, for var named used FUNC.
+
+
+### %ifdef
+
+``%ifdef VAR``
+
+Start condition block and allow use below code only if ``VAR`` is set.
+
+Block ends on ``%endif``
+
+
+### %endid
+
+``%endif``
+
+Ends condition block started by ``%ifdef``.
