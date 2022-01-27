@@ -636,6 +636,16 @@ Return raw address of inserted value.
 
 On error throw exception.
 
+### pe.insertString
+
+``pe.insert(string)``
+
+Allocate space and insert given string value. After string add null byte.
+
+Return raw address of inserted string.
+
+On error throw exception.
+
 ### pe.setValue
 
 ``pe.setValue(offset, offset2, value)``

@@ -732,6 +732,11 @@ function pe_insert(value)
     return pe.insertHex(value.toHex());
 }
 
+function pe_insertString(value)
+{
+    return pe.insertHex((value + "\x00").toHex());
+}
+
 function registerPe()
 {
     pe.importTable = undefined;
@@ -793,5 +798,6 @@ function registerPe()
     pe.insertDWord = pe_insertDWord;
     pe.insertHex = pe_insertHex;
     pe.insert = pe_insert;
+    pe.insertString = pe_insertString;
     pe.resizeHexCode = pe_resizeHexCode;
 }
