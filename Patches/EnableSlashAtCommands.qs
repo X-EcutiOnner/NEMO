@@ -17,7 +17,7 @@
 function EnableSlashAtCommands()
 {
     var hook = hooks.initTableEndHook(table.CSession_GetTalkType_ret);
-    hook.addFilePost();
+    hook.addFilePost("", {}, 90000);
     hook.validate();
 
     return true;
