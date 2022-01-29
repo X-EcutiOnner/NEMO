@@ -17,7 +17,7 @@
 
 function SetWalkToDelayCmd()
 {
-    var value1 = exe.getUserInput("$walkDelayCmdDelay1", XTYPE_WORD, _("Number Input"), _("Enter the new walk delay (0-1000) - snaps to closest valid value"), 150, 0, 1000);
+    var value1 = exe.getUserInput("$walkDelayCmdDelay1", XTYPE_WORD, _("Number Input"), _("Enter the new walk delay (0-1000) - snaps to closest valid value"), 150, 1, 1000);
     if (pe.getDate() > 20170329)
     {
         var value2 = exe.getUserInput("$walkDelayCmdDelay2", XTYPE_WORD, _("Number Input"), _("Enter the new walk delay 2 (0-1000) - snaps to closest valid value"), 150, 0, 1000);
