@@ -62,6 +62,7 @@ function DisableAdventureAgent()
     var nopEnd = 92;
     var buttonFlagOffset = [2, 1];
     var sendMsgOffset = [9, 4];
+    var invalidateOffset = 0;
     var mesBtnOffsets = [[15, 4], [33, 4], [51, 4], [79, 4]];
     var setBitmapNameOffsets = [27, 45, 63];
     var setBitmapButtonTextOffset = 88;
@@ -69,10 +70,57 @@ function DisableAdventureAgent()
     var offset = pe.findCode(code);
 
     if (offset === -1)
+    {
+        code =
+            "C6 81 ?? ?? ?? 00 00 " +     // 0 mov [ecx+UIBitmapButton.button_flag], 0
+            "FF 90 ?? ?? ?? 00 " +        // 7 call [eax+UIBitmapButton_vtable.UIBitmapButton_Invalidate]
+            "8B 8F ?? ?? ?? 00 " +        // 13 mov ecx, [edi+UIMessengerGroupWnd.m_mesbtn]
+            "6A 00 " +                    // 19 push 0
+            "6A 00 " +                    // 21 push 0
+            "68 " + strHex +              // 23 push offset aIBasicInterface
+            "E8 ?? ?? ?? ?? " +           // 28 call UIBitmapButton_SetBitmapName
+            "8B 8F ?? ?? ?? 00 " +        // 33 mov ecx, [edi+UIMessengerGroupWnd.m_mesbtn]
+            "6A 00 " +                    // 39 push 0
+            "6A 01 " +                    // 41 push 1
+            "68 ?? ?? ?? ?? " +           // 43 push offset aIBasicInterface_0
+            "E8 ?? ?? ?? ?? " +           // 48 call UIBitmapButton_SetBitmapName
+            "8B 8F ?? ?? ?? 00 " +        // 53 mov ecx, [edi+UIMessengerGroupWnd.m_mesbtn]
+            "6A 00 " +                    // 59 push 0
+            "6A 02 " +                    // 61 push 2
+            "68 ?? ?? ?? ?? " +           // 63 push offset aIBasicInterface_1
+            "E8 ?? ?? ?? ?? " +           // 68 call UIBitmapButton_SetBitmapName
+            "68 BA 0D 00 00 " +           // 73 push 0DBAh
+            "E8 ?? ?? ?? ?? " +           // 78 call MsgStr
+            "8B 8F ?? ?? ?? 00 " +        // 83 mov ecx, [edi+UIMessengerGroupWnd.m_mesbtn]
+            "83 C4 04 " +                 // 89 add esp, 4
+            "50 " +                       // 92 push eax
+            "E8 ?? ?? ?? ?? " +           // 93 call UIBitmapButton_SetText
+            "33 C0 " +                    // 98 xor eax, eax
+            "E9 ?? ?? ?? 00 "             // 100 jmp loc_616249
+        nopStart = 0;
+        nopEnd = 98;
+        buttonFlagOffset = [2, 1];
+        sendMsgOffset = 0;
+        invalidateOffset = [9, 4];
+        mesBtnOffsets = [[15, 4], [35, 4], [55, 4], [85, 4]];
+        setBitmapNameOffsets = [29, 49, 69];
+        setBitmapButtonTextOffset = 94;
+
+        var offset = pe.findCode(code);
+    }
+
+    if (offset === -1)
         return "Failed in Step 2 - Pattern not found";
 
     logField("UIBitmapButton::button_flag", offset, buttonFlagOffset);
-    logField("UIBitmapButton_vtable::UIWindow_SendMsg", offset, sendMsgOffset);
+    if (sendMsgOffset != 0)
+    {
+        logField("UIBitmapButton_vtable::UIWindow_SendMsg", offset, sendMsgOffset);
+    }
+    if (invalidateOffset != 0)
+    {
+        logField("UIBitmapButton_vtable::UIWindow_Invalidate", offset, invalidateOffset);
+    }
     for (var i = 0; i < mesBtnOffsets.length; i ++)
     {
         logField("UIMessengerGroupWnd::m_mesbtn", offset, mesBtnOffsets[i]);
