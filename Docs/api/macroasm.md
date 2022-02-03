@@ -157,7 +157,7 @@ Assign to variable address of import function
 
 Any arguments except FUNC can be missing.
 
-If VAR argument missing, for var named used FUNC.
+If VAR argument missing, for var name used FUNC.
 
 
 ### %ifdef

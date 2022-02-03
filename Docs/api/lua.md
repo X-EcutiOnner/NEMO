@@ -128,9 +128,9 @@ In other case returns object with fields:
 | vars      | Variables what should be used for convert asm text into code |
 
 
-### lua_getCLuaLoadInfo
+### lua.getCLuaLoadInfo
 
-``lua_getCLuaLoadInfo(stackOffset)``
+``lua.getCLuaLoadInfo(stackOffset)``
 
 Return object with push asm code for copy argruments for CLua::Load.
 
