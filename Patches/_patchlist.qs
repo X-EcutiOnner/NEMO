@@ -109,7 +109,7 @@ registerPatch( 17, "EnableOfficialCustomFonts", "Enable Official Custom Fonts", 
 
 registerPatch( 18, "SkipServiceSelect", "Skip Service Selection Screen", "UI", 0, "Shinryo", "Jumps directly to the login interface without asking to select a service", false);
 
-registerPatch( 19, "EnableTitleBarMenu", "Enable Title Bar Menu", "UI", 0, "Shinryo", "Enable Title Bar Menu (Reduce, Maximize, Close button) and the window icon", false);
+registerPatch( 19, "EnableTitleBarMenu", "Enable Title Bar Menu (legacy)", "UI", 0, "Shinryo", "Replaced by patch 'Add close button to game window'", false);
 
 registerPatch( 20, "ExtendChatBox", "Extend Chat Box", "UI", 0, "Shinryo", "Extend the Main/Battle chat box max input chars from 70 to 234", false);
 
