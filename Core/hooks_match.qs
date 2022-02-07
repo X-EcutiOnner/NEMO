@@ -98,6 +98,7 @@ function hooks_matchFunctionEnd(storageKey, offset)
         "5B " +                       // 0 pop ebx
         "5D " +                       // 1 pop ebp
         "C2 ?? ??";                   // 2 retn 8
+    var callOffset = 0
     var stolenCodeOffset = [0, 5];
     var stolenCode1Offset = [0, 2];
     var retOffset = [2, 3];
@@ -109,6 +110,7 @@ function hooks_matchFunctionEnd(storageKey, offset)
             "5E " +                       // 0 pop esi
             "5B " +                       // 1 pop ebx
             "C2 ?? ??";                   // 2 retn 8
+        callOffset = 0
         stolenCodeOffset = [0, 5];
         stolenCode1Offset = [0, 2];
         retOffset = [2, 3];
@@ -121,6 +123,7 @@ function hooks_matchFunctionEnd(storageKey, offset)
             "8B E5 " +                    // 0 mov esp, ebp
             "5D " +                       // 2 pop ebp
             "C2 ?? ?? ";                  // 3 retn 4
+        callOffset = 0
         stolenCodeOffset = [0, 6];
         stolenCode1Offset = [0, 3];
         retOffset = [3, 3];
@@ -132,6 +135,7 @@ function hooks_matchFunctionEnd(storageKey, offset)
         code =
             "83 C4 ?? " +                 // 0 add esp, 20h
             "C2 ?? ??";                   // 3 retn 4
+        callOffset = 0
         stolenCodeOffset = [0, 6];
         stolenCode1Offset = [0, 3];
         retOffset = [3, 3];
@@ -143,6 +147,7 @@ function hooks_matchFunctionEnd(storageKey, offset)
         code =
             "81 C4 ?? 00 00 00 " +        // 0 add esp, 88h
             "C2 ?? ?? ";                  // 6 retn 0Ch
+        callOffset = 0
         stolenCodeOffset = [0, 9];
         stolenCode1Offset = [0, 6];
         retOffset = [6, 3];
@@ -156,6 +161,7 @@ function hooks_matchFunctionEnd(storageKey, offset)
             "8B E5 " +                    // 1 mov esp, ebp
             "5D " +                       // 3 pop ebp
             "C3 ";                        // 4 ret retn
+        callOffset = 0
         stolenCodeOffset = [0, 5];
         stolenCode1Offset = [0, 4];
         retOffset = [4, 1];
@@ -168,6 +174,7 @@ function hooks_matchFunctionEnd(storageKey, offset)
             "5E " +                       // 0 pop esi
             "83 C4 ?? " +                 // 1 add esp, 10h
             "C3 ";                        // 4 ret retn
+        callOffset = 0
         stolenCodeOffset = [0, 5];
         stolenCode1Offset = [0, 4];
         retOffset = [4, 1];
@@ -180,6 +187,7 @@ function hooks_matchFunctionEnd(storageKey, offset)
             "5B " +                       // 0 pop ebx
             "83 C4 ?? " +                 // 1 add esp, 10h
             "C3 ";                        // 4 ret retn
+        callOffset = 0
         stolenCodeOffset = [0, 5];
         stolenCode1Offset = [0, 4];
         retOffset = [4, 1];
@@ -188,12 +196,64 @@ function hooks_matchFunctionEnd(storageKey, offset)
 
     if (found !== true)
     {
+        code =
+            "E8 ?? ?? ?? ?? " +           // 0 call ___security_check_cookie
+            "8B E5 " +                    // 5 mov esp, ebp
+            "5D " +                       // 7 pop ebp
+            "C3 "                         // 8 ret retn
+        callOffset = [1, 4]
+        stolenCodeOffset = [5, 4];
+        stolenCode1Offset = [5, 3];
+        retOffset = [8, 1];
+        var found = pe.match(code, offset);
+    }
+
+    if (found !== true)
+    {
+        code =
+            "64 89 0D 00 00 00 00 " +     // 0 mov large fs:0, ecx
+            "8B E5 " +                    // 7 mov esp, ebp
+            "5D " +                       // 9 pop ebp
+            "C3 "                         // 10 ret retn
+        callOffset = 0
+        stolenCodeOffset = [0, 11];
+        stolenCode1Offset = [0, 10];
+        retOffset = [10, 1];
+        var found = pe.match(code, offset);
+    }
+
+    if (found !== true)
+    {
+        code =
+            "81 C4 ?? ?? ?? 00 " +        // 0 add esp, 0B0h
+            "C3 "                         // 6 ret retn
+        callOffset = 0
+        stolenCodeOffset = [0, 7];
+        stolenCode1Offset = [0, 6];
+        retOffset = [6, 1];
+        var found = pe.match(code, offset);
+    }
+
+    if (found !== true)
+    {
         throw "Pattern not found for address: 0x" + pe.rawToVa(offset).toString(16);
+    }
+    if (callOffset !== 0)
+    {
+        var text = asm.load("include/AbsCall");
+        var vars = {
+            "callOffset": pe.fetchRelativeValue(offset, callOffset)
+        };
+        var callBytes = asm.textToHexVa(0, text, vars);
+    }
+    else
+    {
+        var callBytes = "";
     }
     var obj = hooks.createHookObj();
     obj.patchAddr = offset;
-    obj.stolenCode = pe.fetchHexBytes(offset, stolenCodeOffset);
-    obj.stolenCode1 = pe.fetchHexBytes(offset, stolenCode1Offset);
+    obj.stolenCode = callBytes + pe.fetchHexBytes(offset, stolenCodeOffset);
+    obj.stolenCode1 = callBytes + pe.fetchHexBytes(offset, stolenCode1Offset);
     obj.retCode = pe.fetchHexBytes(offset, retOffset);
     obj.continueOffsetVa = 0;
     obj.endHook = true;
