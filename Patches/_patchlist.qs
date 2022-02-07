@@ -750,4 +750,6 @@ registerPatch(423, "ChangeRouletteBronzeLimit", "Change minimal bronze amount fo
 
 registerPatch(426, "SetWalkToDelayCmd", "Change Walk To Delay from chat.", "Fix", 16, "4144", "Allow enable/disable walk delay from chat command", false);
 
+registerPatch(427, "ValidateClientType", "Check is servertype in xml file was set to correct value", "Validation", 0, "4144", "Show error if xml file configured in wrong way", true);
+
 GlobalPostInit();

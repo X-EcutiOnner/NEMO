@@ -78,6 +78,9 @@ function registerTables()
     table.UINewMakeCharWnd_OnCreate_ret = 79;
     table.UIWindowMgr_TextOutSerial = 80;
     table.UIWindowMgr_SendMsg = 81;
+    table.InitClientInfo_ret = 82;
+    table.ErrorMsg = 83;
+    table.ErrorMsg_type = 84;
 
     registerTableFunctions();
 }
