@@ -169,6 +169,17 @@ Start condition block and allow use below code only if ``VAR`` is set.
 Block ends on ``%endif``
 
 
+### %if
+
+``%if VAR == VALUE``
+``%if VALUE == VAR``
+``%if VAR == VAR``
+
+Start condition block and allow use below code only if condition is true.
+
+Block ends on ``%endif``
+
+
 ### %endid
 
 ``%endif``

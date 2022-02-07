@@ -102,16 +102,13 @@ function macroAsm_replaceCmds(obj)
             continue;
         }
         macroAsm_invokeMacroses(obj, i, macroAsm.macroses1);
-        if (typeof(obj.condition) !== "undefined")
+        if (macroAsm.checkCondition(obj))
         {
-            var cond = obj.condition;
-            if (!(cond in obj.vars))
-            {
-                obj.reparse = false;
-                i ++;
-                continue;
-            }
+            obj.reparse = false;
+            i ++;
+            continue;
         }
+
         if (obj.reparse === false && (obj.line[0] === "%" || obj.line[0] === "#"))
             macroAsm_invokeMacroses(obj, i, macroAsm.macroses2);
         if (obj.reparse === false)
@@ -166,6 +163,16 @@ function macroAsm_addMacroses()
         return splitArgEq(line);
     }
 
+    function parse_cmd_argEq2(cmd, line)
+    {
+        cmd = cmd + " ";
+        var idx = line.indexOf(cmd);
+        if (idx !== 0 && idx !== 1)
+            return false;
+        line = line.substring(cmd.length).trim();
+        return splitArgEq2(line);
+    }
+
     function parse_cmd_args(cmd, line)
     {
         cmd = cmd + " ";
@@ -212,6 +219,20 @@ function macroAsm_addMacroses()
             data1 = arg.substring(idx + 1).trim();
         }
         return [data0, data1];
+    }
+
+    function splitArgEq2(arg)
+    {
+        var idx = arg.indexOf("==");
+        var data0 = arg;
+        var data1 = arg;
+        if (idx > 0)
+        {
+            data0 = arg.substring(0, idx).trim();
+            data1 = arg.substring(idx + 2).trim();
+            return [data0, data1];
+        }
+        return false;
     }
 
     function check_arg_var(obj, arg)
@@ -403,6 +424,13 @@ function macroAsm_addMacroses()
         consoleLog("set obj.condition: " + arg);
     }
 
+    function macro_if(obj, cmd, arg)
+    {
+        obj.condition = arg;
+        obj.line = "";
+        consoleLog("set obj.condition: " + arg);
+    }
+
     function macro_endif(obj, cmd)
     {
         obj.condition = undefined;
@@ -430,6 +458,7 @@ function macroAsm_addMacroses()
     ];
 
     macroAsm.macroses2 = [
+        [macro_if,             "%if",        parse_cmd_argEq2, undefined],
         [macro_ifdef,          "%ifdef",     parse_cmd_arg,    undefined],
         [macro_def,            "%def",       parse_cmd_argEq,  undefined],
         [macro_include,        "%include",   parse_cmd_arg,    undefined],
@@ -448,6 +477,39 @@ function macroAsm_addMacroses()
     ];
 }
 
+function macroAsm_checkCondition(obj)
+{
+    if (typeof(obj.condition) !== "undefined")
+    {
+        var cond = obj.condition;
+        if (typeof(obj.condition) === "object" && cond.length == 2)
+        {
+            var name1 = cond[0];
+            var name2 = cond[1];
+            if (name1 in obj.vars || name2 in obj.vars)
+            {
+                if (name1 in obj.vars)
+                    name1 = obj.vars[name1];
+                if (name2 in obj.vars)
+                    name2 = obj.vars[name2];
+                if (name1 != name2)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return true;
+            }
+        }
+        else if (!(cond in obj.vars))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 function registerMacroAsm()
 {
     macroAsm = new Object();
@@ -456,6 +518,7 @@ function registerMacroAsm()
     macroAsm.addMacroses = macroAsm_addMacroses;
     macroAsm.addNewLine = macroAsm_addNewLine;
     macroAsm.invokeMacros = macroAsm_invokeMacros;
+    macroAsm.checkCondition = macroAsm_checkCondition;
 
     macroAsm_addMacroses();
 }
