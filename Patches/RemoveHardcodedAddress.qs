@@ -160,7 +160,7 @@ function RemoveHardcodedAddress20207(overrideAddr, retAddr, clientinfo_addr, cli
         "E8 ?? ?? ?? ?? " +           // 23 call snprintf_s
         "83 C4 18 ";                  // 28 add esp, 18h
     var authHostOffset = 19;
-    var snprintfOffset = 24;
+    var snprintfOffset = [24, 4];
     var offset = pe.find(code, overrideAddr, overrideAddr + 0x300);
 
     if (offset === -1)
@@ -169,37 +169,23 @@ function RemoveHardcodedAddress20207(overrideAddr, retAddr, clientinfo_addr, cli
     logVaVar("g_auth_host_port", offset, authHostOffset);
 
     var authHostVa = pe.fetchDWord(offset + authHostOffset);
-    var snprintfVa = offset + snprintfOffset + 4 + pe.fetchDWord(offset + snprintfOffset);
 
     consoleLog("create format string %s:%s");
 
-    var free = alloc.find(6);
-    if (free === -1)
-        return "Not enough free space";
-    pe.insertAt(free, 6, "%s:%s");
-    var formatVaHex = pe.rawToVa(free).packToHex(4);
+    var formatStr = pe.rawToVa(pe.insertString("%s:%s"))
 
     consoleLog("create code for build new connection string");
 
-    var jmpOffset = 38;
-    var sprintfOffset = 30;
+    var vars = {
+        "clientinfo_addr": clientinfo_addr,
+        "clientinfo_port": clientinfo_port,
+        "formatStr": formatStr,
+        "g_auth_host_port": authHostVa,
+        "snprintf_s": pe.fetchRelativeValue(offset, snprintfOffset),
+        "continue": pe.rawToVa(retAddr)
+    };
 
-    var continueAddr = retAddr - overrideAddr - jmpOffset - 4; // va to rva
-    var sprintfAddr = snprintfVa - overrideAddr - sprintfOffset - 4; // va to rva
-//    var authHostPortAddr = authHostVa - overrideAddr - authHostOffset - 4; // va to rva
-
-    var newCode =
-        "FF 35 " + clientinfo_port.packToHex(4) +  // 0 push clientinfo_port
-        "FF 35 " + clientinfo_addr.packToHex(4) +  // 6 push offset clientinfo_addr
-        "68 " + formatVaHex +                      // 12 push offset aSD_6
-        "6A FF " +                                 // 17 push 0FFFFFFFFh
-        "68 81 00 00 00 " +                        // 19 push 81h
-        "68 " + authHostVa.packToHex(4) +          // 24 push offset g_auth_host_port
-        "E8 " + sprintfAddr.packToHex(4) +         // 29 call snprintf_s
-        "83 C4 18 " +                              // 34 add esp, 18h
-        "E9 " + continueAddr.packToHex(4)          // 37 jmp continue
-
-    pe.replaceHex(overrideAddr, newCode);
+    pe.replaceAsmFile(overrideAddr, "RemoveHardcodedAddress2020", vars);
 
     return true;
 }
