@@ -81,6 +81,7 @@ function registerTables()
     table.InitClientInfo_ret = 82;
     table.ErrorMsg = 83;
     table.ErrorMsg_type = 84;
+    table.g_nameBalloon_fontSize = 85;
 
     registerTableFunctions();
 }

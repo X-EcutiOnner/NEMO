@@ -752,4 +752,6 @@ registerPatch(426, "SetWalkToDelayCmd", "Change Walk To Delay from chat.", "Fix"
 
 registerPatch(427, "ValidateClientType", "Check is servertype in xml file was set to correct value", "Validation", 0, "4144", "Show error if xml file configured in wrong way", true);
 
+registerPatch(428, "ChangeNameBalloonFontSize", "Change names font size", "Font", 0, "4144", "Change font height for classes UINameBalloon*", false);
+
 GlobalPostInit();

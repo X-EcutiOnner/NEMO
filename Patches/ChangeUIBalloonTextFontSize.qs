@@ -78,3 +78,23 @@ function ChangeUIVerticalNameBalloonTextFontSize()
     UIBalloonTextFontSize(table.UIVerticalNameBalloonTextConstructor_ret, "UIVerticalNameBalloonText");
     return true;
 }
+
+function ChangeNameBalloonFontSize()
+{
+    var value = exe.getUserInput("$ChangeNameBalloonFontSize",
+        XTYPE_DWORD,
+        _("Number Input"),
+        _("Enter new name balloons font height"),
+        12,
+        1, 1000);
+
+    var vars = {
+        "fontSize": value
+    };
+
+    var hook = hooks.initTableEndHook(table.InitClientInfo_ret);
+    hook.addFilePost("", vars);
+    hook.validate();
+
+    return true;
+}
