@@ -756,4 +756,6 @@ registerPatch(428, "ChangeNameBalloonFontSize", "Change names font size", "Font"
 
 registerPatch(429, "DisableSetTextType", "Protect shorten and bold name flags", "Fix", 0, "4144", "Remove code from CSession::SetTextType", false);
 
+registerPatch(430, "ChangeNameBalloonFontBold", "Draw names with bold or normal font", "Font", 0, "4144", "Draw UINameBalloon* with bold or normal font", false);
+
 GlobalPostInit();

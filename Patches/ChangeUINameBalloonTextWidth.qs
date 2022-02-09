@@ -54,3 +54,31 @@ function ChangeUIVerticalNameBalloonTextWidth()
     UINameBalloonTextWidth(table.UIVerticalNameBalloonTextConstructor_ret, "UIVerticalNameBalloonText");
     return true;
 }
+
+function ChangeNameBalloonFontBold()
+{
+    enablePatchAndCheck("DisableSetTextType");
+    var value = exe.getUserInput("$ChangeNameBalloonFontBold",
+        XTYPE_BYTE,
+        _("Use bold font"),
+        _("Use bold(1) or normal(0) for names"),
+        0,
+        0, 1)
+
+    var vars = {
+        "bold": value
+    };
+
+    var hook = hooks.initTableEndHook(table.InitClientInfo_ret);
+    hook.addFilePost("", vars);
+    hook.validate();
+
+    return true;
+}
+
+function ChangeNameBalloonFontBold_apply()
+{
+    if (isPatchActive("DisableSetTextType") === false)
+        return "Need patch DisableSetTextType";
+    return true;
+}
