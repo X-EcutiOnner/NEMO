@@ -754,4 +754,6 @@ registerPatch(427, "ValidateClientType", "Check is servertype in xml file was se
 
 registerPatch(428, "ChangeNameBalloonFontSize", "Change names font size", "Font", 0, "4144", "Change font height for classes UINameBalloon*", false);
 
+registerPatch(429, "DisableSetTextType", "Protect shorten and bold name flags", "Fix", 0, "4144", "Remove code from CSession::SetTextType", false);
+
 GlobalPostInit();

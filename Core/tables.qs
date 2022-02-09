@@ -82,6 +82,7 @@ function registerTables()
     table.ErrorMsg = 83;
     table.ErrorMsg_type = 84;
     table.g_nameBalloon_fontSize = 85;
+    table.CSession_SetTextType = 88;
 
     registerTableFunctions();
 }
