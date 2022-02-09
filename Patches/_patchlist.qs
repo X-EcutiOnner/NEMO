@@ -758,4 +758,6 @@ registerPatch(429, "DisableSetTextType", "Protect shorten and bold name flags", 
 
 registerPatch(430, "ChangeNameBalloonFontBold", "Draw names with bold or normal font", "Font", 0, "4144", "Draw UINameBalloon* with bold or normal font", false);
 
+registerPatch(431, "ChangeMissingLauncherError", "Set custom message for error if client started without launcher", "Launcher", 0, "4144", "This message can be visible only in patch 'Disable 1rag1 type parameters' not enabled.", false);
+
 GlobalPostInit();

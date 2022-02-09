@@ -85,6 +85,7 @@ function registerTables()
     table.g_textType_isShorten = 86;
     table.g_textType_isBold = 87;
     table.CSession_SetTextType = 88;
+    table.PLEASE_EXCUTE_LAUNCHER = 89;
 
     registerTableFunctions();
 }
