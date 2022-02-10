@@ -1,3 +1,29 @@
+# 2022-02-10 Different changes
+
+## Patches
+
+- Fix patch [Disable Adventure Agent button on Party Window](http://nemo.herc.ws/patches/DisableAdventureAgent/#success-clients). (fix by @4144).
+- Add patch [Change Walk To Delay from chat](http://nemo.herc.ws/patches/SetWalkToDelayCmd/#success-clients). (by @4144).
+- Add patch [Check is servertype in xml file was set to correct value](http://nemo.herc.ws/patches/ValidateClientType/#success-clients). (by @4144).
+- Add patch [Change names font size](http://nemo.herc.ws/patches/ChangeNameBalloonFontSize/#success-clients). (by @4144).
+- Add patch [Protect shorten and bold name flags](http://nemo.herc.ws/patches/DisableSetTextType/#success-clients). (by @4144).
+- Add patch [Draw names with bold or normal font](http://nemo.herc.ws/patches/ChangeNameBalloonFontBold/#success-clients). (by @4144).
+- Add patch [Set custom message for error if client started without launcher](http://nemo.herc.ws/patches/ChangeMissingLauncherError/#success-clients). (by @4144).
+
+## For devs
+
+- Add function for resize hex code to given len: pe.resizeHexCode.
+- Add code len parameter into function pe.replaceAsmFile.
+- Add functions for get first existing table variable from list: table.getAny, table.getAnyValidated.
+- Add function for insert null terminated string: pe.insertString
+- Add macro assembler conditional commands: %if, %ifdef, %endif.
+- Enable report about legacy functions.
+
+## Other
+
+- Update tables.
+
+
 # 2022-01-06 Functions fixes
 
 ## Other
