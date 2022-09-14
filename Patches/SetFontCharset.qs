@@ -17,5 +17,7 @@
 
 function SetFontCharset()
 {
-    return CreateFontAHook_imp("$SetFontCharset", _("Enter new font charset (0-en, 1-default, 129-kr, 204-ru, etc)"), 0, 0, 255);
+    enablePatchAndCheck("SetLoadFontCharset");
+    enablePatchAndCheck("SetDrawingFontCharset");
+    return true;
 }

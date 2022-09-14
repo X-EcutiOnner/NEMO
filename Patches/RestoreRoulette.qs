@@ -23,7 +23,7 @@ function RestoreRoulette()
   var offset2 = offset + code.hexlength() + 4;
 
   //Step 2b - Get mode constant based on client date.
-  if (exe.getClientDate() > 20150800)
+  if (pe.getDate() > 20150800)
     var mode = 0x10C;
   else
     var mode = 0x11D;

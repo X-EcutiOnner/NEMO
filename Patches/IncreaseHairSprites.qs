@@ -25,23 +25,21 @@ function IncreaseHairSprites()
     var bytesPerString = 4;
     var bufSize = maxHairs * bytesPerString;
 
-    consoleLog("step 1a search for spr/act string");
+    consoleLog("Search for spr/act string");
     var code = "\\\xB8\xD3\xB8\xAE\xC5\xEB\\%s\\%s_%s.%s"; // "\머리통\%s\%s_%s.%s"
     var offset = pe.stringRaw(code);
 
     if (offset === -1)
         return "Failed in step 1 - string not found";
 
-    consoleLog("step 1b - search string reference");
+    consoleLog("Search string reference");
     offset = pe.findCode("68" + pe.rawToVa(offset).packToHex(4));
     if (offset === -1)
         return "Failed in step 1 - string reference missing";
 
-    consoleLog("step 2 - search normal jobs hair limit");
+    consoleLog("Search normal jobs hair limit");
     // offset bit after hair checks
     var refOffset = offset;
-    var newclient = 0;
-    var addNops = "";
 
     code =
         "85 C0" +             // 0 test eax, eax
@@ -49,8 +47,10 @@ function IncreaseHairSprites()
         "83 F8 ??" +          // 4 cmp eax, 1Dh
         "7E 06" +             // 7 jle short B
         "C7 06 ?? 00 00 00";  // 9 mov dword ptr [esi], 0Dh
-    var assignOffset = 9;
+    var addNops = "";
     var valueOffset = 6;
+    var assignOffset = 9;
+    var newclient = 0;
 
     offset = pe.find(code, refOffset - 0x200, refOffset);
     if (offset === -1)
@@ -62,19 +62,19 @@ function IncreaseHairSprites()
             "?? ??" +              // 7 jle short B
             "C7 00 ?? 00 00 00 " + // 9 mov dword ptr [eax], 21h
             "B9 ?? 00 00 00";      // 15 mov ecx, 21h
+        addNops = " 90 90 90 90 90"
+        valueOffset = 6;
+        assignOffset = 9;
+        newclient = 1;
 
-            offset = pe.find(code, refOffset - 0x200, refOffset);
-            addNops = " 90 90 90 90 90"
-            newclient = 1;
-
+        offset = pe.find(code, refOffset - 0x200, refOffset);
     }
     if (offset === -1)
         return "Failed in step 2 - hair limit missing";
 
-    var currentLimit = pe.fetchUByte(offset + valueOffset) + 1;  // current max hair limit
     pe.replaceHex(offset + assignOffset, "90 90 90 90 90 90" + addNops);  // removing hair style limit assign
 
-    consoleLog("step 3 - search doram jobs hair limit");
+    consoleLog("Search doram jobs hair limit");
     if (!newclient)
     {
         code =
@@ -85,6 +85,8 @@ function IncreaseHairSprites()
             "83 F8 ?? " +                 // 9 cmp eax, 7
             "7C 06 " +                    // 12 jl short loc_8D0846
             "C7 06 ?? 00 00 00 ";         // 14 mov dword ptr [esi], 6
+        var assignOffset = 14;
+        var valueOffset = 11;
     }
     else
     {
@@ -97,19 +99,17 @@ function IncreaseHairSprites()
             "7C ?? " +                    // 12 jl short loc_8D0846
             "C7 00 ?? 00 00 00 " +        // 14 mov dword ptr [eax], 0A
             "B9 ?? 00 00 00";             // 20 mov ecx, 0Ah
+        var assignOffset = 14;
+        var valueOffset = 11;
     }
-    var assignOffset = 14;
-    var valueOffset = 11;
-
 
     offset = pe.find(code, refOffset - 0x200, refOffset);
     if (offset === -1)
         return "Failed in step 3 - doram hair limit missing";
 
-    var currentLimit = pe.fetchUByte(offset + valueOffset) + 1;  // current max hair limit
     pe.replaceHex(offset + assignOffset, "90 90 90 90 90 90" + addNops);  // removing hair style limit assign
 
-    consoleLog("step 4 - search string \"2\" \"3\" \"4\"");
+    consoleLog("Search string \"2\" \"3\" \"4\"");
     code =
         "32 00" + // "2"
         "00 00" + //
@@ -122,9 +122,8 @@ function IncreaseHairSprites()
         return "Failed in step 4 - string '2' missing";
 
     var str2Offset = pe.rawToVa(offset);
-    currentLimit = currentLimit.packToHex(1);
 
-    consoleLog("step 5 - search male hair table allocations in CSession::InitPcNameTable");
+    consoleLog("Search male hair table allocations in CSession::InitPcNameTable");
     if (!newclient)
     {
         code =
@@ -135,7 +134,7 @@ function IncreaseHairSprites()
             "8B 06 " +                                     // 15 mov eax, [esi]
             "C7 00 " + str2Offset.packToHex(4);            // 17 mov dword ptr [eax], offset "2"
         var patchOffset = 0;  // from this offset code will be patched
-        var callOffset = 11;  // in this offset relative call address
+        var callOffset = [11, 4];  // in this offset relative call address
         var fetchOffset = 3;  // copy into own code from this address
         var fetchSize = 7;    // copy this N bytes into own code
     }
@@ -151,7 +150,7 @@ function IncreaseHairSprites()
             "C7 45 F0 " + str2Offset.packToHex(4) + " " +  // 13 mov dword ptr [ebp+A], offset "2"
             "C7 00 " + str2Offset.packToHex(4);            // 20 mov dword ptr [eax], offset "2"
         var patchOffset = 0;  // from this offset code will be patched
-        var callOffset = 7;  // in this offset relative call address
+        var callOffset = [7, 4];  // in this offset relative call address
         var fetchOffset = 13;  // copy into own code from this address
         var fetchSize = 7;    // copy this N bytes into own code
     }
@@ -164,11 +163,11 @@ function IncreaseHairSprites()
         return "Failed in step 5 - found wrong number of hair tables: " + offsets.length;
 
     var tableCodeOffset = offsets[0];
-    var vectorCallAddr = pe.fetchDWord(tableCodeOffset + callOffset) + tableCodeOffset + callOffset + 4;
+    var vectorCallAddr = pe.fetchRelativeValue(tableCodeOffset, callOffset);
     var varCode = pe.fetchHex(tableCodeOffset + fetchOffset, fetchSize);
     patchOffset = tableCodeOffset + patchOffset;
 
-    consoleLog("step 6 - allocate strings with hair id");
+    consoleLog("Allocate strings with hair id");
     var free = alloc.find(bufSize);
     if (free === -1)
         return "Failed in step 6 - not enough free space";
@@ -183,11 +182,9 @@ function IncreaseHairSprites()
     pe.insertHexAt(free, bufSize, data);
     var tableStrings = pe.rawToVa(free);  // index = id * bytesPerString
 
-    consoleLog("step 7 - search female hair table and location for jump");
-    var esi1 = "";
-
+    consoleLog("Search female hair table and location for jump");
     if (!newclient)
-{
+    {
         code =
             "8B 06" +                 // 0 mov eax, [esi]
             "8D B7 ?? ?? 00 00" +     // 2 lea esi, [edi+CSession.normal_job_hair_sprite_array_F]
@@ -198,7 +195,8 @@ function IncreaseHairSprites()
             "8B CE " +                // 21 mov ecx, esi
             "E8 ?? ?? ?? ?? ";        // 23 call vector__alloc_mem_and_set_pointer
         var patchOffset2 = 18;   // from this offset code will be patched
-        var callOffset2 = 24;    // in this offset relative call address
+        var callOffset2 = [24, 4];    // in this offset relative call address
+        var pushReg = "";
 
         offset = pe.find(code, tableCodeOffset, tableCodeOffset + 0x150);
     }
@@ -215,17 +213,28 @@ function IncreaseHairSprites()
             "6A ?? " +                         // 25 push 1Eh
             "E8 ?? ?? ?? ?? ";                 // 27 call vector__alloc_mem_and_set_pointer
         var patchOffset2 = 23;   // from this offset code will be patched
-        var callOffset2 = 28;    // in this offset relative call address
-        esi1 = "56 ";
+        var callOffset2 = [28, 4];    // in this offset relative call address
+        var pushReg = "push esi";
 
         offset = pe.find(code, tableCodeOffset, tableCodeOffset + 0x150);
 
         if (offset === -1) //newer clients
         {
-            code = code.replace(" C7 80 ?? ?? ?? ?? ?? ?? ?? ??", " C7 40 ?? ?? ?? ?? ??");   //mov dword ptr [eax+7Ch], offset a31
+            code =
+                "8B 06" +                          // 0 mov eax, [esi]
+                "8D B7 ?? ?? 00 00" +              // 2 lea esi, [edi+CSession.normal_job_hair_sprite_array_F]
+                "8B CE " +                         // 8 mov ecx, esi
+                "C7 40 ?? ?? ?? ?? ??" +           // 10 mov dword ptr [eax+7Ch], offset a31
+                "8D 45 ??" +                       // 17 lea eax, [ebp+var_10]
+                "50" +                             // 20 push eax
+                "56 " +                            // 21 push esi
+                "6A ?? " +                         // 22 push 1Eh
+                "E8 ?? ?? ?? ?? ";                 // 24 call vector__alloc_mem_and_set_pointer
+            patchOffset2 = 20;   // from this offset code will be patched
+            callOffset2 = [25, 4];    // in this offset relative call address
+            pushReg = "push esi";
+
             offset = pe.find(code, tableCodeOffset, tableCodeOffset + 0x150);
-            patchOffset2 -= 3;
-            callOffset2 -= 3;
         }
     }
 
@@ -233,48 +242,25 @@ function IncreaseHairSprites()
         return "Failed in step 7 - jump location not found";
 
     var tableCodeOffset2 = offset;
-    var vectorCallAddr2 = pe.fetchDWord(tableCodeOffset2 + callOffset2) + tableCodeOffset2 + callOffset2 + 4;
+    var vectorCallAddr2 = pe.fetchRelativeValue(tableCodeOffset2, callOffset2);
     patchOffset2 = tableCodeOffset2 + patchOffset2;
 
     if (vectorCallAddr !== vectorCallAddr2)
         return "Failed in step 7 - vector call functions different";
 
-    var jmpAddr = pe.rawToVa(offset);
-    var vectorCallOffset = vectorCallAddr - (patchOffset + newclient + 1 + 5 + varCode.hexlength() + 2 + 5);  // calc offset to call vector function (offsets from next code block)
+    consoleLog("Normal job male hair style table loader patch");
+    var vars = {
+        "pushReg": pushReg,
+        "maxHairs": maxHairs,
+        "varCode": varCode,
+        "varCode2": "",
+        "vectorCall": vectorCallAddr,
+        "tableStrings": tableStrings,
+        "jmpAddr": pe.rawToVa(offset)
+    }
+    pe.replaceAsmFile(patchOffset, "", vars);
 
-    consoleLog("normal job male hair style table loader patch");
-    code =
-        "50 " +                              // push eax
-        esi1 +                               // push esi
-        "68 " + maxHairs.packToHex(4) +      // push maxHairs
-        varCode +                            // mov dword ptr [ebp+A], offset "2"
-        "8B CE " +                           // mov ecx, esi
-        "E8 " + vectorCallOffset.packToHex(4) +  // call vector__alloc_mem_and_set_pointer
-
-        "56 " +                              // push esi
-        "57 " +                              // push edi
-        "53 " +                              // push ebx
-        "51 " +                              // push ecx
-        "B9 " + maxHairs.packToHex(4) +      // mov ecx, maxHairs
-        "8B 06 " +                           // mov eax, [esi]         eax now is pointer to destination buffer
-        "BF " + tableStrings.packToHex(4) +  // mov edi, tableStrings  edi now is pointer to strings buffer
-        "89 38" +                            // mov [eax], edi         save one pointer into table
-        "83 C0 04" +                         // add eax, 4
-        "83 C7 04" +                         // add edi, 4
-        "49" +                               // dec ecx
-        "75 F5" +                            // je -11                 mov to mov [eax], edi
-        "59 " +                              // pop ecx
-        "5B " +                              // pop ebx
-        "5F " +                              // pop edi
-        "5E " +                              // pop esi
-        "E9 ";                               // jmp jmpAddr
-
-    jmpAddr = jmpAddr - (pe.rawToVa(patchOffset) + code.hexlength() + 4);
-    code = code + jmpAddr.packToHex(4);
-
-    pe.replaceHex(patchOffset, code);  // add patch with fill male hair table
-
-    consoleLog("step 8 - search male doram hair table allocations in CSession::InitPcNameTable");
+    consoleLog("Search male doram hair table allocations in CSession::InitPcNameTable");
     if (!newclient)
     {
         code =
@@ -290,7 +276,7 @@ function IncreaseHairSprites()
             "C7 45 ";                     // 30 mov [ebp+a3], offset a1_1
         var str1Offset = 33;
         var patchOffset = 18;  // from this offset code will be patched
-        var callOffset = 24;  // in this offset relative call address
+        var callOffset = [24, 4];  // in this offset relative call address
         // no fetch code
 
         var offsets = pe.findCodes(code);
@@ -311,18 +297,31 @@ function IncreaseHairSprites()
             "C7 40 ";                              // 34 mov dword ptr [eax+4], offset a1
         var str1Offset = 37;
         var patchOffset = 23;  // from this offset code will be patched
-        var callOffset = 28;  // in this offset relative call address
+        var callOffset = [28, 4];  // in this offset relative call address
         // no fetch code
 
         var offsets = pe.findCodes(code);
 
         if (offsets.length === 0)
         {
-            code = code.replace(" C7 80 ?? ?? ?? ?? ?? ?? ?? ??", " C7 40 ?? ?? ?? ?? ??");   //mov dword ptr [eax+7Ch], offset a31
+            code =
+                "8B 06 " +                             // 0 mov eax, [esi]
+                "8D B7 ?? ?? ?? ?? " +                 // 2 lea esi, [edi+CSession.doram_job_hair_sprite_array_M]
+                "8B CE " +                             // 8 mov ecx, esi
+                "C7 40 ?? ?? ?? ?? ??" +               // 10 mov dword ptr [eax+7Ch], offset a31
+                "8D 45 ?? " +                          // 17 lea eax, [ebp+a3]
+                "50 " +                                // 20 push eax
+                "56 " +                                // 21 push esi
+                "6A ?? " +                             // 22 push 7
+                "E8 ?? ?? ?? ?? " +                    // 24 call std_vector_char_ptr_resize
+                "8B 06 " +                             // 29 mov eax, [esi]
+                "C7 40 ";                              // 31 mov dword ptr [eax+4], offset a1
+
+            str1Offset = 34;
+            patchOffset = 20;
+            callOffset = [25, 4];
+
             offsets = pe.findCodes(code);
-            str1Offset -= 3;
-            patchOffset -= 3;
-            callOffset -= 3;
         }
     }
     if (offsets.length === 0)
@@ -335,47 +334,25 @@ function IncreaseHairSprites()
         return "Failed in step 8 - wrong constant 1 found";
 
     var tableCodeOffset = offsets[0];
-    var vectorCallAddr = pe.fetchDWord(tableCodeOffset + callOffset) + tableCodeOffset + callOffset + 4;
-    // no varCode
+    var vectorCallAddr = pe.fetchRelativeValue(tableCodeOffset, callOffset);
     var varCode = "";
     patchOffset = tableCodeOffset + patchOffset;
 
     offset = offsets[0];
-    jmpAddr = pe.rawToVa(offset);
-    var vectorCallOffset2 = vectorCallAddr2 - (patchOffset2 + newclient + 1 + 5 + 2 + 5);  // calc offset to call vector function (offsets from next code block)
 
-    consoleLog("normal job female hair style table loader patch");
-    code =
-        "50 " +                              // push eax
-        esi1 +                               // push esi
-        "68 " + maxHairs.packToHex(4) +      // push maxHairs
-        "8B CE " +                           // mov ecx, esi
-        "E8 " + vectorCallOffset2.packToHex(4) +  // call vector__alloc_mem_and_set_pointer
+    consoleLog("Normal job female hair style table loader patch");
+    var vars = {
+        "pushReg": pushReg,
+        "maxHairs": maxHairs,
+        "varCode": "",
+        "varCode2": "",
+        "vectorCall": vectorCallAddr2,
+        "tableStrings": tableStrings,
+        "jmpAddr": pe.rawToVa(offset)
+    }
+    pe.replaceAsmFile(patchOffset2, "", vars);
 
-        "56 " +                              // push esi
-        "57 " +                              // push edi
-        "53 " +                              // push ebx
-        "51 " +                              // push ecx
-        "B9 " + maxHairs.packToHex(4) +      // mov ecx, maxHairs
-        "8B 06 " +                           // mov eax, [esi]         eax now is pointer to destination buffer
-        "BF " + tableStrings.packToHex(4) +  // mov edi, tableStrings  edi now is pointer to strings buffer
-        "89 38" +                            // mov [eax], edi         save one pointer into table
-        "83 C0 04" +                         // add eax, 4
-        "83 C7 04" +                         // add edi, 4
-        "49" +                               // dec ecx
-        "75 F5" +                            // je -11                 mov to mov [eax], edi
-        "59 " +                              // pop ecx
-        "5B " +                              // pop ebx
-        "5F " +                              // pop edi
-        "5E " +                              // pop esi
-        "E9 ";                               // jmp jmpAddr
-
-    jmpAddr = jmpAddr - (pe.rawToVa(patchOffset2) + code.hexlength() + 4);
-    code = code + jmpAddr.packToHex(4);
-
-    pe.replaceHex(patchOffset2, code);  // add patch with fill female hair table
-
-    consoleLog("step 9 - search female doram hair table and location for jump");
+    consoleLog("Search female doram hair table and location for jump");
 
     if (!newclient)
     {
@@ -398,7 +375,7 @@ function IncreaseHairSprites()
             "C7 40 ";                     // 61 mov dword ptr [eax+C], offset a3
             var str1Offset = 33;
             var patchOffset2 = 18;   // from this offset code will be patched
-            var callOffset2 = 24;    // in this offset relative call address
+            var callOffset2 = [24, 4];    // in this offset relative call address
             var fetchOffset = 37;  // copy into own code from this address
             var fetchSize = 24;    // copy this N bytes into own code
     }
@@ -422,7 +399,7 @@ function IncreaseHairSprites()
 
         var str1Offset = 49;
         var patchOffset2 = 20;   // from this offset code will be patched
-        var callOffset2 = 25;    // in this offset relative call address
+        var callOffset2 = [25, 4];    // in this offset relative call address
         var fetchOffset = 31;  // copy into own code from this address
         var fetchSize = 15;    // copy this N bytes into own code
     }
@@ -432,113 +409,72 @@ function IncreaseHairSprites()
         return "Failed in step 9 - jump location not found";
 
     var tableCodeOffset2 = offset;
-    var vectorCallAddr2 = pe.fetchDWord(tableCodeOffset2 + callOffset2) + tableCodeOffset2 + callOffset2 + 4;
+    var vectorCallAddr2 = pe.fetchRelativeValue(tableCodeOffset2, callOffset2);
     patchOffset2 = tableCodeOffset2 + patchOffset2;
     var varCode = pe.fetchHex(tableCodeOffset2 + fetchOffset, fetchSize);
 
     if (vectorCallAddr !== vectorCallAddr2)
         return "Failed in step 9 - vector call functions different";
 
-    var jmpAddr = pe.rawToVa(offset);
-    var vectorCallOffset = vectorCallAddr - (patchOffset + newclient + 1 + 5 + 2 + 5);  // calc offset to call vector function (offsets from next code block)
+    consoleLog("Doram job male hair style table loader patch");
+    var vars = {
+        "pushReg": pushReg,
+        "maxHairs": maxHairs,
+        "varCode": "",
+        "varCode2": "",
+        "vectorCall": vectorCallAddr,
+        "tableStrings": tableStrings,
+        "jmpAddr": pe.rawToVa(offset)
+    }
+    pe.replaceAsmFile(patchOffset, "", vars);
 
+    consoleLog("Search location for jump");
 
-    consoleLog("doram job male hair style table loader patch");
-
-    code =
-        "50 " +                              // push eax
-        esi1 +                               // push esi
-        "68 " + maxHairs.packToHex(4) +      // push maxHairs
-        "8B CE " +                           // mov ecx, esi
-        "E8 " + vectorCallOffset.packToHex(4) +  // call vector__alloc_mem_and_set_pointer
-
-        "56 " +                              // push esi
-        "57 " +                              // push edi
-        "53 " +                              // push ebx
-        "51 " +                              // push ecx
-        "B9 " + maxHairs.packToHex(4) +      // mov ecx, maxHairs
-        "8B 06 " +                           // mov eax, [esi]         eax now is pointer to destination buffer
-        "BF " + tableStrings.packToHex(4) +  // mov edi, tableStrings  edi now is pointer to strings buffer
-        "89 38" +                            // mov [eax], edi         save one pointer into table
-        "83 C0 04" +                         // add eax, 4
-        "83 C7 04" +                         // add edi, 4
-        "49" +                               // dec ecx
-        "75 F5" +                            // je -11                 mov to mov [eax], edi
-        "59 " +                              // pop ecx
-        "5B " +                              // pop ebx
-        "5F " +                              // pop edi
-        "5E " +                              // pop esi
-        "E9 ";                               // jmp jmpAddr
-
-    jmpAddr = jmpAddr - (pe.rawToVa(patchOffset) + code.hexlength() + 4);
-    code = code + jmpAddr.packToHex(4);
-
-    pe.replaceHex(patchOffset, code);  // add patch with fill male hair table
-
-
-    // ex 8
-    consoleLog("step 10 - search location for jump");
-
-    if (exe.getClientDate() > 20200325)
+    if (pe.getDate() > 20200325)
         var viewID = 3000;
     else
         var viewID = 2000;
 
-    var code =
-        "8B 06 " +                           // 0 mov eax, [esi]
-        "C7 40 ?? ?? ?? ?? ?? " +            // 2 mov dword ptr [eax+28h], offset a10
-        "8D 45 ?? " +                        // 9 lea eax, [ebp+var_10]
-        "50 " +                              // 12 push eax
-        "68 " + viewID.packToHex(4) + " " +  // 14 push viewID
-        "E8 ";                               // 19 call std_vector_char_ptr_resize
 
-    if (newclient)
+    if (!newclient)
     {
-        code = code.replace("8D 45 ?? 50 ", " 8D 45 ?? 50 53 ");   //add "push ebx"
+        var code =
+            "8B 06 " +                           // 0 mov eax, [esi]
+            "C7 40 ?? ?? ?? ?? ?? " +            // 2 mov dword ptr [eax+28h], offset a10
+            "8D 45 ?? " +                        // 9 lea eax, [ebp+var_10]
+            "50 " +                              // 12 push eax
+            "68 " + viewID.packToHex(4) + " " +  // 13 push viewID
+            "E8 ";                               // 18 call std_vector_char_ptr_resize
+        var jumpOffset = 9;
     }
-
-    var jumpOffset = 9;    // jump offset
-
+    else
+    {
+        var code =
+            "8B 06 " +                           // 0 mov eax, [esi]
+            "C7 40 ?? ?? ?? ?? ?? " +            // 2 mov dword ptr [eax+28h], offset a10
+            "8D 45 ?? " +                        // 9 lea eax, [ebp+var_10]
+            "50 " +                              // 12 push eax
+            "53 " +                              // 13 push ebx
+            "68 " + viewID.packToHex(4) + " " +  // 14 push viewID
+            "E8 ";                               // 19 call std_vector_char_ptr_resize
+        var jumpOffset = 9;
+    }
 
     offset = pe.find(code, tableCodeOffset2 + 5, tableCodeOffset2 + 0x150);
     if (offset === -1)
         return "Failed in step 10 - jump location not found";
 
-    jmpAddr = pe.rawToVa(offset + jumpOffset);
-    var vectorCallOffset2 = vectorCallAddr2 - (patchOffset2 + newclient + 1 + 5 + 2 + 5);  // calc offset to call vector function (offsets from next code block)
-
-    consoleLog("doram job female hair style table loader patch");
-    code =
-        "50 " +                              // push eax
-        esi1 +                               // push esi
-        "68 " + maxHairs.packToHex(4) +      // push maxHairs
-        "8B CE " +                           // mov ecx, esi
-        "E8 " + vectorCallOffset2.packToHex(4) +  // call vector__alloc_mem_and_set_pointer
-
-        "56 " +                              // push esi
-        "57 " +                              // push edi
-        "53 " +                              // push ebx
-        "51 " +                              // push ecx
-        "B9 " + maxHairs.packToHex(4) +      // mov ecx, maxHairs
-        "8B 06 " +                           // mov eax, [esi]         eax now is pointer to destination buffer
-        "BF " + tableStrings.packToHex(4) +  // mov edi, tableStrings  edi now is pointer to strings buffer
-        "89 38" +                            // mov [eax], edi         save one pointer into table
-        "83 C0 04" +                         // add eax, 4
-        "83 C7 04" +                         // add edi, 4
-        "49" +                               // dec ecx
-        "75 F5" +                            // je -11                 mov to mov [eax], edi
-        "59 " +                              // pop ecx
-        "5B " +                              // pop ebx
-        "5F " +                              // pop edi
-        "5E " +                              // pop esi
-        varCode +                            // lea ebx, [edi+CSession.ViewID_sprite_array]
-                                             // mov [ebp+var_10], offset "_병아리모자"
-        "E9 ";                               // jmp jmpAddr
-
-    jmpAddr = jmpAddr - (pe.rawToVa(patchOffset2) + code.hexlength() + 4);
-    code = code + jmpAddr.packToHex(4);
-
-    pe.replaceHex(patchOffset2, code);  // add patch with fill female hair table
+    consoleLog("Doram job female hair style table loader patch");
+    var vars = {
+        "pushReg": pushReg,
+        "maxHairs": maxHairs,
+        "varCode": "",
+        "varCode2": varCode,
+        "vectorCall": vectorCallAddr2,
+        "tableStrings": tableStrings,
+        "jmpAddr": pe.rawToVa(offset) + jumpOffset
+    }
+    pe.replaceAsmFile(patchOffset2, "", vars);
 
     return true;
 }

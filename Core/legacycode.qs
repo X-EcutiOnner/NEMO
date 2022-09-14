@@ -17,7 +17,7 @@ function GetFunction(funcName, dllName, ordinal)
 
   //Step 1b - Prep the constants and return variable
   var funcAddr = -1; //The address will be stored here.
-  var offset = GetDataDirectory(1).offset;//Import Table
+  var offset = pe.getSubSection(1).offset;//Import Table
   var imgBase = pe.getImageBase();//The Image Base
 
   //Step 1c - Iterate through each IMAGE_IMPORT_DESCRIPTOR

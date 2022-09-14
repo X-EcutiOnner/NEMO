@@ -326,3 +326,10 @@ Load mask is: "Patches/" + fileName + ".asm"
 Replace macroses in given asm text based on vars dictionary.
 
 This function used internally in asm.textToBytes.
+
+
+### asm.retHex
+
+``asm.retHex(stackSize)``
+
+Return hex bytes for asm command "ret N" where N is stackSize value.

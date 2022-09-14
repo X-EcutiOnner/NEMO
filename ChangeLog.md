@@ -1,3 +1,43 @@
+# 2022-09-14 Different changes
+
+## Patches
+
+- Fix patch [Change character display deletion time](http://nemo.herc.ws/patches/ChangeDisplayCharDelDelay/#success-clients). (fix by @4144).
+- Fix patch [Change Max Friends Value](http://nemo.herc.ws/patches/ChangeMaxFriendsValue/#success-clients). (fix by @4144).
+- Fix patch [Disable Auto follow](http://nemo.herc.ws/patches/DisableAutofollow/#success-clients). (fix by @4144).
+- Fix patch [Disable Ragexe Filename Check](http://nemo.herc.ws/patches/DisableFilenameCheck/#success-clients). (fix by @4144).
+- Fix patch [Always read msgstringtable.txt](http://nemo.herc.ws/patches/ReadMsgstringtabledottxt/#success-clients). (fix by @4144).
+- Fix patch [Remove Equipment Title UI](http://nemo.herc.ws/patches/RemoveEquipmentTitleUI/#success-clients). (fix by @4144).
+- Add patch [Change maximum guild emblem file size](http://nemo.herc.ws/patches/ChangeMaxEmblemFileSize/#success-clients). (by @4144).
+- Add patch [Change tax value on sending items by rodex](http://nemo.herc.ws/patches/ChangeRodexTax/#success-clients). (by @4144).
+- Add patch [Disable Game Guard (NProtect)](http://nemo.herc.ws/patches/DisableNProtect/#success-clients) for 2022 clients. (by @4144).
+- Add patch [Disable packets id encryption](http://nemo.herc.ws/patches/DisablePacketEncryption/#success-clients). (by @4144).
+- Add patch [Enable packets id encryption](http://nemo.herc.ws/patches/EnablePacketEncryption/#success-clients). (by @4144).
+- Add patch [Add support for preview button in custom shops](http://nemo.herc.ws/patches/ExtendOldCashShopPreview/#success-clients). (by @4144).
+- Add patch [Never read msgstringtable.txt](http://nemo.herc.ws/patches/NeverReadMsgstringtabledottxt/#success-clients). (by @4144).
+- Add patch [Set fixed charset on drawing text messages](http://nemo.herc.ws/patches/SetDrawingFontCharset/#success-clients). (by @4144).
+- Add patch [Set fixed charset](http://nemo.herc.ws/patches/SetFontCharset/#success-clients). (by @4144).
+- Add patch [Draw text messages always with bold font](http://nemo.herc.ws/patches/SetDrawingFontBold/#success-clients). (by @4144).
+- Add patch [Draw text messages always with non bold font](http://nemo.herc.ws/patches/SetDrawingFontNonBold/#success-clients). (by @4144).
+- Add patch [Draw text messages always with italic font](http://nemo.herc.ws/patches/SetDrawingFontItalic/#success-clients). (by @4144).
+- Add patch [Draw text messages always with given font type](http://nemo.herc.ws/patches/SetDrawingFontType/#success-clients). (by @4144).
+- Add patch [Draw text messages with fixed height](http://nemo.herc.ws/patches/SetDrawingFontHeight/#success-clients). (by @4144).
+- Add patch [Limit minimal font size for drawed text messages](http://nemo.herc.ws/patches/SetDrawingFontHeightMin/#success-clients). (by @4144).
+- Add patch [Limit maximum font size for drawed text messages](http://nemo.herc.ws/patches/SetDrawingFontHeightMax/#success-clients). (by @4144).
+- Add patch [Adjust font size for drawed text messages](http://nemo.herc.ws/patches/SetDrawingFontHeightAdjust/#success-clients). (by @4144).
+- Add patch [Set fixed server ip address](http://nemo.herc.ws/patches/SetHardcodedServerIp/#success-clients). (by @4144).
+- Add patch [Use low color custom icon](http://nemo.herc.ws/patches/UseCustomIcon16/#success-clients). (by @4144).
+
+## For devs
+
+- Add input hex string validation in asm.hexToAsm.
+- Add functions for work with random numbers. See docs.
+
+## Other
+
+- Update tables.
+
+
 # 2022-02-10 Different changes
 
 ## Patches

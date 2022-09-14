@@ -65,5 +65,5 @@ function ShowCancelToServiceSelect()
 //==============================================================================//
 function ShowCancelToServiceSelect_()
 {
-  return (exe.getClientDate() > 20100803 && !IsZero());
+  return (pe.getDate() > 20100803 && !IsZero());
 }

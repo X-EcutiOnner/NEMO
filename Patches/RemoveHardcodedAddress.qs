@@ -95,7 +95,7 @@ function RemoveHardcodedAddressNew(overrideAddr, retAddr)
     var clientinfo_addr = table.getValidated(table.g_accountAddr);
     var clientinfo_port = table.getValidated(table.g_accountPort);
 
-    if (exe.getClientDate() >= 20200630)
+    if (pe.getDate() >= 20200630)
         return RemoveHardcodedAddress20207(overrideAddr, retAddr, clientinfo_addr, clientinfo_port)
     consoleLog("step 3a - find otp_addr usage");
     var code =

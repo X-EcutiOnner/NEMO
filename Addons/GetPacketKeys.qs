@@ -21,7 +21,7 @@ function GetPacketKeys()
 
   //Step 2 - Write them to file.
     var fp = new TextFile();
-    fp.open(APP_PATH + "/Output/PacketKeys_" + exe.getClientDate() + ".txt", "w");
+    fp.open(APP_PATH + "/Output/PacketKeys_" + pe.getDate() + ".txt", "w");
     fp.writeline("Packet Keys : (" + keys.join(",") + ")");
     fp.close();
 

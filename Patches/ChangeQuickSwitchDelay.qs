@@ -73,5 +73,5 @@ function ChangeQuickSwitchDelay()
 //==============================//
 function ChangeQuickSwitchDelay_()
 {
-  return (exe.getClientDate() >= 20170517);
+  return (pe.getDate() >= 20170517);
 }

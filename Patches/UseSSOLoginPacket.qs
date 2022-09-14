@@ -11,8 +11,10 @@ function UseSSOLoginPacket()
   if (LANGTYPE.length === 1)
     return "Failed in Step 1 - " + LANGTYPE[0];
 
+    var passwordEncryptHex = table.getHex4(table.g_passwordEncrypt)
+
   var code =
-    " 80 3D ?? ?? ?? 00 00" //CMP BYTE PTR DS:[g_passwordencrypt], 0
+    " 80 3D " + passwordEncryptHex + " 00" //CMP BYTE PTR DS:[g_passwordencrypt], 0
   + " 0F 85 ?? ?? 00 00"    //JNE addr1
   + " A1" + LANGTYPE        //MOV EAX, DWORD PTR DS:[g_serviceType]
   + " ?? ??"                //TEST EAX, EAX - (some clients use CMP EAX, EBP instead)
@@ -25,21 +27,7 @@ function UseSSOLoginPacket()
   if (offset === -1)
   {
     var code =
-      " 80 3D ?? ?? ?? 00 00" //CMP BYTE PTR DS:[g_passwordencrypt], 0
-    + " 0F 85 ?? ?? 00 00"    //JNE addr1
-    + " 8B ?? " + LANGTYPE    //MOV EAX, DWORD PTR DS:[g_serviceType]
-    + " ?? ??"                //TEST EAX, EAX - (some clients use CMP EAX, EBP instead)
-    + " 0F 84 ?? ?? 00 00"    //JZ addr2 -> Send SSO Packet (ID = 0x825. was 0x2B0 in Old clients)
-    + " 83 ?? 12"             //CMP EAX, 12
-    + " 0F 84 ?? ?? 00 00"    //JZ addr2 -> Send SSO Packet (ID = 0x825. was 0x2B0 in Old clients)
-    ;
-    offset = pe.findCode(code);
-  }
-
-  if (offset === -1)
-  {
-    var code =
-      " 80 3D ?? ?? ?? 01 00" //CMP BYTE PTR DS:[g_passwordencrypt], 0
+      " 80 3D " + passwordEncryptHex + " 00" //CMP BYTE PTR DS:[g_passwordencrypt], 0
     + " 0F 85 ?? ?? 00 00"    //JNE addr1
     + " 8B ?? " + LANGTYPE    //MOV EAX, DWORD PTR DS:[g_serviceType]
     + " ?? ??"                //TEST EAX, EAX - (some clients use CMP EAX, EBP instead)
@@ -60,7 +48,7 @@ function UseSSOLoginPacket()
   // for very old clients
   //Step 2a - Since it failed it is an old client before VC9. Find the alternate comparison pattern
   code =
-    " A0 ?? ?? ?? 00"       //MOV AL, DWORD PTR DS:[g_passwordencrypt]
+    " A0 " + passwordEncryptHex + // MOV AL, DWORD PTR DS:[g_passwordencrypt]
   + " ?? ??"                //TEST AL, AL - (could be checked with CMP also. so using wildcard)
   + " 0F 85 ?? ?? 00 00"    //JNE addr1
   + " A1" + LANGTYPE        //MOV EAX, DWORD PTR DS:[g_serviceType]

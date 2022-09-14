@@ -1,50 +1,3 @@
-//###############################################################
-//# Purpose: Helper Function to read the data from an icon file #
-//#          to a useful structure (object)                     #
-//###############################################################
-
-function ReadIconFile(fname)
-{
-
-  //Step 1a - Open the icon file
-  var fp = new BinFile();
-  fp.open(fname);
-
-  //Step 1b - Create a icondir structure/object which will hold all the info & images
-  var icondir = new Object();
-  var pos = 0;
-
-  //Step 2a - Read Header Entries
-  icondir.idReserved = fp.readHex(pos,2).unpackToInt();
-  icondir.idType     = fp.readHex(pos+2,2).unpackToInt();
-  icondir.idCount    = fp.readHex(pos+4,2).unpackToInt();
-  icondir.idEntries  = [];
-  pos += 6;
-
-  //Step 2b - Read all the image entry + data
-  for (var i = 0; i < icondir.idCount; i++)
-  {
-    var icondirentry = new Object();
-    icondirentry.bWidth        = fp.readHex(pos,1).unpackToInt();
-    icondirentry.bHeight       = fp.readHex(pos+1,1).unpackToInt();
-    icondirentry.bColorCount   = fp.readHex(pos+2,1).unpackToInt();
-    icondirentry.bReserved     = fp.readHex(pos+3,1).unpackToInt();
-    icondirentry.wPlanes       = fp.readHex(pos+4,2).unpackToInt();
-    icondirentry.wBitCount     = fp.readHex(pos+6,2).unpackToInt();
-    icondirentry.dwBytesInRes  = fp.readHex(pos+8,4).unpackToInt();
-    icondirentry.dwImageOffset = fp.readHex(pos+12,4).unpackToInt();
-    icondirentry.iconimage     = fp.readHex(icondirentry.dwImageOffset, icondirentry.dwBytesInRes);
-    icondir.idEntries[i]       = icondirentry;
-    pos += 16;
-  }
-
-  //Step 2c - Close the file
-  fp.close();
-
-  //Step 3 - Return the structure created
-  return icondir;
-}
-
 //==================================================================//
 // UseRagnarokIcon patch is already achieved in UseCustomIcon patch //
 // so we use the true argument to make the patch stop there         //
@@ -64,15 +17,15 @@ function UseCustomIcon(nomod)
 {
 
   //Step 1a - Find Resource Table
-  var offset = GetDataDirectory(2).offset;
+  var offset = pe.getSubSection(2).offset;
   if (offset === -1)
     throw "found wrong offset in GetDataDirectory";
 
   //Step 1b - Get the Resource Tree (Check the function in core)
-  var rsrcTree = new ResourceDir(offset, 0, 0);
+  var rsrcTree = new resource.dir(offset, 0, 0);
 
   //Step 2a - Find the resource dir of RT_GROUP_ICON = 0xE (check the function in core)
-  var entry = GetResourceEntry(rsrcTree, [0xE]);
+  var entry = resource.getEntry(rsrcTree, [0xE]);
   if (entry === -1)
     return "Failed in Step 2 - Unable to find icongrp";
 
@@ -99,7 +52,7 @@ function UseCustomIcon(nomod)
   //============================================//
 
   //Step 4 - Find the RT_GROUP_ICON , 119, 1042 resource entry address
-  var entry = GetResourceEntry(rsrcTree, [0xE, 0x77, 0x412]);//RT_GROUP_ICON , 119, 1042
+  var entry = resource.getEntry(rsrcTree, [0xE, 0x77, 0x412]);//RT_GROUP_ICON , 119, 1042
   switch (entry)
   {
     case -2: return "Failed in Step 4 - Unable to find icongrp/lang";
@@ -109,14 +62,7 @@ function UseCustomIcon(nomod)
   var icogrpOff = entry.dataAddr;
 
   //Step 5a - Load the new icon
-  var fp = new BinFile();
-  var iconfile = GetInputFile(fp, "$inpIconFile", _("File Input - Use Custom Icon"), _("Enter the Icon File"), APP_PATH + "/Input/NEMO.ico");
-  if (!iconfile)
-    return "Patch Cancelled";
-
-  fp.close();
-
-  var icondir = ReadIconFile(iconfile);
+  var icondir = resource.selectIconFile("$inpIconFile", APP_PATH + "/Input/NEMO.ico");
 
   //Step 5b - Find the image that meets the spec = 8bpp 32x32
   for (var i = 0; i < icondir.idCount; i++)
@@ -149,7 +95,7 @@ function UseCustomIcon(nomod)
 
     if (memicondirentry.bColorCount == 0 && memicondirentry.wBitCount == 8 && memicondirentry.bWidth == 32 && memicondirentry.bWidth == 32)
     { //8bpp 32x32 image
-      entry = GetResourceEntry(rsrcTree, [0x3, memicondirentry.nID, 0x412]);//returns negative number on fail or ResourceEntry object on success
+      entry = resource.getEntry(rsrcTree, [0x3, memicondirentry.nID, 0x412]);//returns negative number on fail or ResourceEntry object on success
       if (entry < 0) continue;
       break;
     }

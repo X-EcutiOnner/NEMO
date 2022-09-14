@@ -45,5 +45,5 @@ function DisablePasswordEncryption()
 
 function DisablePasswordEncryption_()
 {
-    return (exe.getClientDate() > 20171019 && IsZero()) || exe.getClientDate() >= 20181114;
+    return (pe.getDate() > 20171019 && IsZero()) || pe.getDate() >= 20181114;
 }

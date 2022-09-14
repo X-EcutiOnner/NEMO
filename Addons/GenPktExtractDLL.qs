@@ -159,7 +159,7 @@ function GenPktExtractDLL()
   fp.close();
 
   //Step 5c - Replace the Filename template
-  dllHex = dllHex.replace(" 64".repeat(8), ("" + exe.getClientDate()).toHex());//FileName
+  dllHex = dllHex.replace(" 64".repeat(8), ("" + pe.getDate()).toHex());//FileName
 
   //Step 5d - Replace all the addresses and PktOff
   code =
@@ -178,7 +178,7 @@ function GenPktExtractDLL()
   dllHex = dllHex.replace(/ 01 FF 00 FF 02 FF 00 FF 03 FF 00 FF 04 FF 00 FF 05 FF 00 FF/i, code);
 
   //Step 5e - Write out the filled up contents
-  if (!fp.open(APP_PATH + "/Output/ws2_pe_" + exe.getClientDate() + ".dll", "w"))
+  if (!fp.open(APP_PATH + "/Output/ws2_pe_" + pe.getDate() + ".dll", "w"))
     throw "Unable to create output file";
 
   fp.writeHex(0, dllHex);

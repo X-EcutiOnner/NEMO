@@ -43,5 +43,5 @@ function FixShortcutsInWine()
 
 function FixShortcutsInWine_()
 {
-    return (exe.getClientDate() > 20190306 && IsSakray()) || exe.getClientDate() >= 20190401;
+    return (pe.getDate() > 20190306 && IsSakray()) || pe.getDate() >= 20190401;
 }

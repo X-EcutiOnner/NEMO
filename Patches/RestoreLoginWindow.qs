@@ -85,8 +85,10 @@ function RestoreLoginWindow()
   if (LANGTYPE.length === 1)
     return "Failed in Step 4 - " + LANGTYPE[0];
 
+    var passwordEncryptHex = table.getHex4(table.g_passwordEncrypt)
+
   code =
-    " 80 3D ?? ?? ?? 00 00"   //CMP BYTE PTR DS:[g_passwordencrypt], 0
+    " 80 3D " + passwordEncryptHex + " 00" // CMP BYTE PTR DS:[g_passwordencrypt], 0
   + " 0F 85 ?? ?? 00 00"      //JNE addr1
   + " A1" + LANGTYPE          //MOV EAX, DWORD PTR DS:[g_serviceType]
   + " ?? ??"                  //TEST EAX, EAX - (some clients use CMP EAX, EBP instead)
@@ -105,7 +107,7 @@ function RestoreLoginWindow()
   if (offset === -1)
   {
       code =
-        " 80 3D ?? ?? ?? 01 00"   //CMP BYTE PTR DS:[g_passwordencrypt], 0
+        " 80 3D " + passwordEncryptHex + " 00" // CMP BYTE PTR DS:[g_passwordencrypt], 0
       + " 0F 85 ?? ?? 00 00"      //JNE addr1
       + " 8B ??" + LANGTYPE       //MOV EAX, DWORD PTR DS:[g_serviceType]
       + " ?? ??"                  //TEST EAX, EAX - (some clients use CMP EAX, EBP instead)
@@ -249,7 +251,7 @@ function RestoreLoginWindow()
   // Extra for certain 2013 - 2014 clients. Need to fix a function to return 1//
   //==========================================================================//
 
-  if (exe.getClientDate() >= 20130320 && exe.getClientDate() <= 20140226)
+  if (pe.getDate() >= 20130320 && pe.getDate() <= 20140226)
   {
 
     //Step 6a - Find offset of "ID"
@@ -307,5 +309,5 @@ function RestoreLoginWindow()
 //==============================================================//
 function RestoreLoginWindow_()
 {
-  return (exe.getClientDate() > 20100803 && !IsZero());
+  return (pe.getDate() > 20100803 && !IsZero());
 }

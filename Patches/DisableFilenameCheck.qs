@@ -5,6 +5,8 @@
 
 function DisableFilenameCheck()
 {
+    var hwndHex = table.getHex4(table.g_hMainWnd);
+
     //Step 1 - Find the Comparison pattern
     var code =
         " 84 C0"          //TEST AL, AL
@@ -80,6 +82,29 @@ function DisableFilenameCheck()
     }
 
     if (offset === -1)
+    {   // 2022-03-30
+        code =
+            "85 C0 " +                    // 0 test eax, eax
+            "74 10 " +                    // 2 jz short loc_8A657E
+            "83 BD ?? ?? ?? FF 01 " +     // 4 cmp [ebp+VersionInformation.dwPlatformId], 1
+            "75 07 " +                    // 11 jnz short loc_8A657E
+            "E8 54 ?? ?? FF " +           // 13 call SearchProcessIn9X
+            "EB 05 " +                    // 18 jmp short loc_8A6583
+            "E8 2D ?? ?? FF " +           // 20 call SearchProcessInNT
+            "84 C0 " +                    // 25 test al, al
+            "75 18 " +                    // 27 jnz short loc_8A659F
+            "6A 00 " +                    // 29 push 0
+            "6A 00 " +                    // 31 push 0
+            "68 ?? ?? ?? 00 " +           // 33 push offset aD_27
+            "FF ?? " + hwndHex +          // 38 push g_hMainWnd
+            "FF D7 " +                    // 44 call edi
+            "33 C0 " +                    // 46 xor eax, eax
+            "E9 "                         // 48 jmp loc_8A6AB3
+        patchOffset = 27;
+        offset = pe.findCode(code);
+    }
+
+    if (offset === -1)
     {
         var code =
             "85 C0 " +                    // 0 test eax, eax
@@ -94,7 +119,7 @@ function DisableFilenameCheck()
             "6A 00 " +                    // 29 push 0
             "6A 00 " +                    // 31 push 0
             "68 ?? ?? ?? 00 " +           // 33 push offset aD_14
-            "FF 35 ?? ?? ?? ?? " +        // 38 push g_hMainWnd
+            "FF 35 " + hwndHex +          // 38 push g_hMainWnd
             "FF D6 " +                    // 44 call esi
             "33 C0 " +                    // 46 xor eax, eax
             "E9 ";                        // 48 jmp loc_889F02

@@ -163,6 +163,21 @@ function PacketEncryptionKeys(varname, index)
   return true;
 }
 
+function PacketFirstKeyEncryption_()
+{
+    return table.get(table.comboFunction) <= 0;
+}
+
+function PacketSecondKeyEncryption_()
+{
+    return table.get(table.comboFunction) <= 0;
+}
+
+function PacketThirdKeyEncryption_()
+{
+    return table.get(table.comboFunction) <= 0;
+}
+
 //================================================================//
 // Patch Destructor Functions wrapping over _PacketEncryptionKeys //
 //================================================================//

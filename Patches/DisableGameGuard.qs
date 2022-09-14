@@ -100,5 +100,5 @@ function DisableGameGuard()
 //============================//
 function DisableGameGuard_()
 {
-  return (pe.stringRaw("GameGuard Error: %lu") !== -1);
+    return (pe.stringRaw("GameGuard Error: %lu") !== -1 && pe.getDate() < 20210000);
 }

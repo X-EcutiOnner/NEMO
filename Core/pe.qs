@@ -645,9 +645,9 @@ function pe_insertAsmTextObj(commands, vars, freeSpace, dryRun)
     }
     else
     {
-        if (storage.zero == 0)
+        if (storage.getZero() == 0)
             fatalError("Failed in pe.insertAsmTextObj - Not enough free space");
-        free = storage.zero;
+        free = storage.getZero();
     }
 
     var obj = asm.textToObjRaw(free, commands, vars);
@@ -661,7 +661,7 @@ function pe_insertAsmTextObj(commands, vars, freeSpace, dryRun)
         else
         {
             pe.directReplace(free, obj.code);
-            storage.zero = storage.zero + size;
+            storage.adjustZero(size);
         }
     }
     obj.free = free;
@@ -689,9 +689,9 @@ function pe_insertDWord(value, dryRun)
     }
     else
     {
-        if (storage.zero == 0)
+        if (storage.getZero() == 0)
             fatalError("Failed in pe.insertDWord - Not enough free space");
-        free = storage.zero;
+        free = storage.getZero();
     }
     var obj = asm.textToObjRaw(free, "long " + value, {});
     if (dryRun !== true)
@@ -704,7 +704,7 @@ function pe_insertDWord(value, dryRun)
         else
         {
             pe.directReplace(free, obj.code);
-            storage.zero = storage.zero + size;
+            storage.adjustZero(size);
         }
     }
     return free;

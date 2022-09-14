@@ -20,6 +20,11 @@ function hooks_initEndHook(patchAddr)
     return hooks_initHook(patchAddr, hooks_matchFunctionEnd);
 }
 
+function hooks_initTableStartHook(varId)
+{
+    return hooks_initHook(varId, hooks_matchFunctionTableStart, table.var2ToHook);
+}
+
 function hooks_initTableEndHook(varId)
 {
     return hooks_initHook(varId, hooks_matchFunctionEnd, table.varToHook);
@@ -51,4 +56,14 @@ function hooks_initImportHooks(funcName, dllName, ordinal)
     return hooks_initHooks([funcName, dllName, ordinal],
         hooks.matchImportUsage,
         hooks.searchImportUsage);
+}
+
+function hooks_initTableReplaceHook(varId, retText, vars)
+{
+    var hook = hooks_initHook(varId, hooks_matchFunctionReplace, table.varToHook);
+    if (typeof(retText) !== "undefined")
+    {
+        hook.addFinal(retText, vars);
+    }
+    return hook;
 }

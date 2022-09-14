@@ -41,10 +41,13 @@ function getClientName()
 
 function GlobalInit()
 {
+    registerRandom();
     registerTables();
     registerAsm();
     registerMacroAsm();
     registerExe();
+    registerControls();
+    registerInput();
     registerPe();
     registerStorage();
     registerImports();
@@ -52,6 +55,7 @@ function GlobalInit()
     registerLua();
     registerTextFile();
     registerBinFile();
+    registerResource();
 }
 
 function GlobalPostInit()

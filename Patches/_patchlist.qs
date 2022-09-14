@@ -30,7 +30,7 @@ registerGroup( 7, "SharedHeadPalettes", true);
 
 registerGroup( 8, "OnlySelectedLoginBackground", true);
 
-registerGroup( 9, "PacketEncryptionKeys", false);
+registerGroup( 9, "PacketEncryption", true);
 
 registerGroup(10, "LoginMode", true);
 
@@ -53,6 +53,8 @@ registerGroup(19, "Hairs", true);
 registerGroup(20, "Path", false);
 
 registerGroup(21, "Import", true);
+
+registerGroup(22, "MsgStringTable", true);
 
 globalVarTest = 123;
 
@@ -143,7 +145,7 @@ registerPatch( 34, "EnableShowName", "Enable /showname", "Fix", 0, "Neo", "Enabl
 
 registerPatch( 35, "ReadDataFolderFirst", "Read Data Folder First", "Data", 0, "Shinryo", "Gives the data directory contents priority over the data/sdata.grf contents", false);
 
-registerPatch( 36, "ReadMsgstringtabledottxt", "Read msgstringtable.txt", "Data", 0, "Shinryo", "This option will force the client to read all the user interface messages from msgstringtable.txt instead of displaying the Korean messages", true);
+registerPatch( 36, "ReadMsgstringtabledottxt", "Always read msgstringtable.txt", "Data", 22, "Shinryo, 4144", "This option will force the client to read all the user interface messages from msgstringtable.txt instead of displaying the Korean messages", true);
 
 registerPatch( 37, "ReadQuestid2displaydottxt", "Read questid2display.txt", "Data", 0, "Shinryo", "Makes the client to load questid2display.txt on all LangTypes (instead of only 0)", true);
 
@@ -165,7 +167,7 @@ registerPatch( 45, "UseCustomAuraSprites", "Use Custom Aura Sprites", "Data", 0,
 
 registerPatch( 46, "UseNormalGuildBrackets", "Use Normal Guild Brackets", "UI", 0, "Shinryo", "On LangType 0, instead of square-brackets, japanese style brackets are used, this option reverts that behaviour to the normal square brackets '[' and ']'", true);
 
-registerPatch( 47, "UseRagnarokIcon", "Use Ragnarok Icon", "UI", 4, "Shinryo, Neo", "Makes the hexed client use the RO program icon instead of the generic Win32 app icon", false);
+registerPatch( 47, "UseRagnarokIcon", "Use Ragnarok Icon", "Icon", 4, "Shinryo, Neo", "Makes the hexed client use the RO program icon instead of the generic Win32 app icon", false);
 
 registerPatch( 48, "UsePlainTextDescriptions", "Use Plain Text Descriptions", "Data", 0, "Shinryo", "Signals that the contents of text files are text files, not encoded", true);
 
@@ -194,7 +196,7 @@ registerPatch( 59, "ChatColorPartySelf", "Chat Color - Your Party", "Color", 0, 
 
 registerPatch( 60, "ChatColorPlayerSelf", "Chat Color - Self", "Color", 0, "Ai4rei/AN, Shakto", "Changes your character's Chat color and sets it to the specified value. Default value is 00ff00 (Green)", false);
 
-registerPatch( 61, "DisablePacketEncryption", "Disable Packet Encryption", "UI", 0, "Ai4rei/AN", "Disable kRO Packet ID Encryption. Also known as Skip Packet Obfuscation", false);
+registerPatch( 61, "DisablePacketEncryptionOld", "Disable Packet Encryption", "UI", 0, "Ai4rei/AN", "Disable kRO Packet ID Encryption. Also known as Skip Packet Obfuscation", false);
 
 registerPatch( 62, "DisableLoginEncryption", "Disable Login Encryption", "Fix", 0, "Neo", "Disable Encryption in Login Packet 0x2b0", true);
 
@@ -254,11 +256,11 @@ registerPatch( 90, "EnableDNSSupport", "Enable DNS Support", "UI", 0, "Shinryo",
 
 registerPatch( 91, "DCToLoginWindow", "Disconnect to Login Window", "UI", 0, "Neo", "Make the client return to Login Window upon disconnection", false, [40]);
 
-registerPatch( 92, "PacketFirstKeyEncryption", "Packet First Key Encryption", "Packet", 9, "Shakto, Neo", "Change the 1st key for packet encryption. Dont select the patch Disable Packet Header Encryption if you are using this. Don't use it if you don't know what you are doing", false);
+registerPatch( 92, "PacketFirstKeyEncryption", "Packet First Key Encryption", "Packet", 0, "Shakto, Neo", "Change the 1st key for packet encryption. Dont select the patch Disable Packet Header Encryption if you are using this. Don't use it if you don't know what you are doing", false);
 
-registerPatch( 93, "PacketSecondKeyEncryption", "Packet Second Key Encryption", "Packet", 9, "Shakto, Neo", "Change the 2nd key for packet encryption. Dont select the patch Disable Packet Header Encryption if you are using this. Don't use it if you don't know what you are doing", false);
+registerPatch( 93, "PacketSecondKeyEncryption", "Packet Second Key Encryption", "Packet", 0, "Shakto, Neo", "Change the 2nd key for packet encryption. Dont select the patch Disable Packet Header Encryption if you are using this. Don't use it if you don't know what you are doing", false);
 
-registerPatch( 94, "PacketThirdKeyEncryption", "Packet Third Key Encryption", "Packet", 9, "Shakto, Neo", "Change the 3rd key for packet encryption. Dont select the patch Disable Packet Header Encryption if you are using this. Don't use it if you don't know what you are doing", false);
+registerPatch( 94, "PacketThirdKeyEncryption", "Packet Third Key Encryption", "Packet", 0, "Shakto, Neo", "Change the 3rd key for packet encryption. Dont select the patch Disable Packet Header Encryption if you are using this. Don't use it if you don't know what you are doing", false);
 
 registerPatch( 95, "UseSSOLoginPacket", "Use SSO Login Packet", "Packet", 10, "Ai4rei/AN", "Enable using SSO packet on all LangType (to use login and pass with a launcher)", false);
 
@@ -328,7 +330,7 @@ registerPatch(208, "RestoreCashShop", "Restore Cash Shop Icon", "Special", 0, "N
 
 registerPatch(209, "EnableMailBox", "Enable Mail Box for All LangTypes", "Custom", 0, "Neo", "Enables the full use of Mail Boxes and @mail commands (write is disabled for few LangTypes by default in 2013 Clients)", false);
 
-registerPatch(210, "UseCustomIcon", "Use Custom Icon", "Custom", 4, "Neo", "Makes the hexed client use the User specified icon. Icon file should have an 8bpp (256 color) 32x32 image", false);
+registerPatch(210, "UseCustomIcon", "Use Custom Icon", "Icon", 4, "Neo", "Makes the hexed client use the User specified icon. Icon file should have an 8bpp (256 color) 32x32 image", false);
 
 registerPatch(211, "UseCustomDLL", "Use Custom DLL", "Custom", 21, "Neo", "Makes the hexed client load the specified DLL and functions", false);
 
@@ -688,7 +690,7 @@ registerPatch(394, "SetNormalFontWeight", "Change all normal fonts weight to fix
 
 registerPatch(395, "SetFontWeightAdjust", "Adjust all fonts weight to fixed value", "Size", 0, "4144", "Adjust all fonts weight to fixed value", false);
 
-registerPatch(396, "SetFontCharset", "Change all fonts charset", "Font", 0, "4144", "Change all fonts charset", false);
+registerPatch(396, "SetLoadFontCharset", "Change all load fonts charset", "Font", 0, "4144", "Change all fonts charset in win32 api", false);
 
 registerPatch(397, "SetFontName", "Change all fonts face", "Font", 0, "4144", "Change all fonts face name", false);
 
@@ -759,5 +761,43 @@ registerPatch(429, "DisableSetTextType", "Protect shorten and bold name flags", 
 registerPatch(430, "ChangeNameBalloonFontBold", "Draw names with bold or normal font", "Font", 0, "4144", "Draw UINameBalloon* with bold or normal font", false);
 
 registerPatch(431, "ChangeMissingLauncherError", "Set custom message for error if client started without launcher", "Launcher", 0, "4144", "This message can be visible only in patch 'Disable 1rag1 type parameters' not enabled.", false);
+
+registerPatch(432, "DisableNProtect", "Disable Game Guard (NProtect)", "Fix", 0, "4144", "Disables Game Guard in 2022-03-30 clients", true);
+
+registerPatch(433, "ChangeMaxEmblemFileSize", "Change maximum guild emblem file size", "Fix", 0, "4144", "Allow upload gif emblems with other maximum size (default limit is 51200 bytes)", false);
+
+registerPatch(434, "NeverReadMsgstringtabledottxt", "Never read msgstringtable.txt", "Data", 22, "4144", "This option will block client from reading all the user interface messages from msgstringtable.txt. Instead client will display Korean messages", false);
+
+registerPatch(435, "EnablePacketEncryption", "Enable packets id encryption", "Protection", 9, "4144", "Set default way for encryption packets id based on 3 keys", false);
+
+registerPatch(436, "DisablePacketEncryption", "Disable packets id encryption", "Protection", 9, "4144", "Disable default way for encryption packets id based on 3 keys", false);
+
+registerPatch(437, "ChangeRodexTax", "Change tax value on sending items by rodex", "Rodex", 0, "4144", "Allow replace default 2500 rodex tax to custom value", false);
+
+registerPatch(438, "SetHardcodedServerIp", "Set fixed server ip address", "Protection", 0, "4144", "Client will always connect only to given hardcoded ip address", false);
+
+registerPatch(439, "SetDrawingFontCharset", "Set fixed charset on drawing text messages", "Font", 0, "4144", "Allow use only one charset for any text messages drawing. Fixing issue with job name in mini stats window.", false);
+
+registerPatch(440, "SetFontCharset", "Set fixed charset", "Font", 0, "4144", "Allow use only one charset for any text messages. (enable load and use font charset patches)", false);
+
+registerPatch(441, "SetDrawingFontBold", "Draw text messages always with bold font", "Font", 0, "4144", "Set bold font on all drawed text messages.", false);
+
+registerPatch(442, "SetDrawingFontNonBold", "Draw text messages always with non bold font", "Font", 0, "4144", "Set normal (non bold) font on all drawed text messages.", false);
+
+registerPatch(443, "SetDrawingFontItalic", "Draw text messages always with italic font", "Font", 0, "4144", "Set italic font on all drawed text messages.", false);
+
+registerPatch(444, "SetDrawingFontType", "Draw text messages always with given font type", "Font", 0, "4144", "Set font type on all drawed text messages. Font type is custom mostly set charset only.", false);
+
+registerPatch(445, "SetDrawingFontHeight", "Draw text messages with fixed height", "Font", 0, "4144", "Set font height on all drawed text messages.", false);
+
+registerPatch(446, "SetDrawingFontHeightMin", "Limit minimal font size for drawed text messages", "Font", 0, "4144", "Allow set minimal font size for text messages.", false);
+
+registerPatch(447, "SetDrawingFontHeightMax", "Limit maximum font size for drawed text messages", "Font", 0, "4144", "Allow set maximum font size for text messages.", false);
+
+registerPatch(448, "SetDrawingFontHeightAdjust", "Adjust font size for drawed text messages", "Font", 0, "4144", "Allow adjust font size for text messages.", false);
+
+registerPatch(449, "ExtendOldCashShopPreview", "Add support for preview button in custom shops", "Fix", 0, "4144", "Extend old cash shop packet for support equipment preview.", false);
+
+registerPatch(450, "UseCustomIcon16", "Use low color custom icon", "Icon", 4, "Neo, 4144", "Use custom icon with size 32x32 and 16 colors", false);
 
 GlobalPostInit();

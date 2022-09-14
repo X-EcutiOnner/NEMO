@@ -15,9 +15,39 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+function storage_set(varName, value)
+{
+    storage[varName] = value;
+}
+
+function storage_get(varName)
+{
+    return storage[varName];
+}
+
+function storage_getZero()
+{
+    return storage.zero;
+}
+
+function storage_setZero(value)
+{
+    storage.zero = value;
+}
+
+function storage_adjustZero(value)
+{
+    storage.zero = storage.zero + value;
+}
+
 function storage_init()
 {
-    storage = new Object();
+    for (var key in storage)
+    {
+        if (storage.hasOwnProperty(key))
+            delete storage[key];
+    }
+
     storage.hooks = {};
     storage.zero = 0;
     storage.multiHooks = {};
@@ -26,4 +56,10 @@ function storage_init()
 function registerStorage()
 {
     storage_init();
+
+    storage.set = storage_set;
+    storage.get = storage_get;
+    storage.getZero = storage_getZero;
+    storage.setZero = storage_setZero;
+    storage.adjustZero = storage_adjustZero;
 }

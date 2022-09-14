@@ -13,7 +13,7 @@ function ExtractTxtNames()
 
   //Step 2a - Open output file and write the header.
     var fp = new TextFile();
-    fp.open(APP_PATH + "/Output/loaded_txt_files_" + exe.getClientDate() + ".txt", "w");
+    fp.open(APP_PATH + "/Output/loaded_txt_files_" + pe.getDate() + ".txt", "w");
     fp.writeline("Extracted with NEMO");
     fp.writeline("-------------------");
 

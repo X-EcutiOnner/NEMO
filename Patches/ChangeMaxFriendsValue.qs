@@ -60,6 +60,18 @@ function ChangeMaxFriendsValue()
     }
 
     if (offses === -1)
+    {
+        code =
+            "8B 83 ?? 00 00 00 " +        // 0 mov eax, [ebx+98h]
+            "8B 40 18 " +                 // 6 mov eax, [eax+18h]
+            "99 " +                       // 9 cdq
+            "F7 BB ?? ?? 00 00 " +        // 10 idiv [ebx+100h]
+            "89 83 ?? 00 00 00 "          // 16 mov [ebx+0F8h], eax
+
+        offses = pe.findCode(code);
+    }
+
+    if (offses === -1)
         return "Failed in Step 1 - Pattern not found";
 
     consoleLog("Step 2 - Search string '%s(%d/%d)' for friends list");
@@ -170,6 +182,23 @@ function ChangeMaxFriendsValue()
             "50 " +                    // 26 push eax
             "E8 ?? ?? ?? ?? " +        // 27 call sub_47A2E0
             "83 C4 14 ";               // 32 add esp, 14h
+
+        repLoc = 1;
+        sprintfOffset = [28, false];
+        offset = pe.find(code, offses, offses + 0xBC);
+    }
+
+    if (offset === -1)
+    {
+        code =
+            "6A ?? " +                    // 0 push 28h
+            "FF B3 ?? ?? 00 00 " +        // 2 push dword ptr [ebx+0DCh]
+            "8D 85 ?? ?? FF FF " +        // 8 lea eax, [ebp+var_170+4]
+            "FF B4 8D ?? ?? FF FF " +     // 14 push [ebp+ecx*4+var_12C.m_allocated_len]
+            "68 " + strHex +              // 21 push offset aSDD_8
+            "50 " +                       // 26 push eax
+            "E8 ?? ?? ?? ?? " +           // 27 call sprintf
+            "83 C4 14 "                   // 32 add esp, 14h
 
         repLoc = 1;
         sprintfOffset = [28, false];

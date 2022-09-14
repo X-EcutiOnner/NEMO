@@ -13,7 +13,7 @@ function UseCustomDLL()
   var hasHShield = (getActivePatches().indexOf(15) !== -1);
 
   //Step 1b - Get the current import table
-  var dir = GetDataDirectory(1);
+  var dir = pe.getSubSection(1);
   if (dir.offset === -1)
     throw "found wrong offset in GetDataDirectory";
 

@@ -77,7 +77,42 @@ function hooks_matchFunctionStart(storageKey, offset)
 
     if (found !== true)
     {
-        throw "First pattern not found: 0x" + offsetVa.toString(16);
+        var code =
+            "55 " +                       // 0 push ebp
+            "8B EC " +                    // 1 mov ebp, esp
+            "8B 55 ?? "                   // 3 mov edx, [ebp+fontType]
+
+        stolenCodeOffset = [0, 6];
+        continueOffset = 6;
+        found = pe.match(code, offset);
+    }
+
+    if (found !== true)
+    {
+        var code =
+            "55 " +                       // 0 push ebp
+            "8B EC " +                    // 1 mov ebp, esp
+            "8B 45 ?? "                   // 3 mov eax, [ebp+fontType]
+
+        stolenCodeOffset = [0, 6];
+        continueOffset = 6;
+        found = pe.match(code, offset);
+    }
+
+    if (found !== true)
+    {
+        var code =
+            "8B 44 24 ?? " +              // 0 mov eax, [esp+arg_0]
+            "56 "                         // 4 push esi
+
+        stolenCodeOffset = [0, 5];
+        continueOffset = 5;
+        found = pe.match(code, offset);
+    }
+
+    if (found !== true)
+    {
+        throw "Function start pattern not found: 0x" + offsetVa.toString(16);
     }
     var obj = hooks.createHookObj();
     obj.patchAddr = offset;
@@ -86,6 +121,19 @@ function hooks_matchFunctionStart(storageKey, offset)
     obj.continueOffsetVa = offsetVa + continueOffset;
     obj.retCode = "";
     obj.endHook = false;
+    return obj;
+}
+
+function hooks_matchFunctionTableStart(storageKey, offsets)
+{
+    var offset = offsets[0];
+    var stackSize = offsets[1];
+
+    var obj = hooks_matchFunctionStart(storageKey, offset);
+    obj.stolenCode = hooks.duplicateStackCode(obj.continueOffsetVa, stackSize, obj.stolenCode);
+    obj.stolenCode1 = obj.stolenCode;
+    obj.retCode = asm.retHex(stackSize) + obj.retCode;
+    obj.endHook = true;
     return obj;
 }
 
@@ -326,4 +374,17 @@ function hooks_matchImportUsage(offset, importOffset)
         ],
         offset, importOffset
     );
+}
+
+function hooks_matchFunctionReplace(storageKey, offset)
+{
+    checkArgs("hooks.matchFunctionReplace", arguments, [["Number", "Number"]]);
+    var obj = hooks.createHookObj();
+    obj.patchAddr = offset;
+    obj.stolenCode = "";
+    obj.stolenCode1 = "";
+    obj.retCode = "";
+    obj.continueOffsetVa = 0;
+    obj.endHook = true;
+    return obj;
 }

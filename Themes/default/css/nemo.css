@@ -210,7 +210,7 @@ QHeaderView::section {
     padding-left:2px;
 }
 
-QSpinBox {
+QSpinBox, QDoubleSpinBox, QFontComboBox {
     background-color:white;
 }
 

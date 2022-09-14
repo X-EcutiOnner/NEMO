@@ -78,6 +78,8 @@ function SendClientFlags_apply()
 
     if (storage.ExtendCashShop === true)
         flags |= 1;
+    if (storage.ExtendOldCashShop === true)
+        flags |= 2;
 
     patch.removePatchData(storage.g_client_version);
     pe.replaceDWord(storage.g_client_version, flags);

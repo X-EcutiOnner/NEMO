@@ -24,10 +24,12 @@ function LoginPacketSend_match()
     if (LANGTYPE.length === 1)
         throw "Failed in Step 1a - " + LANGTYPE[0];
 
+    var passwordEncryptHex = table.getHex4(table.g_passwordEncrypt)
+
     consoleLog("Search pattern");
     // search in CLoginMode_OnChangeState
     var code =
-        "80 3D ?? ?? ?? ?? 00 " +     // 0 cmp ds:g_passwordEncrypt, 0
+        "80 3D " + passwordEncryptHex + " 00 " + // 0 cmp ds:g_passwordEncrypt, 0
         "0F 85 ?? ?? ?? 00 " +        // 7 jnz loc_80923F
         "8B ?? " + LANGTYPE +         // 13 mov ecx, ds:g_serviceType
         "?? ?? " +                    // 19 test ecx, ecx
@@ -36,14 +38,11 @@ function LoginPacketSend_match()
         "0F 84 ?? ?? 00 00 " +        // 30 jz loc_8090C2
         "83 ?? 0C " +                 // 36 cmp ecx, 0Ch
         "0F 84 ?? ?? 00 00 ";         // 39 jz loc_8090C2
-    var passwordEncryptOffset = [2, 4];
     var nopRangeOffset = [19, 45];
     var offset = pe.findCode(code);
 
     if (offset === -1)
         throw "Pattern not found";
-
-    logVaVar("g_passwordEncrypt", offset, passwordEncryptOffset);
 
     var obj = hooks.createHookObj();
 //    obj.patchAddr = ;
@@ -72,5 +71,5 @@ function RestoreOldLoginPacket()
 //====================================================================//
 function RestoreOldLoginPacket_()
 {
-    return (exe.getClientDate() > 20171019 && IsZero()) || exe.getClientDate() >= 20181114;
+    return (pe.getDate() > 20171019 && IsZero()) || pe.getDate() >= 20181114;
 }

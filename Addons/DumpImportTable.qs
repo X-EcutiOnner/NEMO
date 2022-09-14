@@ -6,13 +6,13 @@ function DumpImportTable()
 {
 
   consoleLog("Step 1a - Get the Import Data Directory Offset");
-  var offset = GetDataDirectory(1).offset;
+  var offset = pe.getSubSection(1).offset;
   if (offset === -1)
     throw "Wrong offset";
 
   consoleLog("Step 1b - Open text file for writing");
   var fp = new TextFile();
-  if (!fp.open(APP_PATH + "/Output/importTable_Dump_" + exe.getClientDate() + ".txt", "w"))
+  if (!fp.open(APP_PATH + "/Output/importTable_Dump_" + pe.getDate() + ".txt", "w"))
     throw "Error: Unable to create text file in Output folder";
 
   consoleLog("Step 2a - Write the import address to file");

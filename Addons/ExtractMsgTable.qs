@@ -14,7 +14,7 @@ function ExtractMsgTable()
     var msgStr = "";
 
     var fp = new BinFile();
-    fp.open(APP_PATH + "/Output/msgstringtable_" + exe.getClientDate() + ".txt", "w");
+    fp.open(APP_PATH + "/Output/msgstringtable_" + pe.getDate() + ".txt", "w");
 
     while (!done)
     {

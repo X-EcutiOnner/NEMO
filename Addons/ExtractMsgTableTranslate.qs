@@ -64,7 +64,7 @@ function ExtractMsgTableTranslate()
     var done = false;
     var id = 0;
 
-    fp.open(APP_PATH + "/Output/msgstringtable_" + exe.getClientDate() + ".txt", "w");
+    fp.open(APP_PATH + "/Output/msgstringtable_" + pe.getDate() + ".txt", "w");
 
     while (!done)
     {

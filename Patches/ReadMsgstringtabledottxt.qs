@@ -1,61 +1,47 @@
-//##################################################################
-//# Purpose: Change the JNZ after LangType check in InitMsgStrings #
-//#          function to JMP.                                      #
-//##################################################################
+//
+// Copyright (C) 2021-2022  Andrei Karas (4144)
+//
+// Hercules is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+
+function MsgStringTable_patch()
+{
+    var offset = table.getRawValidated(table.initMsgStrings_jmp);
+
+    var code =
+        "75 ?? "                      // 0 jnz short addr
+    var cmdOffset = [0, 1];
+    var addrOffset = [1, 1];
+
+    var found = pe.match(code, offset);
+    if (found !== true)
+    {
+        throw "Error: jmp not matched";
+    }
+
+    var cmd = pe.fetchValue(offset, cmdOffset);
+    var addr = pe.fetchRelativeValue(offset, addrOffset);
+
+    var vars = {
+        "addr": addr,
+    };
+
+    pe.replaceAsmFile(offset, "", vars, 2);
+}
 
 function ReadMsgstringtabledottxt()
 {
-    //Step 1 - Find the comparison which is at the start of the function
-    var LANGTYPE = GetLangType();//Langtype value overrides Service settings hence they use the same variable - g_serviceTypes
-    if (LANGTYPE.length === 1)
-        return "Failed in Step 1 - " + LANGTYPE[0];
-
-    var offset2 = 1;
-    var code =
-        " 83 3D" + LANGTYPE + " 00" //CMP DWORD PTR DS:[g_serviceType], 0
-      + " 56"                       //PUSH ESI
-      + " 75"                       //JNZ SHORT addr -> continue with msgStringTable.txt loading
-      ;
-    var offset = pe.findCode(code);  //VC9+ Clients
-
-    if (offset === -1)
-    {
-        code =
-            " A1" + LANGTYPE //MOV EAX, DWORD PTR DS:[g_serviceType]
-          + " 56"            //PUSH ESI
-          + " 85 C0"         //TEST EAX, EAX
-          + " 75"            //JNZ SHORT addr -> continue with msgStringTable.txt loading
-        ;
-        offset = pe.findCode(code); //Older Clients
-    }
-
-    if (offset === -1)
-    {
-        code =
-            " 83 3D" + LANGTYPE + " 00" // CMP DWORD PTR DS:[g_serviceType], 0
-          + " 75 25"                    // JNZ SHORT addr
-          + " 56"                       // PUSH ESI
-        ;
-        offset = pe.findCode(code); // 2016 clients [Secret]
-        offset2 = 3;
-    }
-
-    if (offset === -1)
-    {   // 2019-02-13+
-        code =
-            " 83 3D" + LANGTYPE + " 00" // CMP DWORD PTR DS:[g_serviceType], 0
-          + " 75 26"                    // JNZ SHORT addr
-          + " 56"                       // PUSH ESI
-        ;
-        offset = pe.findCode(code); // 2016 clients [Secret]
-        offset2 = 3;
-    }
-
-    if (offset === -1)
-        return "Failed in Step 1";
-
-    //Step 2 - Change JNZ to JMP
-    pe.replaceByte(offset + code.hexlength() - offset2, 0xEB);
-
+    MsgStringTable_patch();
     return true;
 }

@@ -79,8 +79,8 @@ function IgnoreQuestErrors()
 function IgnoreQuestErrors_()
 {
     return (
-                exe.getClientDate() >= 20180319 ||
-                exe.getClientDate() >= 20180300 && IsSakray() ||
-                exe.getClientDate() >= 20171115 && IsZero()
+                pe.getDate() >= 20180319 ||
+                pe.getDate() >= 20180300 && IsSakray() ||
+                pe.getDate() >= 20171115 && IsZero()
             );
 }

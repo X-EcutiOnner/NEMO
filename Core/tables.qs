@@ -86,6 +86,15 @@ function registerTables()
     table.g_textType_isBold = 87;
     table.CSession_SetTextType = 88;
     table.PLEASE_EXCUTE_LAUNCHER = 89;
+    table.g_passwordEncrypt = 90;
+    table.g_hideAccountList = 91;
+    table.max_emblem_size_offset = 92;
+    table.initMsgStrings_jmp = 93;
+    table.comboFunction = 94;
+    table.rodexTax = 95;
+    table.DrawDC_SetFont = 96;
+    table.CGameActor_m_job = 98;
+    table.UIEquipWnd_SendMsg_TAB = 99;
 
     registerTableFunctions();
 }
@@ -157,6 +166,13 @@ function table_varToHook(varId)
     return [[offset, offset]];
 }
 
+function table_var2ToHook(varId)
+{
+    var offset = table.getRawValidated(varId);
+    var offset2 = table.get(varId + 1);
+    return [[offset, [offset, offset2]]];
+}
+
 function getEcxSessionHex()
 {
     return "B9 " + table.getHex4(table.g_session);  // mov ecx, g_session
@@ -188,4 +204,5 @@ function registerTableFunctions()
     table.getAnyValidated = table_getAnyValidated;
     table.getSessionAbsHex4 = table_getSessionAbsHex4;
     table.varToHook = table_varToHook;
+    table.var2ToHook = table_var2ToHook;
 }

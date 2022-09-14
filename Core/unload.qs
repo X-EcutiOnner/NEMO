@@ -30,7 +30,7 @@ function Global_clear()
 
     dllFile = false;
 
-    storage_init();
+    registerStorage();
     registerHooks();
     registerImports();
     registerPe();

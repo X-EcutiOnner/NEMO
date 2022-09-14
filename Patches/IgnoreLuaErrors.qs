@@ -123,5 +123,5 @@ function IgnoreLuaErrors()
 //=======================================================//
 function IgnoreLuaErrors_()
 {
-    return (exe.getClientDate() >= 20100000);
+    return (pe.getDate() >= 20100000);
 }

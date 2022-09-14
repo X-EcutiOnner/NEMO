@@ -198,7 +198,7 @@ function DisableHShield()
     else
     {
         consoleLog("Step 5f - If Custom DLL is not present then we need to traverse the Import table and remove the aossdk entry");
-        var dir = GetDataDirectory(1);
+        var dir = pe.getSubSection(1);
         var finalValue = " 00".repeat(20);
         var curValue;
         var lastDLL = " ";

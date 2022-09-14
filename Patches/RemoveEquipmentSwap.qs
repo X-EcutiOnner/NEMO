@@ -74,5 +74,5 @@ function RemoveEquipmentSwap()
 //=======================================================//
 function RemoveEquipmentSwap_()
 {
-    return (exe.getClientDate() >= 20170208);
+    return (pe.getDate() >= 20170208);
 }

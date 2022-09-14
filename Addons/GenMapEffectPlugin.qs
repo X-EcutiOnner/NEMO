@@ -282,15 +282,15 @@ function GenMapEffectPlugin()
     dll = dll.replace(/ 6C 5D C3/i, gR_clrColor + " 5D C3");
 
     consoleLog("Write to output dll file.");
-    fp.open(APP_PATH + "/Output/rdll2_" + exe.getClientDate() + ".asi", "w");
+    fp.open(APP_PATH + "/Output/rdll2_" + pe.getDate() + ".asi", "w");
     fp.writeHex(0,dll);
     fp.close();
 
     consoleLog("Also write out the values to header file (client.h)");
     var fp2 = new TextFile();
-    fp2.open(APP_PATH + "/Output/client_" + exe.getClientDate() + ".h", "w");
+    fp2.open(APP_PATH + "/Output/client_" + pe.getDate() + ".h", "w");
     fp2.writeline("#include <WTypes.h>");
-    fp2.writeline("\n// Client Date : " + exe.getClientDate());
+    fp2.writeline("\n// Client Date : " + pe.getDate());
     fp2.writeline("\n// Client offsets - some are #define because they were appearing in multiple locations unnecessarily");
     fp2.writeline("#define G_WEATHER 0x" + gWeather.toBE() + ";");
     fp2.writeline("#define G_RENDERER 0x" + gRenderer.toBE() + ";");

@@ -101,21 +101,7 @@ function RestoreSongsEffect()
     var patchAddr = offset + patchOffset;
     var retAddr = pe.rawToVa(patchAddr + 5).packToHex(4);
 
-    consoleLog("Step 3 - get skill id offset");
-    code =
-        " B8 ?? ?? 00 00"     //0 mov eax,1094h
-      + " 75 06"              //5 jne short
-      + " 8B 86 ?? ?? 00 00"  //7 mov eax,[esi+skillOffset]
-      + " 5E"                 //13 pop esi
-      + " C3"                 //14 ret
-    ;
-    var jobOffset = [9, 4];
-    offset = pe.findCode(code);
-    if (offset === -1)
-        return "Failed in Step 3 - skill offset not found";
-
-    var sidOffset = pe.fetchHex(offset + jobOffset[0], jobOffset[1]);
-    logField("CGameActor::m_job", offset, jobOffset);
+    var sidOffset = table.getValidated(table.CGameActor_m_job).packToHex(4);
 
     consoleLog("Step 4a - Prepare effectID list");
     var effectID = [242, 278, 279, 280, 281, 282, 283, 284, 285, 277, 286, 287, 288, 289, 290, 291, 292, 293, 294];

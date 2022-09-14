@@ -43,6 +43,17 @@ function DisableAutofollow()
     }
 
     if (offsets.length === 0)
+    {
+        code =
+            "FF 90 ?? ?? 00 00 " +        // 0 call [eax+value]
+            "A3 " + lastLockOnPcGid;      // 6 mov m_lastLockOnPcGid, eax
+        starOffset = 6;
+        endOffset = 11;
+
+        offsets = pe.findCodes(code);
+    }
+
+    if (offsets.length === 0)
         return "Failed in Step 1";
 
     //Step 2 - NOP out the assignment for the correct match (pattern might match more than one location)

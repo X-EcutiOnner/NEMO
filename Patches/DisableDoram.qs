@@ -70,5 +70,5 @@ function DisableDoram()
 
 function DisableDoram_()
 {
-    return exe.getClientDate() <= 20170614;
+    return pe.getDate() <= 20170614;
 }

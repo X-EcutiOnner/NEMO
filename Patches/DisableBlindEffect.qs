@@ -217,5 +217,5 @@ function DisableBlindEffect()
 //=======================================================//
 function DisableBlindEffect_()
 {
-    return (exe.getClientDate() > 20020000);
+    return (pe.getDate() > 20020000);
 }

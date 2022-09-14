@@ -8,6 +8,7 @@
 /Output/*.txt
 /Output/*.dll
 /Output/*.asi
+/Input/nemo.key
 FailedTranslations.txt
 *.exe.secure.txt
 PatchList.log

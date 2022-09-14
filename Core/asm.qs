@@ -123,6 +123,10 @@ function asm_hexToAsm(code)
     var data = ""
     for (var i = 0; i < parts.length; i ++)
     {
+        if (parts[i].length == 0)
+            continue;
+        if (parts[i].length != 2)
+            fatalError("Found wrong hex string: '" + code + "'");
         data += "db 0x" + parts[i] + "\n";
     }
     return data;
@@ -183,6 +187,12 @@ function asm_textToBytes(addrVa, commands, vars)
     return res;
 }
 
+function asm_retHex(stackSize)
+{
+    checkArgs("asm.retHex", arguments, [["Number"]]);
+    return asm_textToHexVa(0, "ret " + stackSize, {});
+}
+
 function registerAsm()
 {
     asm.textToBytes = asm_textToBytes;
@@ -202,4 +212,5 @@ function registerAsm()
     asm.combine = asm_combine;
     asm.load = asm_load;
     asm.loadHex = asm_loadHex;
+    asm.retHex = asm_retHex;
 }

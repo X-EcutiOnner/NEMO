@@ -45,7 +45,7 @@ function FixAchievementCounters()
 
     if (offset === -1)
     {
-        if (exe.getClientDate() < 20170000)
+        if (pe.getDate() < 20170000)
             return "Failed in step 2 - pattern not found";
         else
             var addr1 = false;  // can skip 2017 clients, because no this bug

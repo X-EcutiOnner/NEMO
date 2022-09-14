@@ -10,6 +10,8 @@
   - [macroasm](api/macroasm.md)
   - [patch](api/patch.md)
   - [pe](api/pe.md)
+  - [random](api/random.md)
+  - [resource](api/resource.md)
   - [table](api/table.md)
 - [Classes](api/classes.md)
   - [BinFile](api/binfile.md)
