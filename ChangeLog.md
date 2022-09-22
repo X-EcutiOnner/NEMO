@@ -1,3 +1,28 @@
+# 2022-09-22 Different changes
+
+## Patches
+
+- Add patch [Add custom lua support \[HatEffectInfo\]](http://nemo.herc.ws/patches/AddCLSHatEffect/#success-clients). (by llchrisll, 4144).
+- Add patch [Add custom lua support \[Headgears\]](http://nemo.herc.ws/patches/AddCLSHeadgear/#success-clients). (by llchrisll, 4144).
+- Add patch [Add custom lua support \[Lapine Box\]](http://nemo.herc.ws/patches/AddCLSLapine/#success-clients). (by llchrisll, 4144).
+- Add patch [Add custom lua support \[Navigation\]](http://nemo.herc.ws/patches/AddCLSNavi/#success-clients). (by llchrisll, 4144).
+- Add patch [Add custom lua support \[NPC/Mob/Pet\]](http://nemo.herc.ws/patches/AddCLSNPC/#success-clients). (by llchrisll, 4144).
+- Add patch [Add custom lua support \[Quest\]](http://nemo.herc.ws/patches/AddCLSQuest/#success-clients). (by llchrisll, 4144).
+- Add patch [Add custom lua support \[Random Option\]](http://nemo.herc.ws/patches/AddCLSRandomOption/#success-clients). (by llchrisll, 4144).
+- Add patch [Add custom lua support \[Robe\]](http://nemo.herc.ws/patches/AddCLSRobe/#success-clients). (by llchrisll, 4144).
+- Add patch [Add custom lua support \[Signboard\]](http://nemo.herc.ws/patches/AddCLSSign/#success-clients). (by llchrisll, 4144).
+- Add patch [Add custom lua support \[Title\]](http://nemo.herc.ws/patches/AddCLSTitle/#success-clients). (by llchrisll, 4144).
+- Add patch [Add custom lua support \[Weapon\]](http://nemo.herc.ws/patches/AddCLSWeapon/#success-clients). (by llchrisll, 4144).
+- Add patch [Add custom lua support \[World Map\]](http://nemo.herc.ws/patches/AddCLSWorldView/#success-clients). (by llchrisll, 4144).
+- Remove patch "Add loading custom lua files".
+
+## Other
+
+- Update tables.
+- Fix multi patch feature (was broken in previous update).
+- Replace some legacy input functions in some patches.
+
+
 # 2022-09-14 Different changes
 
 ## Patches

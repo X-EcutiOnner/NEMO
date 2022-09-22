@@ -153,8 +153,8 @@ function hooks_checkMatchedObject(funcName, storageKey)
     if (storageKey in storage.hooks)
     {
         var obj = storage.hooks[storageKey];
-        if (obj.matchFunc.name !== funcName)
-            fatalError("Other type of hook registered for address: 0x" + pe.rawToVa(storageAddr).toString(16));
+        if (obj.matchFunc !== funcName)
+            fatalError("Other type of hook registered for address: 0x" + pe.rawToVa(storageKey).toString(16));
         return true;
     }
     return false;

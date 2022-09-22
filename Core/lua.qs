@@ -107,9 +107,10 @@ function registerLua()
                 "E8 ";                        // 15 call CLua_Load
             var moveOffset = [0, 6];
             var pushFlagsOffset = [6, 4];
-            var strPushOffset = 10;
+            var afterStolenCodeOffset = 10;
             var postOffset = 20;
             var otherOffset = 0;
+            var otherOffset2 = 0;
             var callOffset = [16, 4];
             var hookLoader = pe.find(code);
             if (hookLoader === -1)
@@ -122,9 +123,10 @@ function registerLua()
                     "E8 ";                        // 15 call CLua_Load
                 moveOffset = [0, 6];
                 pushFlagsOffset = [6, 4];
-                strPushOffset = 10;
+                afterStolenCodeOffset = 10;
                 postOffset = 20;
                 otherOffset = 0;
+                otherOffset2 = 0;
                 callOffset = [16, 4];
                 hookLoader = pe.find(code);
             }
@@ -138,10 +140,117 @@ function registerLua()
                     "E8 ";                        // 14 call CLua_Load
                 moveOffset = [0, 6];
                 pushFlagsOffset = [6, 3];
-                strPushOffset = 9;
+                afterStolenCodeOffset = 9;
                 postOffset = 19;
                 otherOffset = 0;
+                otherOffset2 = 0;
                 callOffset = [15, 4];
+                hookLoader = pe.find(code);
+            }
+            if (hookLoader === -1)
+            {
+                var code =
+                    "6A ?? " +                    // 0 push 0
+                    "6A ?? " +                    // 2 push 1
+                    "68 " + strHex +              // 4 push offset aLuaFilesWorl_1
+                    "8B CE " +                    // 9 mov ecx, esi
+                    "E8 "                         // 11 call CLua_Load
+                moveOffset = [9, 2];
+                pushFlagsOffset = [0, 4];
+                afterStolenCodeOffset = 0;
+                postOffset = 16;
+                otherOffset = 0;
+                otherOffset2 = 0;
+                callOffset = [12, 4];
+                hookLoader = pe.find(code);
+            }
+            if (hookLoader === -1)
+            {
+                var code =
+                    "8B CE " +                    // 0 mov ecx, esi
+                    "6A ?? " +                    // 2 push 0
+                    "6A ?? " +                    // 4 push 1
+                    "68 " + strHex +              // 6 push offset aLuaFilesWorldv
+                    "89 B5 ?? ?? ?? FF " +        // 11 mov [ebp+var_2A0], esi
+                    "E8 "                         // 17 call CLua_Load
+                moveOffset = [0, 2];
+                pushFlagsOffset = [2, 4];
+                afterStolenCodeOffset = 6;
+                postOffset = 22;
+                otherOffset = [11, 6];
+                otherOffset2 = 0;
+                callOffset = [18, 4];
+                hookLoader = pe.find(code);
+            }
+            if (hookLoader === -1)
+            {
+                var code =
+                    "6A ?? " +                    // 0 push 0
+                    "6A ?? " +                    // 2 push 1
+                    "68 " + strHex +              // 4 push offset aLuaFilesWorl_2
+                    "8B CF " +                    // 9 mov ecx, edi
+                    "E8 "                         // 11 call CLua_Load
+                moveOffset = [9, 2];
+                pushFlagsOffset = [0, 4];
+                afterStolenCodeOffset = 0;
+                postOffset = 16;
+                otherOffset = 0;
+                otherOffset2 = 0;
+                callOffset = [12, 4];
+                hookLoader = pe.find(code);
+            }
+            if (hookLoader === -1)
+            {
+                var code =
+                    "53 " +                       // 0 push ebx
+                    "6A ?? " +                    // 1 push 1
+                    "68 " + strHex +              // 3 push offset aLuaFilesWorl_2
+                    "8B CE " +                    // 8 mov ecx, esi
+                    "E8 "                         // 10 call CLua_Load
+                moveOffset = [8, 2];
+                pushFlagsOffset = [0, 3];
+                afterStolenCodeOffset = 0;
+                postOffset = 15;
+                otherOffset = 0;
+                otherOffset2 = 0;
+                callOffset = [11, 4];
+                hookLoader = pe.find(code);
+            }
+            if (hookLoader === -1)
+            {
+                var code =
+                    "53 " +                       // 0 push ebx
+                    "6A ?? " +                    // 1 push 1
+                    "89 8D ?? ?? ?? FF " +        // 3 mov [ebp+var_164], ecx
+                    "68 " + strHex +              // 9 push offset aLuaFilesWorldv
+                    "8B CE " +                    // 14 mov ecx, esi
+                    "89 B5 ?? ?? ?? FF " +        // 16 mov [ebp+lua], esi
+                    "E8 "                         // 22 call CLua_Load
+                moveOffset = [14, 2];
+                pushFlagsOffset = [0, 3];
+                afterStolenCodeOffset = 0;
+                postOffset = 27;
+                otherOffset = [3, 6];
+                otherOffset2 = [16, 6];
+                callOffset = [23, 4];
+                hookLoader = pe.find(code);
+            }
+            if (hookLoader === -1)
+            {
+                var code =
+                    "6A ?? " +                    // 0 push 0
+                    "6A ?? " +                    // 2 push 1
+                    "68 " + strHex +              // 4 push offset aLuaFilesWorldv
+                    "8B CF " +                    // 9 mov ecx, edi
+                    "89 BD ?? ?? ?? FF " +        // 11 mov [ebp+lua], edi
+                    "E8 "                         // 17 call CLua_Load
+                moveOffset = [9, 2];
+                pushFlagsOffset = [0, 4];
+                afterStolenCodeOffset = 0;
+                postOffset = 22;
+                otherOffset = [11, 6];
+                otherOffset2 = 0;
+                callOffset = [18, 4];
                 hookLoader = pe.find(code);
             }
         }
@@ -154,9 +263,10 @@ function registerLua()
                 "E8 ";                        // 13 call CLua_Load
             var moveOffset = [0, 6];
             var pushFlagsOffset = [6, 2];
-            var strPushOffset = 8;
+            var afterStolenCodeOffset = 8;
             var postOffset = 18;
             var otherOffset = 0;
+            var otherOffset2 = 0;
             var callOffset = [14, 4];
             var hookLoader = pe.find(code);
             if (hookLoader === -1)
@@ -168,9 +278,10 @@ function registerLua()
                     "E8 ";                        // 13 call CLua_Load
                 moveOffset = [0, 6];
                 pushFlagsOffset = [6, 2];
-                strPushOffset = 8;
+                afterStolenCodeOffset = 8;
                 postOffset = 18;
                 otherOffset = 0;
+                otherOffset2 = 0;
                 callOffset = [14, 4];
                 hookLoader = pe.find(code);
             }
@@ -183,9 +294,10 @@ function registerLua()
                 "E8 ";                        // 11 call CLua_Load
             var moveOffset = [0, 6];
             var pushFlagsOffset = 0;
-            var strPushOffset = 6;
+            var afterStolenCodeOffset = 6;
             var postOffset = 16;
             var otherOffset = 0;
+            var otherOffset2 = 0;
             var callOffset = [12, 4];
             var hookLoader = pe.find(code);
             if (hookLoader === -1)
@@ -196,9 +308,10 @@ function registerLua()
                     "E8 ";                        // 11 call CLua_Load
                 moveOffset = [0, 6];
                 pushFlagsOffset = 0;
-                strPushOffset = 6;
+                afterStolenCodeOffset = 6;
                 postOffset = 16;
                 otherOffset = 0;
+                otherOffset2 = 0;
                 callOffset = [12, 4];
                 hookLoader = pe.find(code);
             }
@@ -211,9 +324,10 @@ function registerLua()
                     "E8 ";                        // 14 call CLua_Load
                 moveOffset = [0, 6];
                 pushFlagsOffset = 0;
-                strPushOffset = 9;
+                afterStolenCodeOffset = 9;
                 postOffset = 19;
                 otherOffset = [6, 3];
+                otherOffset2 = 0;
                 callOffset = [15, 4];
                 hookLoader = pe.find(code);
             }
@@ -233,8 +347,14 @@ function registerLua()
             throw "LUAFL: found wrong call function: " + origFile;
 
         consoleLog("Read stolen code");
-        var allStolenCode = pe.fetchHex(hookLoader, strPushOffset);
-        var movStolenCode = pe.fetchHexBytes(hookLoader, moveOffset)
+        if (moveOffset !== 0)
+        {
+            var movStolenCode = pe.fetchHexBytes(hookLoader, moveOffset);
+        }
+        else
+        {
+            var movStolenCode = "";
+        }
         if (pushFlagsOffset !== 0)
         {
             var pushFlagsStolenCode = pe.fetchHexBytes(hookLoader, pushFlagsOffset);
@@ -243,7 +363,7 @@ function registerLua()
         {
             var pushFlagsStolenCode = "";
         }
-        var shortStolenCode = movStolenCode + pushFlagsStolenCode;
+        var customStolenCode = movStolenCode + pushFlagsStolenCode;
         if (otherOffset !== 0)
         {
             var otherStoleCode = pe.fetchHexBytes(hookLoader, otherOffset);
@@ -251,6 +371,18 @@ function registerLua()
         else
         {
             var otherStoleCode = "";
+        }
+        if (otherOffset2 !== 0)
+        {
+            otherStoleCode += pe.fetchHexBytes(hookLoader, otherOffset2);
+        }
+        if (afterStolenCodeOffset != 0)
+        {
+            var defaultStolenCode = pe.fetchHex(hookLoader, afterStolenCodeOffset);
+        }
+        else
+        {
+            var defaultStolenCode = customStolenCode;
         }
 
         consoleLog("Construct asm code with strings");
@@ -274,14 +406,14 @@ function registerLua()
 
         consoleLog("Create own code");
 
-        var asmCode = "";
+        var asmCode = asm.hexToAsm(otherStoleCode);
 
         consoleLog("Add before code");
         for (var i = 0; i < beforeNameList.length; i++)
         {
             var asmCode = asm.combine(
                 asmCode,
-                asm.hexToAsm(shortStolenCode),
+                asm.hexToAsm(customStolenCode),
                 "push varb" + i,
                 "call CLua_Load"
             )
@@ -292,7 +424,7 @@ function registerLua()
             consoleLog("Add default code");
             var asmCode = asm.combine(
                 asmCode,
-                asm.hexToAsm(allStolenCode),
+                asm.hexToAsm(defaultStolenCode),
                 "push offset",
                 "call CLua_Load"
             )
@@ -303,7 +435,7 @@ function registerLua()
         {
             var asmCode = asm.combine(
                 asmCode,
-                asm.hexToAsm(shortStolenCode),
+                asm.hexToAsm(customStolenCode),
                 "push vara" + i,
                 "call CLua_Load"
             )

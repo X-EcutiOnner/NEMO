@@ -56,6 +56,8 @@ registerGroup(21, "Import", true);
 
 registerGroup(22, "MsgStringTable", true);
 
+registerGroup(23, "LuaCustomization", false);
+
 globalVarTest = 123;
 
 //#########################################################################################################################################################
@@ -624,7 +626,7 @@ registerPatch(361, "LoadCustomLuaBeforeAfterFiles", "Load custom lua files for m
 
 registerPatch(362, "TaekwonJobNameFix", "Fixes the Korean Job name issue with LangType", "UI", 0, "Ai4rei/AN, Neo, 4144", "Fixes the Korean Job name issue with LangType", true);
 
-registerPatch(363, "AddCustomLua", "Add loading custom lua files", "Custom", 0, "llchrisll, 4144", "Add loading custom lua files for llchrisll", false);
+// 363
 
 registerPatch(364, "ChangeUIBalloonTextFontSize", "Change default font size for base class of all balloons", "Size", 0, "4144", "Change default font size for class UIBalloonText", false);
 
@@ -799,5 +801,31 @@ registerPatch(448, "SetDrawingFontHeightAdjust", "Adjust font size for drawed te
 registerPatch(449, "ExtendOldCashShopPreview", "Add support for preview button in custom shops", "Fix", 0, "4144", "Extend old cash shop packet for support equipment preview.", false);
 
 registerPatch(450, "UseCustomIcon16", "Use low color custom icon", "Icon", 4, "Neo, 4144", "Use custom icon with size 32x32 and 16 colors", false);
+
+registerPatch(451, "AddCLSHatEffect", "Add custom lua support [HatEffectInfo]", "Translation", 23, "llchrisll, 4144", "Add the custom lua support by llchrisll for hat effects.\nCheck his wiki for more info.", false);
+
+registerPatch(452, "AddCLSHeadgear", "Add custom lua support [Headgears]", "Translation", 23, "llchrisll, 4144", "Add the custom lua support by llchrisll for headgears.\nCheck his wiki for more info.", false);
+
+registerPatch(453, "AddCLSLapine", "Add custom lua support [Lapine Box]", "Translation", 23, "llchrisll, 4144", "Add the custom lua support by llchrisll for lapine boxes.\nCheck his wiki for more info.", false);
+
+registerPatch(454, "AddCLSNavi", "Add custom lua support [Navigation]", "Translation", 23, "llchrisll, 4144", "Add the custom lua support by llchrisll for navigation.\nCheck his wiki for more info.", false);
+
+registerPatch(455, "AddCLSNPC", "Add custom lua support [NPC/Mob/Pet]", "Translation", 23, "llchrisll, 4144", "Add the custom lua support by llchrisll for NPCs/mobs/pets.\nCheck his wiki for more info.", false);
+
+registerPatch(456, "AddCLSQuest", "Add custom lua support [Quest]", "Translation", 23, "llchrisll, 4144", "Add the custom lua support by llchrisll for quests.\nCheck his wiki for more info.", false);
+
+registerPatch(457, "AddCLSRandomOption", "Add custom lua support [Random Option]", "Translation", 23, "llchrisll, 4144", "Add the custom lua support by llchrisll for random options.\nCheck his wiki for more info.", false);
+
+registerPatch(458, "AddCLSRobe", "Add custom lua support [Robe]", "Translation", 23, "llchrisll, 4144", "Add the custom lua support by llchrisll for robes.\nCheck his wiki for more info.", false);
+
+registerPatch(459, "AddCLSSign", "Add custom lua support [Signboard]", "Translation", 23, "llchrisll, 4144", "Add the custom lua support by llchrisll for signboards.\nCheck his wiki for more info.", false);
+
+registerPatch(460, "AddCLSTitle", "Add custom lua support [Title]", "Translation", 23, "llchrisll, 4144", "Add the custom lua support by llchrisll for titles.\nCheck his wiki for more info.", false);
+
+registerPatch(461, "AddCLSWeapon", "Add custom lua support [Weapon]", "Translation", 23, "llchrisll, 4144", "Add the custom lua support by llchrisll for weapons.\nCheck his wiki for more info.", false);
+
+registerPatch(462, "AddCLSWorldView", "Add custom lua support [World Map]", "Translation", 23, "llchrisll, 4144", "Add the custom lua support by llchrisll for world map.\nCheck his wiki for more info.", false);
+
+// 463 reserved
 
 GlobalPostInit();

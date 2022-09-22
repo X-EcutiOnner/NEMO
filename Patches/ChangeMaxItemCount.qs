@@ -20,7 +20,11 @@
 
 function SetMaxItemCount()
 {
-  return ChangeMaxItemCount(exe.getUserInput("$MaxItemCount", XTYPE_STRING, _("Number Input"), _("Enter the max item count (0-999)"), 100, 0, 3));
+    return ChangeMaxItemCount(input.getString("$MaxItemCount",
+        _("Number Input"),
+        _("Enter the max item count (0-999)"),
+        100,
+        3));
 }
 
 //####################################################################################

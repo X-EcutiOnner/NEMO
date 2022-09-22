@@ -160,7 +160,11 @@ function EnableMultipleGRFs()
     ;
 
     //Step 4 - Get the INI file name from user
-    var iniFile = exe.getUserInput("$dataINI", XTYPE_STRING, _("String Input"), _("Enter the name of the INI file"), "DATA.INI", 1, 20);
+    var iniFile = input.getString("$dataINI",
+        _("String Input"),
+        _("Enter the name of the INI file"),
+        "DATA.INI",
+        20);
     if (iniFile === "")
         iniFile = ".\\DATA.INI";
     else
