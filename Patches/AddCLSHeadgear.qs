@@ -23,7 +23,7 @@ function AddCLSHeadgear()
     lua.loadBefore("Lua Files\\DataInfo\\AccessoryId", ["lua files\\cls\\accessoryid"]);
     if (pe.stringRaw("Lua Files\\DataInfo\\TB_Layer_Priority") !== -1 || table.get(table.packetVersion) > 20180000)
         lua.loadBefore("Lua Files\\DataInfo\\TB_Layer_Priority", ["lua files\\cls\\tb_layer_priority"]);
- 
+
     return true;
 }
 

@@ -6,18 +6,16 @@
 /Other
 /Output/*.h
 /Output/*.txt
+/Output/*.exe
 /Output/*.dll
 /Output/*.asi
 /Input/nemo.key
 FailedTranslations.txt
 *.exe.secure.txt
-PatchList.log
-InputList.db
-CDClient.dll
-NEMO.ini
-*.exe
-*.log
+/PatchList.log
+/InputList.db
+/NEMO.ini
 *.db
 
 # exception
-!/NEMO.exe
+!/Output/dummy.txt

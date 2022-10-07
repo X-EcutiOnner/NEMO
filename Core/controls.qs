@@ -53,6 +53,16 @@ function input_createDialog()
         return this.addControl(Control.CheckBox, varName, title, def);
     }
 
+    InputLayout.prototype.addInt = function(varName, def, min, max, step)
+    {
+        return this.addControl(Control.IntSpinBox, varName, "", def, min, max, step);
+    }
+
+    InputLayout.prototype.addColorPicker = function(varName, def)
+    {
+        return this.addControl(Control.ColorPicker, varName, "", def, 0, 0, 0);
+    }
+
     InputLayout.prototype.addHBox = function()
     {
         return this.addLayout(Control.HBox, "");
@@ -91,6 +101,22 @@ function input_createDialog()
         var box = this.addVBox();
         box.addLabel(label);
         box.addTextBox(varName, def, max, mask);
+        return box;
+    }
+
+    InputLayout.prototype.addLabelInt = function(varName, label, def, min, max, step)
+    {
+        var box = this.addVBox();
+        box.addLabel(label);
+        box.addInt(varName, def, min, max, step);
+        return box;
+    }
+
+    InputLayout.prototype.addLabelColorPicker = function(varName, label, def)
+    {
+        var box = this.addVBox();
+        box.addLabel(label);
+        box.addColorPicker(varName, def);
         return box;
     }
 

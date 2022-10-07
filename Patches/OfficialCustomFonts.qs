@@ -44,7 +44,23 @@ function OfficialCustomFonts_match()
                 "EotLibInitOffset": 15,
                 "EotLibSetValidUrlOffset": 25
             }
-        ]
+        ],
+        [
+            "83 3D " + LANGTYPE + " 00 " + // 0 cmp ds:g_serviceType, 0
+            "5F " +                       // 7 pop edi
+            "5E " +                       // 8 pop esi
+            "0F 85 ?? 00 00 00 " +        // 9 jnz locret_85E042
+            "E8 ?? ?? ?? ?? " +           // 15 call EotLibInit
+            "68 " + urlOffset +           // 20 push offset aHttpWww_ragn_1
+            "E8 ?? ?? ?? ?? " +           // 25 call EotLibSetValidUrl
+            "6A 00 ",                     // 30 push 0
+            {
+                "replaceOffset": [9, 6],
+                "jmpOffset": [11, 4],
+                "EotLibInitOffset": 16,
+                "EotLibSetValidUrlOffset": 26
+            }
+        ],
     ];
 
     var offsetObj = pe.findAnyCode(code);

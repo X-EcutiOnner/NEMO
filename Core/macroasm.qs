@@ -347,7 +347,7 @@ function macroAsm_addMacroses()
     function macro_asciz(obj, cmd, arg)
     {
         if (arg[0] != "\"")
-            fatalError("Not string in asm command: " + cmd);
+            fatalError("Not string in asm command: " + cmd + "line: " + obj.line);
         var sz = arg.length;
         if (sz < 3)
             fatalError("Wrong macro asm line2: " + obj.line);

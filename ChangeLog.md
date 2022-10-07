@@ -1,3 +1,15 @@
+# 2022-10-07 Different changes
+
+## Patches
+
+- Fix patch [Disable Official Custom Fonts](http://nemo.herc.ws/patches/DisableOfficialCustomFonts/#success-clients) for 2022-10-05. (fix by 4144).
+- Fix patch [Enable Official Custom Fonts](http://nemo.herc.ws/patches/EnableOfficialCustomFonts/#success-clients) for 2022-10-05. (fix by 4144).
+
+## Other
+
+- Update tables.
+
+
 # 2022-09-22 Different changes
 
 ## Patches

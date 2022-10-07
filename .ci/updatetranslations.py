@@ -31,8 +31,10 @@ patchesCategory = set()
 patchesGroup = set()
 scriptLines = set()
 
+
 def langToInit(lang):
     return "Patches_{0}.ini".format(lang)
+
 
 def initPatchLang(name):
     patchesIni[name] = dict()
@@ -48,6 +50,7 @@ def initPatchLang(name):
     oldPatchesIni["Input/backup/" + name]["Group"] = dict()
     oldPatchesIni["Input/backup/" + name]["Script"] = dict()
 
+
 def findLangs():
     files = sorted(os.listdir(".."))
     for file1 in files:
@@ -61,10 +64,12 @@ def findLangs():
         langs.add(lang)
         initPatchLang(langToInit(lang))
 
+
 def addPatchIniGroup(name, groupName, group, iniDict):
     if groupName == "":
         return
     iniDict[name][groupName] = group
+
 
 def parsePatchIni(name, iniDict, isOld):
     path = "../" + name
@@ -89,17 +94,19 @@ def parsePatchIni(name, iniDict, isOld):
                 idx = line.find("\"=\"")
                 if idx < 0:
                     continue
-                line1 = line[:idx+1]
-                line2 = line[idx+2:]
+                line1 = line[:idx + 1]
+                line2 = line[idx + 2:]
                 if isOld is False or line1 != line2:
                     group[line1] = line2
         addPatchIniGroup(name, groupName, group, iniDict)
+
 
 def parsePatchLangs():
     for lang in langs:
         iniName = langToInit(lang)
         parsePatchIni(iniName, patchesIni, False)
         parsePatchIni("Input/backup/" + iniName, oldPatchesIni, True)
+
 
 def parsePatchesList(name):
     with open(name, "rt") as r:
@@ -117,6 +124,7 @@ def parsePatchesList(name):
             patchesDescription.add("\"" + description + "\"")
             patchesCategory.add("\"" + category + "\"")
             patchesGroup.add("\"" + group + "\"")
+
 
 def savePatchSection(w, name, patches, iniFile, oldIniFile, normalIni):
     global retCode
@@ -145,6 +153,7 @@ def savePatchSection(w, name, patches, iniFile, oldIniFile, normalIni):
     for line in sorted(section.keys()):
         w.write("{0}={1}\n".format(line, section[line]))
 
+
 def filterLines(name, strings, iniFile, oldIniFile, normalIni):
     section = iniFile[name]
     section2 = dict()
@@ -161,6 +170,7 @@ def filterLines(name, strings, iniFile, oldIniFile, normalIni):
     if normalIni:
         oldIniFile[name] = oldSection
 
+
 def savePatchIni(name, iniDict, normalIni):
     if normalIni:
         iniFile = iniDict[name]
@@ -172,13 +182,39 @@ def savePatchIni(name, iniDict, normalIni):
         oldIniFile = oldPatchesIni[name]
     with open("../" + name, "wt") as w:
         w.write(";Patches translations\n")
-        savePatchSection(w, "Name", patchesName, iniFile, oldIniFile, normalIni)
-        savePatchSection(w, "Category", patchesCategory, iniFile, oldIniFile, normalIni)
-        savePatchSection(w, "Description", patchesDescription, iniFile, oldIniFile, normalIni)
-        savePatchSection(w, "Group", patchesGroup, iniFile, oldIniFile, normalIni)
+        savePatchSection(w,
+                         "Name",
+                         patchesName,
+                         iniFile,
+                         oldIniFile,
+                         normalIni)
+        savePatchSection(w,
+                         "Category",
+                         patchesCategory,
+                         iniFile,
+                         oldIniFile,
+                         normalIni)
+        savePatchSection(w,
+                         "Description",
+                         patchesDescription,
+                         iniFile,
+                         oldIniFile,
+                         normalIni)
+        savePatchSection(w,
+                         "Group",
+                         patchesGroup,
+                         iniFile,
+                         oldIniFile,
+                         normalIni)
         if normalIni:
             filterLines("Script", scriptLines, iniFile, oldIniFile, normalIni)
-        savePatchSection(w, "Script", scriptLines, iniFile, oldIniFile, normalIni)
+        savePatchSection(w,
+                         "Script",
+                         scriptLines,
+                         iniFile,
+                         oldIniFile,
+                         normalIni)
+
 
 def savePatchLangs():
     for lang in langs:
@@ -186,19 +222,20 @@ def savePatchLangs():
         savePatchIni(iniName, patchesIni, True)
         savePatchIni("Input/backup/" + iniName, oldPatchesIni, False)
 
+
 def parsePoFile(path):
     with open(path, "r") as f:
         flag = 0
         msgid = ""
         for line in f:
             if flag == 0:
-                idx = line.find ("msgid ")
+                idx = line.find("msgid ")
                 if idx == 0:
                     msgid = line[len("msgid "):]
                     msgid = msgid[1:len(msgid) - 2]
                     flag = 1
             elif flag == 1:
-                idx = line.find ("msgstr ")
+                idx = line.find("msgstr ")
                 if idx == 0:
                     if msgid != "":
                         scriptLines.add("\"" + msgid + "\"")
@@ -209,7 +246,7 @@ def parsePoFile(path):
                         scriptLines.add("\"" + msgid + "\"")
                     flag = 0
 
-            idx = line.find ("\"")
+            idx = line.find("\"")
             if idx == 0:
                 line = line[1:len(line) - 2]
                 if flag == 1:
