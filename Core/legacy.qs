@@ -17,8 +17,10 @@
 
 function reportLegacy(text)
 {
-    if (typeof(console2) !== "undefined")
+    if (typeof console2 !== "undefined")
+    {
         console2.logLegacy(text);
+    }
     throw text;
 }
 
@@ -26,22 +28,24 @@ function registerExeLegacy()
 {
     var enableLegacy = true;
 
-    if (typeof(enableLegacy) !== "undefined")
+    if (typeof enableLegacy !== "undefined")
+    {
         return;
-    exe.findCode = function()
+    }
+    exe.findCode = function findCode()
     {
         reportLegacy("Please replace exe.findCode to pe.findCode");
-    }
-    exe.findCodes = function()
+    };
+    exe.findCodes = function findCodes()
     {
         reportLegacy("Please replace exe.findCodes to pe.findCodes");
-    }
-    exe.find = function()
+    };
+    exe.find = function find()
     {
         reportLegacy("Please replace exe.find to pe.find");
-    }
-    exe.findAll = function()
+    };
+    exe.findAll = function findAll()
     {
         reportLegacy("Please replace exe.findAll to pe.findAll");
-    }
+    };
 }

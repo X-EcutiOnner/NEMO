@@ -16,8 +16,6 @@
 
 function LoadCustomLuaBeforeAfterFiles()
 {
-    consoleLog("Read table");
-
     var offset = table.getRaw(table.CLua_Load);
     if (offset < 0)
     {
@@ -25,22 +23,20 @@ function LoadCustomLuaBeforeAfterFiles()
     }
     var CLua_Load = table.get(table.CLua_Load);
 
-    consoleLog("Parse function start");
-
     var matchObj = hooks.matchFunctionStart(offset, offset);
-
-    consoleLog("allocate buffer");
 
     var free = alloc.find(300);
     if (free === -1)
+    {
         return "Not enough free space";
+    }
     var str = "";
     for (var i = 0; i < 300; i ++)
-        str = str + "\x00";
+    {
+        str += "\x00";
+    }
     pe.insertAt(free, 300, str);
     var buffer = pe.rawToVa(free);
-
-    consoleLog("Prepare own code");
 
     var info = lua.getCLuaLoadInfo(4);
 
@@ -50,12 +46,11 @@ function LoadCustomLuaBeforeAfterFiles()
         "buffer": buffer,
         "argsOffset": info.argsOffset,
         "asmCopyArgs": info.asmCopyArgs,
-        "stolenCode": matchObj.stolenCode
-    }
+        "stolenCode": matchObj.stolenCode,
+    };
 
     var data = pe.insertAsmFile("", vars);
 
-    consoleLog("add jump to own code");
     pe.setJmpRaw(offset, data.free);
 
     return true;

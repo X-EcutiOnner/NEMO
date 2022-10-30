@@ -21,87 +21,89 @@ function ChangeAdventureAgencyLevelRange()
     var offset = pe.stringVa("%d");
 
     if (offset === -1)
+    {
         return "Failed in Step 1 - String not found";
+    }
 
     var strHex = offset.packToHex(4);
 
     var code =
-        "8D 46 05" +          // 0 lea eax, [esi+5]
-        "66 C7 45 ?? 00 00" + // 3 mov [ebp+var_20], 0
-        "50" +                // 9 push eax
-        "68" + strHex +       // 10 push offset aD_2
-        "6A FF";              // 15 push 0FFFFFFFFh
+        "8D 46 05" +
+        "66 C7 45 ?? 00 00" +
+        "50" +
+        "68" + strHex +
+        "6A FF";
 
     var rangeUOffset = [2, 1];
     var offsetsU = pe.findCodes(code);
 
     if (offsetsU.length === 0)
     {
-        var code =
-            "8D 46 05" +      // 0 lea eax, [esi+5]
-            "50" +            // 3 push eax
-            "68" + strHex +   // 4 push offset aD_2
-            "6A FF";          // 9 push 0FFFFFFFFh
+        code =
+            "8D 46 05" +
+            "50" +
+            "68" + strHex +
+            "6A FF";
 
         rangeUOffset = [2, 1];
         offsetsU = pe.findCodes(code);
     }
 
     if (offsetsU.length === 0)
+    {
         return "Failed in Step 1 - AgencyUpperLevelRange not found";
+    }
 
-    var code =
-        "8D 46 ??" +        // 0 lea eax, [esi-5]
-        "0F 57 C0" +        // 3 xorps xmm0, xmm0
-        "3B C1" +           // 6 cmp eax, ecx
-        "66 0F D6 45 ??" +  // 8 movq [ebp+var_1C], xmm0
-        "0F 4C C1" +        // 13 cmovl eax, ecx
-        "50" +              // 16 push eax
-        "68" + strHex +     // 17 push offset aD_2
-        "6A FF";            // 22 push 0FFFFFFFFh
+    code =
+        "8D 46 ??" +
+        "0F 57 C0" +
+        "3B C1" +
+        "66 0F D6 45 ??" +
+        "0F 4C C1" +
+        "50" +
+        "68" + strHex +
+        "6A FF";
 
     var rangeLOffset = [2, 1];
     var offsetsL = pe.findCodes(code);
 
     if (offsetsL.length === 0)
     {
-        var code =
-            "8D 46 ??" +      // 0 lea eax, [esi-5]
-            "3B C1" +         // 3 cmp eax, ecx
-            "0F 4C C1" +      // 5 cmovl eax, ecx
-            "50" +            // 8 push eax
-            "68" + strHex +   // 9 push offset aD_2
-            "6A FF";          // 14 push 0FFFFFFFFh
+        code =
+            "8D 46 ??" +
+            "3B C1" +
+            "0F 4C C1" +
+            "50" +
+            "68" + strHex +
+            "6A FF";
 
         rangeLOffset = [2, 1];
         offsetsL = pe.findCodes(code);
     }
 
     if (offsetsL.length === 0)
+    {
         return "Failed in Step 2 - AgencyLowerLevelRange not found";
+    }
 
     var upprangeVal = exe.getUserInput("$upprangeVal", XTYPE_BYTE, _("upper level range (default +5)"), _("Enter new upper level range"), "+5", 1, 127);
     var lowrangeVal = exe.getUserInput("$lowrangeVal", XTYPE_BYTE, _("lower level range (default -5)"), _("Enter new lower level range"), "-5", -127, -1);
+    var i;
 
-    for (var i = 0; i < offsetsU.length; i++)
+    for (i = 0; i < offsetsU.length; i++)
     {
         pe.replaceByte(offsetsU[i] + rangeUOffset[0], upprangeVal);
-        logVaVar("MAX_ADVENTURE_AGENCY_LEVEL_RANGE", offsetsU[i], rangeUOffset);
     }
 
-    for (var i = 0; i < offsetsL.length; i++)
+    for (i = 0; i < offsetsL.length; i++)
     {
         pe.replaceByte(offsetsL[i] + rangeLOffset[0], lowrangeVal);
-        logVaVar("MIN_ADVENTURE_AGENCY_LEVEL_RANGE", offsetsL[i], rangeLOffset);
     }
 
     return true;
 }
 
-//============================//
-// Disable Unsupported client //
-//============================//
 function ChangeAdventureAgencyLevelRange_()
 {
-    return (pe.stringRaw("btn_job_def_on") !== -1);
+    return pe.stringRaw("btn_job_def_on") !== -1;
 }

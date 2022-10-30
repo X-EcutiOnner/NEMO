@@ -19,18 +19,20 @@ function ValidateClientType()
 {
     var hook = hooks.initTableEndHook(table.InitClientInfo_ret);
 
-    var errorText = exe.getUserInput("$ValidateClientType_error", XTYPE_STRING,
+    var errorText = exe.getUserInput(
+        "$ValidateClientType_error", XTYPE_STRING,
         _("String input"),
         _("Enter error message for wrong servertype configured"),
-        "Using wrong servertype in clientinfo/sclientinfo xml. Please change servertype to correct one.");
+        "Using wrong servertype in clientinfo/sclientinfo xml. Please change servertype to correct one."
+    );
 
     var errorBuf = pe.rawToVa(pe.insertString(errorText));
 
     var vars = {
         "sakray": IsSakray(),
         "error": errorBuf,
-        "serverType": GetServerType()
-    }
+        "serverType": GetServerType(),
+    };
     hook.addFilePost("", vars);
     hook.validate();
 

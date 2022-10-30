@@ -19,7 +19,9 @@ function AddCLSLapine()
 {
     lua.loadBefore("Lua Files\\datainfo\\LapineDdukDDakBox", ["lua files\\cls\\lapineddukddakbox"]);
     if (pe.stringRaw("Lua Files\\datainfo\\LapineUpgradeBox") !== -1 || table.get(table.packetVersion) > 20170800)
+    {
         lua.loadBefore("Lua Files\\datainfo\\LapineUpgradeBox", ["lua files\\cls\\lapineupgradebox"]);
+    }
 
     return true;
 }

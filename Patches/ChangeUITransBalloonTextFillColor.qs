@@ -22,20 +22,26 @@ function UITransBalloonTextFillColor(addrId, name)
 
     var value = exe.getUserInput(colorStr, XTYPE_COLOR, _("Color input"), _("Select default background color in @@").replace("@@", name), 0x5C5C5C).reverseRGB();
     if (value === 0x5C5C5C)
+    {
         throw "New background color is same";
+    }
 
     if (table.get(addrId) === 0)
+    {
         throw name + "::" + name + " ret not set";
+    }
     var addrRaw = table.getRaw(addrId);
 
     var field = table.get(fieldId);
     if (field === 0)
+    {
         throw "UITransBalloonText::m_backFillColor not set";
+    }
 
     var text = "mov dword ptr [eax + m_backFillColor], backFillColor";
     var vars = {
         "m_backFillColor": field,
-        "backFillColor": value
+        "backFillColor": value,
     };
 
     var hook = hooks.initEndHook(addrRaw);

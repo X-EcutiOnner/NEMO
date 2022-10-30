@@ -18,7 +18,7 @@
 
 function DisableOTPLoginPacket()
 {
-    pe.replaceHex(table.getRawValidated(table.OTPLoginPatchId1), 0x2710.packToHex(4));  // replace LMM_ constant
+    pe.replaceHex(table.getRawValidated(table.OTPLoginPatchId1), 0x2710.packToHex(4));
     pe.replaceByte(table.getRawValidated(table.OTPLoginPatchId2), 0);
 
     return true;
@@ -26,5 +26,5 @@ function DisableOTPLoginPacket()
 
 function DisableOTPLoginPacket_()
 {
-    return (pe.stringRaw(".?AVUILoginOTPWnd@@") !== -1);
+    return pe.stringRaw(".?AVUILoginOTPWnd@@") !== -1;
 }

@@ -23,102 +23,102 @@ function input_createDialog()
         this.varName = varName;
     }
 
-    InputControl.prototype.addControl = function(type, varName, title, def, min, max, other)
-    {
-        var id = input.addControl(this.id, type, varName, title, def, min, max, other);
-        return new InputControl(id, varName);
-    }
-
-    InputControl.prototype.addLayout = function(type, varName, title, def, min, max, other)
-    {
-        var id = input.addControl(this.id, type, varName, title, def, min, max, other);
-        return new InputLayout(id, varName);
-    }
-
     function InputLayout(id, varName)
     {
         InputControl.call(this, id, varName);
     }
 
+    InputControl.prototype.addControl = function addControl(type, varName, title, def, min, max, other)
+    {
+        var id = input.addControl(this.id, type, varName, title, def, min, max, other);
+        return new InputControl(id, varName);
+    };
+
+    InputControl.prototype.addLayout = function addLayout(type, varName, title, def, min, max, other)
+    {
+        var id = input.addControl(this.id, type, varName, title, def, min, max, other);
+        return new InputLayout(id, varName);
+    };
+
     InputLayout.prototype = Object.create(InputControl.prototype);
     InputLayout.prototype.constructor = InputLayout;
 
-    InputLayout.prototype.addTextBox = function(varName, def, max, step)
+    InputLayout.prototype.addTextBox = function addTextBox(varName, def, max, step)
     {
         return this.addControl(Control.TextBox, varName, "", def, 0, max, step);
-    }
+    };
 
-    InputLayout.prototype.addCheckBox = function(varName, title, def)
+    InputLayout.prototype.addCheckBox = function addCheckBox(varName, title, def)
     {
         return this.addControl(Control.CheckBox, varName, title, def);
-    }
+    };
 
-    InputLayout.prototype.addInt = function(varName, def, min, max, step)
+    InputLayout.prototype.addInt = function addInt(varName, def, min, max, step)
     {
         return this.addControl(Control.IntSpinBox, varName, "", def, min, max, step);
-    }
+    };
 
-    InputLayout.prototype.addColorPicker = function(varName, def)
+    InputLayout.prototype.addColorPicker = function addColorPicker(varName, def)
     {
         return this.addControl(Control.ColorPicker, varName, "", def, 0, 0, 0);
-    }
+    };
 
-    InputLayout.prototype.addHBox = function()
+    InputLayout.prototype.addHBox = function addHBox()
     {
         return this.addLayout(Control.HBox, "");
-    }
+    };
 
-    InputLayout.prototype.addVBox = function()
+    InputLayout.prototype.addVBox = function addVBox()
     {
         return this.addLayout(Control.VBox, "");
-    }
+    };
 
-    InputLayout.prototype.addLabel = function(title)
+    InputLayout.prototype.addLabel = function addLabel(title)
     {
         return this.addControl(Control.Label, "", title);
-    }
+    };
 
-    InputLayout.prototype.addButtonOk = function(varName)
+    InputLayout.prototype.addButtonOk = function addButtonOk(varName)
     {
         return this.addControl(Control.ButtonOk);
-    }
+    };
 
-    InputLayout.prototype.addButtonCancel = function(varName)
+    InputLayout.prototype.addButtonCancel = function addButtonCancel(varName)
     {
         return this.addControl(Control.ButtonCancel);
-    }
+    };
 
-    InputLayout.prototype.addOkCancel = function(varName)
+    InputLayout.prototype.addOkCancel = function addOkCancel(varName)
     {
         var box = this.addHBox();
         box.addButtonOk();
         box.addButtonCancel();
         return box;
-    }
+    };
 
-    InputLayout.prototype.addLabelText = function(varName, label, def, max, mask)
+    InputLayout.prototype.addLabelText = function addLabelText(varName, label, def, max, mask)
     {
         var box = this.addVBox();
         box.addLabel(label);
         box.addTextBox(varName, def, max, mask);
         return box;
-    }
+    };
 
-    InputLayout.prototype.addLabelInt = function(varName, label, def, min, max, step)
+    InputLayout.prototype.addLabelInt = function addLabelInt(varName, label, def, min, max, step)
     {
         var box = this.addVBox();
         box.addLabel(label);
         box.addInt(varName, def, min, max, step);
         return box;
-    }
+    };
 
-    InputLayout.prototype.addLabelColorPicker = function(varName, label, def)
+    InputLayout.prototype.addLabelColorPicker = function addLabelColorPicker(varName, label, def)
     {
         var box = this.addVBox();
         box.addLabel(label);
         box.addColorPicker(varName, def);
         return box;
-    }
+    };
 
     function InputDialog()
     {
@@ -128,25 +128,25 @@ function input_createDialog()
     InputDialog.prototype = Object.create(InputLayout.prototype);
     InputDialog.prototype.constructor = InputDialog;
 
-    InputDialog.prototype.show = function()
+    InputDialog.prototype.show = function show()
     {
         return input.show();
-    }
+    };
 
-    InputDialog.prototype.setTitle = function(title)
+    InputDialog.prototype.setTitle = function setTitle(title)
     {
         return input.setWindowTitle(title);
-    }
+    };
 
-    InputDialog.prototype.setMinimumSize = function(dx, dy)
+    InputDialog.prototype.setMinimumSize = function setMinimumSize(dx, dy)
     {
         return input.setMinimumSize(dx, dy);
-    }
+    };
 
-    InputDialog.prototype.setMaximumSize = function(dx, dy)
+    InputDialog.prototype.setMaximumSize = function setMaximumSize(dx, dy)
     {
         return input.setMaximumSize(dx, dy);
-    }
+    };
 
     input.newDialog();
     return new InputDialog();

@@ -1,6 +1,7 @@
 // When an in-game setting that requires a restart to take effect is changed,
 // the client tries to launch ro.gnjoy.com. This patch disables the behavior.
 // Author: mrjnumber1
+
 function DisableKROSiteLaunch()
 {
     var urls = [
@@ -14,8 +15,8 @@ function DisableKROSiteLaunch()
         "http://www.hangame.com",
         "http://ragnarok.co.kr",
         "http://roz.gnjoy.com",
-        "http://roz.gnjoy.com/"
-    ]
+        "http://roz.gnjoy.com/",
+    ];
     var patched = false;
 
     for (var i = 0; i < urls.length; i ++)
@@ -29,6 +30,8 @@ function DisableKROSiteLaunch()
     }
 
     if (patched === false)
+    {
         return "Failed in Step 1";
+    }
     return true;
 }

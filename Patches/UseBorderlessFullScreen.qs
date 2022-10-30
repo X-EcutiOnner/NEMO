@@ -19,7 +19,9 @@ function UseBorderlessFullScreen()
 {
     var hooksList = hooks.initImportCallHooks("CreateWindowExA", "user32.dll");
     if (hooksList.length === 0)
+    {
         throw "CreateWindowExA call usages not found";
+    }
     hooksList.addFilePre("", {}, 1000);
     hooksList.validate();
     return true;

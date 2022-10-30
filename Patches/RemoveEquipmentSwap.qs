@@ -18,61 +18,65 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
-//########################################################################################
-//# Purpose: Change the EAX after comparison to remove equipment swap button both on the #
-//#          equipment window and costume window inside SWAPEQUIPMENTWNDINFO function.   #
-//########################################################################################
+// ########################################################################################
+// # Purpose: Change the EAX after comparison to remove equipment swap button both on the #
+// #          equipment window and costume window inside SWAPEQUIPMENTWNDINFO function.   #
+// ########################################################################################
 
 function RemoveEquipmentSwap()
 {
-    // Step 1 - Find the location where equipment function is called
     var code =
-        "E8 ?? ?? ?? FF " +     // call    sub_59E810
-        "8B 47 18 " +           // mov     eax, [edi+18h]
-        "8B 8F ?? ?? 00 00 " +  // mov     ecx, [edi+100h]
-        "83 E8 14 " +           // sub     eax, 14h
-        "8B 11 " +              // mov     edx, [ecx]
-        "50 ";                  // push    eax
+        "E8 ?? ?? ?? FF " +
+        "8B 47 18 " +
+        "8B 8F ?? ?? 00 00 " +
+        "83 E8 14 " +
+        "8B 11 " +
+        "50 ";
 
     var repLoc = 15;
     var offset = pe.findCode(code);
 
     if (offset === -1)
     {
-        code = code.replace("83 E8 14 8B 11 50 ", "83 E8 14 50 "); // remove MOV EDX, [ECX]
+        code =
+            "E8 ?? ?? ?? FF " +
+            "8B 47 18 " +
+            "8B 8F ?? ?? 00 00 " +
+            "83 E8 14 " +
+            "50 ";
         offset = pe.findCode(code);
     }
 
     if (offset === -1)
+    {
         return "Failed in Step 1 - Pattern not found";
+    }
 
     pe.replaceByte(offset + repLoc, 0xC0);
 
-    // Step 2 - Find the location where costume function is called
-    var code =
-        "8B 8E ?? ?? 00 00 " +  // mov     ecx, [esi+100h]
-        "85 C9 " +              // test    ecx, ecx
-        "74 6F " +              // jz      short loc_66C1FF
-        "8B 86 ?? 00 00 00 " +  // mov     eax, [esi+0B8h]
-        "8B 11 " +              // mov     edx, [ecx]
-        "05 93 00 00 00 " +     // add     eax, 93h
-        "50 ";                  // push    eax
+    code =
+        "8B 8E ?? ?? 00 00 " +
+        "85 C9 " +
+        "74 6F " +
+        "8B 86 ?? 00 00 00 " +
+        "8B 11 " +
+        "05 93 00 00 00 " +
+        "50 ";
 
-    var repLoc = 19;
-    var offset = pe.findCode(code);
+    repLoc = 19;
+    offset = pe.findCode(code);
 
     if (offset === -1)
+    {
         return "Failed in Step 2 - Pattern not found";
+    }
 
     pe.replaceByte(offset + repLoc, 0xFF);
 
     return true;
 }
 
-//=======================================================//
-// Disable for Unsupported Clients - Check for Reference //
-//=======================================================//
 function RemoveEquipmentSwap_()
 {
-    return (pe.getDate() >= 20170208);
+    return pe.getDate() >= 20170208;
 }

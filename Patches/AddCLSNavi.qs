@@ -21,26 +21,34 @@ function AddCLSNavi()
     {
         lua.loadBefore("Lua Files\\Navigation\\Navi_Map_krSak", ["lua files\\cls\\navi_map"]);
         if (pe.stringRaw("Lua Files\\Navigation\\Navi_Npc_krSak") !== -1 || table.get(table.packetVersion) > 20190400)
+        {
             lua.loadBefore("Lua Files\\Navigation\\Navi_Npc_krSak", ["lua files\\cls\\navi_npc"]);
+        }
         lua.loadBefore("Lua Files\\Navigation\\Navi_Mob_krSak", ["lua files\\cls\\navi_mob"]);
         lua.loadBefore("Lua Files\\Navigation\\Navi_Link_krSak", ["lua files\\cls\\navi_link"]);
         lua.loadBefore("Lua Files\\Navigation\\Navi_LinkDistance_krSak", ["lua files\\cls\\navi_linkdistance"]);
         lua.loadBefore("Lua Files\\Navigation\\Navi_NpcDistance_krSak", ["lua files\\cls\\navi_npcdistance"]);
         if (pe.stringRaw("Lua Files\\Navigation\\navi_picknpc_krSak") !== -1 || table.get(table.packetVersion) > 20190400)
+        {
             lua.loadBefore("Lua Files\\Navigation\\navi_picknpc_krSak", ["lua files\\cls\\navi_picknpc"]);
+        }
         lua.loadBefore("Lua Files\\Navigation\\Navi_Scroll_krSak", ["lua files\\cls\\navi_scroll"]);
     }
     else
     {
         lua.loadBefore("Lua Files\\Navigation\\Navi_Map_krpri", ["lua files\\cls\\navi_map"]);
         if (pe.stringRaw("Lua Files\\Navigation\\Navi_Npc_krpri") !== -1 || table.get(table.packetVersion) > 20190400)
+        {
             lua.loadBefore("Lua Files\\Navigation\\Navi_Npc_krpri", ["lua files\\cls\\navi_npc"]);
+        }
         lua.loadBefore("Lua Files\\Navigation\\Navi_Mob_krpri", ["lua files\\cls\\navi_mob"]);
         lua.loadBefore("Lua Files\\Navigation\\Navi_Link_krpri", ["lua files\\cls\\navi_link"]);
         lua.loadBefore("Lua Files\\Navigation\\Navi_LinkDistance_krpri", ["lua files\\cls\\navi_linkdistance"]);
         lua.loadBefore("Lua Files\\Navigation\\Navi_NpcDistance_krpri", ["lua files\\cls\\navi_npcdistance"]);
         if (pe.stringRaw("Lua Files\\Navigation\\navi_picknpc_krpri") !== -1 || table.get(table.packetVersion) > 20190400)
+        {
             lua.loadBefore("Lua Files\\Navigation\\navi_picknpc_krpri", ["lua files\\cls\\navi_picknpc"]);
+        }
         lua.loadBefore("Lua Files\\Navigation\\Navi_Scroll_krpri", ["lua files\\cls\\navi_scroll"]);
     }
 
@@ -50,9 +58,13 @@ function AddCLSNavi()
 function AddCLSNavi_()
 {
     if (table.get(table.packetVersion) > 20180404)
+    {
         return true;
+    }
     if (IsSakray())
+    {
         return pe.stringRaw("Lua Files\\Navigation\\Navi_Map_krSak") !== -1;
-    else
-        return pe.stringRaw("Lua Files\\Navigation\\Navi_Map_krpri") !== -1;
+    }
+
+    return pe.stringRaw("Lua Files\\Navigation\\Navi_Map_krpri") !== -1;
 }

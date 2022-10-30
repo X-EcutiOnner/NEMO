@@ -14,64 +14,56 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-//=============================================================//
-// Patch Functions wrapping over ChangeMaxItemCount function   //
-//=============================================================//
-
-function SetMaxItemCount()
-{
-    return ChangeMaxItemCount(input.getString("$MaxItemCount",
-        _("Number Input"),
-        _("Enter the max item count (0-999)"),
-        100,
-        3));
-}
-
-//####################################################################################
-//# Purpose: Find the max item count display and replace it with the value specified #
-//####################################################################################
 
 function ChangeMaxItemCount(value)
 {
-      //Step 1a - Prep String
-      var newString = "/" + value  ;
+    var newString = "/" + value;
 
-      //Step 1b - Allocate space for New Format String.
-      var free = alloc.find(newString.length);
-      if (free === -1)
+    var free = alloc.find(newString.length);
+    if (free === -1)
+    {
         return "Failed in Step 1 - Not enough free space";
+    }
 
-      //Step 1c - Insert the new format string
-      pe.insertAt(free, newString.length, newString);
+    pe.insertAt(free, newString.length, newString);
 
-      //Step 2 - Find the max item count.
-      var code =
-         " 6A 64"          //PUSH 64h
-       + " 8D 45 ??"       //LEA EAX, [EBP+Z]
-       + " 68 ?? ?? ?? ??" //PUSH offset "/%d"
-       ;
+    var code =
+        " 6A 64" +
+        " 8D 45 ??" +
+        " 68 ?? ?? ?? ??";
 
-      var offsets = pe.findAll(code);
+    var offsets = pe.findAll(code);
 
-      if (offsets.length === 0)  //new clients
-      {
+    if (offsets.length === 0)
+    {
         code =
-         " 83 C1 64"          //ADD ECX,64h
-       + " 51"                //PUSH ECX
-       + " 68 ?? ?? ?? 00"    //PUSH offset "/%d"
-       ;
-       offsets = pe.findAll(code);
-      }
+            " 83 C1 64" +
+            " 51" +
+            " 68 ?? ?? ?? 00";
+        offsets = pe.findAll(code);
+    }
 
-      if (offsets.length === 0)
+    if (offsets.length === 0)
+    {
         return "Failed in Step 2 - function missing";
+    }
 
-      //Step 3 - Replace with new one's address
-      for (var i = 0; i < offsets.length; i++)
-      {
-          var offset2 = offsets[i] + code.hexlength();
-          pe.replaceDWord(offset2 - 4, pe.rawToVa(free));
-      }
+    for (var i = 0; i < offsets.length; i++)
+    {
+        var offset2 = offsets[i] + code.hexlength();
+        pe.replaceDWord(offset2 - 4, pe.rawToVa(free));
+    }
 
-  return true;
+    return true;
+}
+
+function SetMaxItemCount()
+{
+    return ChangeMaxItemCount(input.getString(
+        "$MaxItemCount",
+        _("Number Input"),
+        _("Enter the max item count (0-999)"),
+        100,
+        3
+    ));
 }

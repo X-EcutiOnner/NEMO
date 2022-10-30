@@ -19,7 +19,9 @@ function ExtendOldCashShopPreview()
 {
     var res = runBin("ExtendOldCashShopPreview");
     if (res === true)
+    {
         storage.ExtendOldCashShop = true;
+    }
     return res;
 }
 

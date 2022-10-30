@@ -1,22 +1,21 @@
-//###################################################################
-//# Purpose: Change the JNE after Langtype comparison to JMP in the #
-//#          'On Login' callback which skips loading HelpMsgStr.    #
-//###################################################################
+// ###################################################################
+// # Purpose: Change the JNE after Langtype comparison to JMP in the #
+// #          'On Login' callback which skips loading HelpMsgStr.    #
+// ###################################################################
 
 function DisableHelpMsg()
 {
-    consoleLog("Step 1 - Search the Unique PUSHes after the comparison");
     var code =
-        "6A 0D " +  // 00 push 0Dh
-        "6A 2A ";   // 02 push 2Ah
+        "6A 0D " +
+        "6A 2A ";
 
     var offset = pe.findCode(code);
 
     if (offset === -1)
     {
         code =
-            "6A 0E " +  // 00 push 0Eh
-            "6A 2A ";   // 02 push 2Ah
+            "6A 0E " +
+            "6A 2A ";
 
         offset = pe.findCode(code);
     }
@@ -24,9 +23,9 @@ function DisableHelpMsg()
     if (offset === -1)
     {
         code =
-            "6A 0E " +  // 00 push 0Eh
-            "8B 01 " +  // 02 mov eax, [ecx]
-            "6A 2A ";   // 04 push 2Ah
+            "6A 0E " +
+            "8B 01 " +
+            "6A 2A ";
 
         offset = pe.findCode(code);
     }
@@ -34,9 +33,9 @@ function DisableHelpMsg()
     if (offset === -1)
     {
         code =
-            "6A 0E " +  // 00 push 0Eh
-            "8B 01 " +  // 02 mov eax, [ecx]
-            "6A 2F ";   // 04 push 2Fh
+            "6A 0E " +
+            "8B 01 " +
+            "6A 2F ";
 
         offset = pe.findCode(code);
     }
@@ -44,34 +43,36 @@ function DisableHelpMsg()
     if (offset === -1)
     {
         code =
-            "6A 0E " +  // 00 push 0Eh
-            "8B 11 " +  // 02 mov edx, [ecx]
-            "6A 2F ";   // 04 push 2Fh
+            "6A 0E " +
+            "8B 11 " +
+            "6A 2F ";
 
         offset = pe.findCode(code);
     }
 
     if (offset === -1)
+    {
         return "Failed in Step 1 - Pattern not found";
+    }
 
-    consoleLog("Step 2 - Search the address of 'LANGTYPE'");
     var LANGTYPE = GetLangType();
 
     if (LANGTYPE.length === 1)
+    {
         return "Failed in Step 2 - " + LANGTYPE[0];
+    }
 
-    consoleLog("Step 3 - Find the comparison before patching");
-    var code =
-        LANGTYPE +  // 00 CMP DWORD PTR DS:[g_serviceType], reg32_A
-        "75 ";      // 04 JNE addr
+    code =
+        LANGTYPE +
+        "75 ";
 
     var offset2 = pe.find(code, offset - 0x20, offset);
 
     if (offset2 === -1)
     {
         code =
-            LANGTYPE + "00 " +  // 00 cmp dword ptr ds:[g_serviceType], 0
-            "75 ";              // 05 jnz short addr
+            LANGTYPE + "00 " +
+            "75 ";
 
         offset2 = pe.find(code, offset - 0x20, offset);
     }
@@ -79,26 +80,24 @@ function DisableHelpMsg()
     if (offset2 === -1)
     {
         code =
-            LANGTYPE +  // 00 mov eax, g_serviceType
-            "?? ?? " +  // 04 cmp eax, edi
-            "75 ";      // 06 jnz short addr
+            LANGTYPE +
+            "?? ?? " +
+            "75 ";
 
         offset2 = pe.find(code, offset - 0x20, offset);
     }
 
     if (offset2 === -1)
+    {
         return "Failed in Step 3 - Pattern not found";
+    }
 
-    consoleLog("Step 4 - Replace JNE with JMP");
     pe.replaceByte(offset2 + code.hexlength() - 1, 0xEB);
 
     return true;
 }
 
-//=======================================================//
-// Disable for Unsupported Clients - Check for Reference //
-//=======================================================//
 function DisableHelpMsg_()
 {
-    return (pe.stringRaw("/tip") !== -1);
+    return pe.stringRaw("/tip") !== -1;
 }

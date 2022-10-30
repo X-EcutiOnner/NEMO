@@ -18,69 +18,62 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
-//####################################################
-//# Purpose: Modify QuestErrorMsg function to return #
-//#          without showing the MessageBox.         #
-//####################################################
+// ####################################################
+// # Purpose: Modify QuestErrorMsg function to return #
+// #          without showing the MessageBox.         #
+// ####################################################
 
 function IgnoreQuestErrors()
 {
-    consoleLog("Step 1 - Search string 'Not found Quest Info = %lu'");
     var offset = pe.stringVa("Not found Quest Info = %lu");
 
     if (offset === -1)
+    {
         return "Failed in Step 1 - String not found";
+    }
 
     var strHex = offset.packToHex(4);
     var hwndHex = table.getHex4(table.g_hMainWnd);
 
-    consoleLog("Step 2 - Prep code for finding the QuestErrorMsg");
     var code =
-        "68 " + strHex +           // 0 push offset aNotFoundQuestI
-        "50 " +                    // 5 push eax
-        "E8 ?? ?? ?? ?? " +        // 6 call std_string_sprintf
-        "83 C4 0C " +              // 11 add esp, 0Ch
-        "C7 45 ?? 01 00 00 00 " +  // 14 mov [ebp+var_4], 1
-        "83 78 14 10 " +           // 21 cmp dword ptr [eax+14h], 10h
-        "72 02 " +                 // 25 jb short loc_561264
-        "8B 00 " +                 // 27 mov eax, [eax]
-        "6A 00 " +                 // 29 push 0
-        "68 ?? ?? ?? ?? " +        // 31 push offset aError
-        "50 " +                    // 36 push eax
-        "FF 35 " + hwndHex +       // 37 push g_hMainWnd
-        "FF 15 ?? ?? ?? ?? ";      // 43 call ds:MessageBoxA
-    var sprintfOffset = 7;
+        "68 " + strHex +
+        "50 " +
+        "E8 ?? ?? ?? ?? " +
+        "83 C4 0C " +
+        "C7 45 ?? 01 00 00 00 " +
+        "83 78 14 10 " +
+        "72 02 " +
+        "8B 00 " +
+        "6A 00 " +
+        "68 ?? ?? ?? ?? " +
+        "50 " +
+        "FF 35 " + hwndHex +
+        "FF 15 ?? ?? ?? ?? ";
     var replaceOffset = 29;
 
-    var offset = pe.findCode(code);
+    offset = pe.findCode(code);
 
     if (offset === -1)
+    {
         return "Failed in Step 2 - Pattern not found";
+    }
 
-    consoleLog("Log vars");
-    logRawFunc("std_string_sprintf", offset, sprintfOffset);
-
-    consoleLog("Step 3 - Replace with xor eax, eax followed by nops");
     var newCode =
-        "90 90 " +              // 00 nops
-        "33 C0 90 90 90 " +     // 02 xor eax, eax + nops
-        "90 " +                 // 07 nops
-        "90 90 90 90 90 90 " +  // 08 nops
-        "90 90 90 90 90 90 ";   // 14 nops
+        "90 90 " +
+        "33 C0 90 90 90 " +
+        "90 " +
+        "90 90 90 90 90 90 " +
+        "90 90 90 90 90 90 ";
 
     pe.replaceHex(offset + replaceOffset, newCode);
 
     return true;
 }
 
-//=======================================================//
-// Disable for Unsupported Clients - Check for Reference //
-//=======================================================//
 function IgnoreQuestErrors_()
 {
     return (
-                pe.getDate() >= 20180319 ||
-                pe.getDate() >= 20180300 && IsSakray() ||
-                pe.getDate() >= 20171115 && IsZero()
-            );
+        pe.getDate() >= 20180319 ||
+        (pe.getDate() >= 20180300 && IsSakray()) ||
+        (pe.getDate() >= 20171115 && IsZero()));
 }

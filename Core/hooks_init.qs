@@ -32,36 +32,44 @@ function hooks_initTableEndHook(varId)
 
 function hooks_initImportCallHooks(funcName, dllName, ordinal)
 {
-    return hooks_initHooks([funcName, dllName, ordinal],
+    return hooks_initHooks(
+        [funcName, dllName, ordinal],
         hooks.matchImportCallUsage,
-        hooks.searchImportCallUsage);
+        hooks.searchImportCallUsage
+    );
 }
 
 function hooks_initImportJmpHooks(funcName, dllName, ordinal)
 {
-    return hooks_initHooks([funcName, dllName, ordinal],
+    return hooks_initHooks(
+        [funcName, dllName, ordinal],
         hooks.matchImportJmpUsage,
-        hooks.searchImportJmpUsage);
+        hooks.searchImportJmpUsage
+    );
 }
 
 function hooks_initImportMovHooks(funcName, dllName, ordinal)
 {
-    return hooks_initHooks([funcName, dllName, ordinal],
+    return hooks_initHooks(
+        [funcName, dllName, ordinal],
         hooks.matchImportMovUsage,
-        hooks.searchImportMovUsage);
+        hooks.searchImportMovUsage
+    );
 }
 
 function hooks_initImportHooks(funcName, dllName, ordinal)
 {
-    return hooks_initHooks([funcName, dllName, ordinal],
+    return hooks_initHooks(
+        [funcName, dllName, ordinal],
         hooks.matchImportUsage,
-        hooks.searchImportUsage);
+        hooks.searchImportUsage
+    );
 }
 
 function hooks_initTableReplaceHook(varId, retText, vars)
 {
     var hook = hooks_initHook(varId, hooks_matchFunctionReplace, table.varToHook);
-    if (typeof(retText) !== "undefined")
+    if (typeof retText !== "undefined")
     {
         hook.addFinal(retText, vars);
     }

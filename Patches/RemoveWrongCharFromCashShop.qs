@@ -14,42 +14,45 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-//####################################################
-//# Purpose: Dont draw field with random number in   #
-//#          cash shop in UICashShopWnd_virt68       #
-//####################################################
+// ####################################################
+// # Purpose: Dont draw field with random number in   #
+// #          cash shop in UICashShopWnd_virt68       #
+// ####################################################
 
 function RemoveWrongCharFromCashShop()
 {
     var offset = pe.stringVa("%d C");
     if (offset === -1)
+    {
         return "Failed in Step 1 - format string not found";
-    var strHex = offset.packToHex(4)
+    }
+    var strHex = offset.packToHex(4);
 
-    // search second string usage in function
     var code =
-        "8B CE " +              // mov ecx, esi
-        "50 " +                 // push eax
-        "68 C2 01 00 00 " +     // push 1C2h
-        "68 26 02 00 00 " +     // push 226h
-        "E8 ?? ?? ?? ?? " +     // call UICashShopWnd_sub
-        "FF B6 ?? ?? 00 00 " +  // push dword ptr [esi+A]
-        "8D 45 ?? " +           // lea eax, [ebp+string_ptr]
-        "68 " + strHex +        // push offset "%d C"
-        "50 " +                 // push eax
-        "E8 "                   // call std::string::sprintf
+        "8B CE " +
+        "50 " +
+        "68 C2 01 00 00 " +
+        "68 26 02 00 00 " +
+        "E8 ?? ?? ?? ?? " +
+        "FF B6 ?? ?? 00 00 " +
+        "8D 45 ?? " +
+        "68 " + strHex +
+        "50 " +
+        "E8 ";
     var pushOffset = 18;
     offset = pe.findCode(code);
 
     if (offset === -1)
+    {
         return "Failed in step 2 - pattern not found";
+    }
 
     code =
-        "6A 00" +  // push 0
-        "90" +     // nop
-        "90" +     // nop
-        "90" +     // nop
-        "90"       // nop
+        "6A 00" +
+        "90" +
+        "90" +
+        "90" +
+        "90";
     pe.replaceHex(offset + pushOffset, code);
 
     return true;
@@ -57,5 +60,5 @@ function RemoveWrongCharFromCashShop()
 
 function RemoveWrongCharFromCashShop_()
 {
-    return (pe.stringRaw(".?AVUICashShopWnd@@") !== -1);
+    return pe.stringRaw(".?AVUICashShopWnd@@") !== -1;
 }

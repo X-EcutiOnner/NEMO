@@ -18,26 +18,26 @@
 function SetWalkToDelayCmd()
 {
     var value1 = exe.getUserInput("$walkDelayCmdDelay1", XTYPE_WORD, _("Number Input"), _("Enter the new walk delay (0-1000) - snaps to closest valid value"), 150, 1, 1000);
+    var value2 = 0;
     if (pe.getDate() > 20170329)
     {
-        var value2 = exe.getUserInput("$walkDelayCmdDelay2", XTYPE_WORD, _("Number Input"), _("Enter the new walk delay 2 (0-1000) - snaps to closest valid value"), 150, 0, 1000);
-    }
-    else
-    {
-        var value2 = 0;
+        value2 = exe.getUserInput("$walkDelayCmdDelay2", XTYPE_WORD, _("Number Input"), _("Enter the new walk delay 2 (0-1000) - snaps to closest valid value"), 150, 0, 1000);
     }
 
-    var textColor = exe.getUserInput("$walkDelayCmdColor", XTYPE_COLOR,
+    var textColor = exe.getUserInput(
+        "$walkDelayCmdColor", XTYPE_COLOR,
         _("Color input"),
         _("Select walk delay chat message color"),
-        (0xffff).reverseRGB()).reverseRGB();
-    var cmdText = exe.getUserInput("$walkDelayCmd", XTYPE_STRING,
+        0xffff.reverseRGB()
+    ).reverseRGB();
+    var cmdText = exe.getUserInput(
+        "$walkDelayCmd", XTYPE_STRING,
         _("String input"),
         _("Enter walk delay enable/disable chat command)"),
         "/walkdelay",
-        2);
+        2
+    );
 
-    consoleLog("Use new delay value");
     var offsetObj = ChangeWalkToDelay_Match();
     var offset = offsetObj.offset;
     var patchOffset = offsetObj.delayCmdOffset;
@@ -45,29 +45,24 @@ function SetWalkToDelayCmd()
     var delayVar1 = pe.rawToVa(pe.insertDWord(value1));
     var vars = {
         "reg": "ecx",
-        "delay": delayVar1
+        "delay": delayVar1,
     };
-    var data = pe.replaceAsmFile(offset + patchOffset[0], "WalkToDelayAssign", vars, patchOffset[1]);
+    pe.replaceAsmFile(offset + patchOffset[0], "WalkToDelayAssign", vars, patchOffset[1]);
 
+    var delayVar2 = 0;
     if (pe.getDate() > 20170329)
     {
         offsetObj = ChangeWalkToDelay_Match2();
         offset = offsetObj.offset;
         patchOffset = offsetObj.delayCmdOffset;
 
-        var delayVar2 = pe.rawToVa(pe.insertDWord(value2));
-        var vars = {
+        delayVar2 = pe.rawToVa(pe.insertDWord(value2));
+        vars = {
             "reg": "ecx",
-            "delay": delayVar2
+            "delay": delayVar2,
         };
-        var data = pe.replaceAsmFile(offset + patchOffset[0], "WalkToDelayAssign", vars, patchOffset[1]);
+        pe.replaceAsmFile(offset + patchOffset[0], "WalkToDelayAssign", vars, patchOffset[1]);
     }
-    else
-    {
-        var delayVar2 = 0;
-    }
-
-    consoleLog("Add chat command");
 
     var cmdOffset = pe.rawToVa(pe.insertString(cmdText));
 
@@ -79,8 +74,8 @@ function SetWalkToDelayCmd()
             "command": cmdOffset,
             "value1": value1,
             "value2": value2,
-            "textColor": textColor
-        }
+            "textColor": textColor,
+        };
     }
     else
     {
@@ -88,8 +83,8 @@ function SetWalkToDelayCmd()
             "delay1": delayVar1,
             "command": cmdOffset,
             "value1": value1,
-            "textColor": textColor
-        }
+            "textColor": textColor,
+        };
     }
 
     var hook = hooks.initTableEndHook(table.CSession_GetTalkType_ret);

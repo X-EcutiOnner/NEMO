@@ -14,28 +14,22 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-//##############################################################################
-//# Purpose: Copy disabled and patched cdclient.dll into destination directory #
-//##############################################################################
+// ##############################################################################
+// # Purpose: Copy disabled and patched cdclient.dll into destination directory #
+// ##############################################################################
 
 function CopyCDGuard()
 {
     return true;
 }
 
-//====================================//
-// Do real copy on apply patches time //
-//====================================//
 function CopyCDGuard_apply()
 {
     copyFileToDst(APP_PATH + "/Input/CDClient.dll", "CDClient.dll");
     return true;
 }
 
-//============================//
-// Disable Unsupported client //
-//============================//
 function CopyCDGuard_()
 {
-    return (pe.stringRaw("CDClient.dll") !== -1);
+    return pe.stringRaw("CDClient.dll") !== -1;
 }

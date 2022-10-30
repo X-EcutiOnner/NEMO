@@ -15,6 +15,127 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+function table_getRaw(varId)
+{
+    checkArgs("table.getRaw", arguments, [["Number"]]);
+    var ret = table.get(varId);
+    if (ret === 0)
+    {
+        return 0;
+    }
+    return pe.vaToRaw(ret);
+}
+
+function table_getValidated(varId)
+{
+    checkArgs("table.getValidated", arguments, [["Number"]]);
+    var ret = table.get(varId);
+    if (ret <= 0)
+    {
+        throw "Incorrect table var given: " + varId;
+    }
+    return ret;
+}
+
+function table_getRawValidated(varId)
+{
+    checkArgs("table.getRawValidated", arguments, [["Number"]]);
+    return pe.vaToRaw(table_getValidated(varId));
+}
+
+function table_getHex1(varId)
+{
+    checkArgs("table.getHex1", arguments, [["Number"]]);
+    return table.get(varId).packToHex(1);
+}
+
+function table_getHex4(varId)
+{
+    checkArgs("table.getHex4", arguments, [["Number"]]);
+    return table.get(varId).packToHex(4);
+}
+
+function table_getAny(vars)
+{
+    for (var i = 0; i < vars.length; i ++)
+    {
+        var value = table.get(vars[i]);
+        if (value > 0)
+        {
+            return value;
+        }
+    }
+    return 0;
+}
+
+function table_getAnyValidated(vars)
+{
+    var value = table_getAny(vars);
+    if (value > 0)
+    {
+        return value;
+    }
+    throw "All variables not exists";
+}
+
+function table_getSessionAbsHex4(varId)
+{
+    checkArgs("table.getSessionAbsHex4", arguments, [["Number"]]);
+    return (table.get(table.g_session) + table.get(varId)).packToHex(4);
+}
+
+function table_varToHook(varId)
+{
+    var offset = table.getRawValidated(varId);
+    return [[offset, offset]];
+}
+
+function table_var2ToHook(varId)
+{
+    var offset = table.getRawValidated(varId);
+    var offset2 = table.get(varId + 1);
+    return [[offset, [offset, offset2]]];
+}
+
+function getEcxSessionHex()
+{
+    return "B9 " + table.getHex4(table.g_session);
+}
+
+function getEcxWindowMgrHex()
+{
+    return "B9 " + table.getHex4(table.g_windowMgr);
+}
+
+function getEcxModeMgrHex()
+{
+    return "B9 " + table.getHex4(table.g_modeMgr);
+}
+
+function getEcxFileMgrHex()
+{
+    return "B9 " + table.getHex4(table.g_fileMgr);
+}
+
+function IsSakray()
+{
+    return table.get(table.serverTypeValue) === 1;
+}
+
+function registerTableFunctions()
+{
+    table.getValidated = table_getValidated;
+    table.getHex1 = table_getHex1;
+    table.getHex4 = table_getHex4;
+    table.getRaw = table_getRaw;
+    table.getRawValidated = table_getRawValidated;
+    table.getAny = table_getAny;
+    table.getAnyValidated = table_getAnyValidated;
+    table.getSessionAbsHex4 = table_getSessionAbsHex4;
+    table.varToHook = table_varToHook;
+    table.var2ToHook = table_var2ToHook;
+}
+
 function registerTables()
 {
     table.var1 = 0;
@@ -95,114 +216,7 @@ function registerTables()
     table.DrawDC_SetFont = 96;
     table.CGameActor_m_job = 98;
     table.UIEquipWnd_SendMsg_TAB = 99;
+    table.serverTypeValue = 100;
 
     registerTableFunctions();
-}
-
-function table_getRaw(varId)
-{
-    checkArgs("table.getRaw", arguments, [["Number"]]);
-    var ret = table.get(varId);
-    if (ret === 0)
-        return 0;
-    return pe.vaToRaw(ret);
-}
-
-function table_getRawValidated(varId)
-{
-    checkArgs("table.getRawValidated", arguments, [["Number"]]);
-    return pe.vaToRaw(table_getValidated(varId));
-}
-
-function table_getValidated(varId)
-{
-    checkArgs("table.getValidated", arguments, [["Number"]]);
-    var ret = table.get(varId);
-    if (ret <= 0)
-        throw "Incorrect table var given: " + varId;
-    return ret;
-}
-
-function table_getHex1(varId)
-{
-    checkArgs("table.getHex1", arguments, [["Number"]]);
-    return table.get(varId).packToHex(1);
-}
-
-function table_getHex4(varId)
-{
-    checkArgs("table.getHex4", arguments, [["Number"]]);
-    return table.get(varId).packToHex(4);
-}
-
-function table_getAny(vars)
-{
-    for (var i = 0; i < vars.length; i ++)
-    {
-        var value = table.get(vars[i]);
-        if (value > 0)
-            return value;
-    }
-    return 0;
-}
-
-function table_getAnyValidated(vars)
-{
-    var value = table_getAny(vars);
-    if (value > 0)
-        return value;
-    throw "All variables not exists";
-}
-
-function table_getSessionAbsHex4(varId)
-{
-    checkArgs("table.getSessionAbsHex4", arguments, [["Number"]]);
-    return (table.get(table.g_session) + table.get(varId)).packToHex(4);
-}
-
-function table_varToHook(varId)
-{
-    var offset = table.getRawValidated(varId);
-    return [[offset, offset]];
-}
-
-function table_var2ToHook(varId)
-{
-    var offset = table.getRawValidated(varId);
-    var offset2 = table.get(varId + 1);
-    return [[offset, [offset, offset2]]];
-}
-
-function getEcxSessionHex()
-{
-    return "B9 " + table.getHex4(table.g_session);  // mov ecx, g_session
-}
-
-function getEcxWindowMgrHex()
-{
-    return "B9 " + table.getHex4(table.g_windowMgr);  // mov ecx, g_windowMgr
-}
-
-function getEcxModeMgrHex()
-{
-    return "B9 " + table.getHex4(table.g_modeMgr);  // mov ecx, g_modeMgr
-}
-
-function getEcxFileMgrHex()
-{
-    return "B9 " + table.getHex4(table.g_fileMgr);  // mov ecx, g_fileMgr
-}
-
-function registerTableFunctions()
-{
-    table.getValidated = table_getValidated;
-    table.getHex1 = table_getHex1;
-    table.getHex4 = table_getHex4;
-    table.getRaw = table_getRaw;
-    table.getRawValidated = table_getRawValidated;
-    table.getAny = table_getAny;
-    table.getAnyValidated = table_getAnyValidated;
-    table.getSessionAbsHex4 = table_getSessionAbsHex4;
-    table.varToHook = table_varToHook;
-    table.var2ToHook = table_var2ToHook;
 }

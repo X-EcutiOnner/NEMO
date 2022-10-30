@@ -14,30 +14,29 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-//###########################################################
-//# Purpose: Change minimal screen resolution limit for     #
-//#          width and height in function reading settings  #
-//###########################################################
+// ###########################################################
+// # Purpose: Change minimal screen resolution limit for     #
+// #          width and height in function reading settings  #
+// ###########################################################
 
 function ChangeMinimalResolutionLimit()
 {
     var code =
-        "8B 0D ?? ?? ?? ?? " +        // 0 mov ecx, screen_width
-        "A3 ?? ?? ?? ?? " +           // 6 mov screen_old_height, eax
-        "81 F9 00 04 00 00 " +        // 11 cmp ecx, 400h
-        "72 0C " +                    // 17 jb short loc_ADA278
-        "A1 ?? ?? ?? ?? " +           // 19 mov eax, screen_height
-        "3D 00 03 00 00 " +           // 24 cmp eax, 300h
-        "73 15 " +                    // 29 jnb short loc_ADA28D
-        "B9 00 04 00 00 " +           // 31 mov ecx, 400h
-        "B8 00 03 00 00 " +           // 36 mov eax, 300h
-        "89 0D ?? ?? ?? ?? " +        // 41 mov screen_width, ecx
-        "A3 ";                        // 47 mov screen_height, eax
+        "8B 0D ?? ?? ?? ?? " +
+        "A3 ?? ?? ?? ?? " +
+        "81 F9 00 04 00 00 " +
+        "72 0C " +
+        "A1 ?? ?? ?? ?? " +
+        "3D 00 03 00 00 " +
+        "73 15 " +
+        "B9 00 04 00 00 " +
+        "B8 00 03 00 00 " +
+        "89 0D ?? ?? ?? ?? " +
+        "A3 ";
     var widthOffset1 = 13;
     var widthOffset2 = 32;
     var heightOffset1 = 25;
     var heightOffset2 = 37;
-    var screenOldHeightOffset = 7;
     var screenWidth1Offset = 2;
     var screenWidth2Offset = 43;
     var screenHeight1Offset = 20;
@@ -47,22 +46,21 @@ function ChangeMinimalResolutionLimit()
     var heightLimit2 = 768;
     var offset = pe.findCode(code);
 
-    if (offset === -1)  //Newer clients only compare screen_height
+    if (offset === -1)
     {
         code =
-            "A3 ?? ?? ?? ?? " +           // 0 mov screen_old_height, eax
-            "A1 ?? ?? ?? ?? " +           // 5 mov eax, screen_height
-            "3D 98 02 00 00 " +           // 10 cmp eax, 298h
-            "73 17 " +                    // 15 jnb short loc_AAF6A6
-            "B9 00 04 00 00 " +           // 17 mov ecx, 400h
-            "B8 00 03 00 00 " +           // 22 mov eax, 300h
-            "89 0D ?? ?? ?? ?? " +        // 27 mov screen_width, ecx
-            "A3 ";                        // 33 mov screen_height, eax
+            "A3 ?? ?? ?? ?? " +
+            "A1 ?? ?? ?? ?? " +
+            "3D 98 02 00 00 " +
+            "73 17 " +
+            "B9 00 04 00 00 " +
+            "B8 00 03 00 00 " +
+            "89 0D ?? ?? ?? ?? " +
+            "A3 ";
         widthOffset1 = -1;
         widthOffset2 = 18;
         heightOffset1 = 11;
         heightOffset2 = 23;
-        screenOldHeightOffset = 1;
         screenWidth1Offset = 29;
         screenWidth2Offset = -1;
         screenHeight1Offset = 6;
@@ -74,7 +72,9 @@ function ChangeMinimalResolutionLimit()
     }
 
     if (offset === -1)
+    {
         return "Failed in step 1 - resolution limit not found";
+    }
 
     if (widthOffset1 !== -1 && pe.fetchDWord(offset + widthOffset1) !== widthLimit)
     {
@@ -97,12 +97,6 @@ function ChangeMinimalResolutionLimit()
         return "Failed in step 1 - wrong height found";
     }
 
-    logVaVar("screen_old_height", offset, screenOldHeightOffset);
-    logVaVar("screen_width", offset, screenWidth1Offset);
-    logVaVar("screen_height", offset, screenHeight1Offset);
-    logVal("screen_width_limit", offset, widthOffset1);
-    logVal("screen_height_limit", offset, heightOffset2);
-
     var width = exe.getUserInput("$newScreenWidth", XTYPE_DWORD, _("Number Input"), _("Enter new minimal width:"), widthLimit, 0, 100000);
     var height = exe.getUserInput("$newScreenHeight", XTYPE_DWORD, _("Number Input"), _("Enter new minimal height:"), heightLimit2, 0, 100000);
     if (width === widthLimit && (height === heightLimit1 || height === heightLimit2))
@@ -118,52 +112,49 @@ function ChangeMinimalResolutionLimit()
     pe.replaceDWord(offset + heightOffset1, height);
     pe.replaceDWord(offset + heightOffset2, height);
 
-    //Fix potential crash when access the Advanced Settings
     var screenWidthAdd = pe.fetchHex(offset + screenWidth1Offset, 4);
     var screenHeightAdd = pe.fetchHex(offset + screenHeight1Offset, 4);
 
     code =
-        "3B 3D " + screenWidthAdd +    //cmp edi, screenWidth
-        "8B BD ?? ?? ?? ?? " +         //mov edi, [ebp-x]
-        "75 ?? " +                     //jne short
-        "3B 35 " + screenHeightAdd +   //cmp esi, screenHeight
-        "75 ?? ";                      //jne short
+        "3B 3D " + screenWidthAdd +
+        "8B BD ?? ?? ?? ?? " +
+        "75 ?? " +
+        "3B 35 " + screenHeightAdd +
+        "75 ?? ";
 
     offset = pe.findCode(code);
-    if (offset === -1) //Newer clients
+    if (offset === -1)
     {
         code =
-            "3B ?? " + screenWidthAdd +    //cmp reg, screenWidth
-            "75 ?? " +                     //jne short
-            "3B 35 " + screenHeightAdd +   //cmp esi, screenHeight
-            "75 ?? " +                     //jne short
-            "3B ";                         //cmp reg, screenColor
+            "3B ?? " + screenWidthAdd +
+            "75 ?? " +
+            "3B 35 " + screenHeightAdd +
+            "75 ?? " +
+            "3B ";
 
         offset = pe.findCode(code);
-
     }
     if (offset === -1)
+    {
         return "Failed in step 2a";
+    }
 
     code =
-        "A3 ?? ?? ?? ?? " +              //0 mov MODECNT, eax
-        "89 ?? ?? 00 00 00 ";            //5 mov [reg+UIGraphicSettingWnd.MODECNT], eax
+        "A3 ?? ?? ?? ?? " +
+        "89 ?? ?? 00 00 00 ";
     var retAdd = 5;
-    var modeCntOffset = [1, 4];
-    var uiModeCntOffset = [7, 4];
 
     offset = pe.find(code, offset, offset + 0x80);
     if (offset === -1)
+    {
         return "Failed in step 2b";
-
-    logVaVar("MODECNT", offset, modeCntOffset);
-    logField("UIGraphicSettingWnd::MODECNT", offset, uiModeCntOffset);
+    }
 
     var codeIns = pe.fetchHex(offset, retAdd);
 
     var vars = {
         "retAddr": pe.rawToVa(offset + retAdd),
-        "codeIns": codeIns
+        "codeIns": codeIns,
     };
 
     var data = pe.insertAsmFile("", vars);
@@ -174,5 +165,5 @@ function ChangeMinimalResolutionLimit()
 
 function ChangeMinimalResolutionLimit_()
 {
-    return (pe.stringRaw("WIDTH") !== -1);
+    return pe.stringRaw("WIDTH") !== -1;
 }

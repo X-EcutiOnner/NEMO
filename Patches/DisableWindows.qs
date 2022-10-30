@@ -14,67 +14,66 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-//#####################################################################
-//# Purpose: Modify indirect switch table in UIWindowMgr::MakeWindow, #
-//#          make specified windows go to default case.               #
-//#####################################################################
+// #####################################################################
+// # Purpose: Modify indirect switch table in UIWindowMgr::MakeWindow, #
+// #          make specified windows go to default case.               #
+// #####################################################################
+
 function DisableWindows()
 {
-  //Get the address of UIWindowMgr::MakeWindow
-  var makeWnd = table.getRaw(table.UIWindowMgr_MakeWindow);
+    var makeWnd = table.getRaw(table.UIWindowMgr_MakeWindow);
 
-  //Find switch table
-  var code =
-    " 0F B6 ?? ?? ?? ?? 00" //movzx eax,byte ptr [eax+iswTable]
-  + " FF 24 85 ?? ?? ?? 00" //jmp dword ptr [eax*4+swTable]
-  ;
-  var switch1Offset = 3;
-  var switch2Offset = 10;
+    var code =
+        " 0F B6 ?? ?? ?? ?? 00" +
+        " FF 24 85 ?? ?? ?? 00";
 
-  var offset = pe.find(code, makeWnd, makeWnd + 0x200);
-  if (offset === -1)
-    return "Failed in Step 1 - Can't find indirect table for switch statement";
-
-  logVaVar("UIWindowMgr_MakeWindow switch1", offset, switch1Offset);
-  logVaVar("UIWindowMgr_MakeWindow switch2", offset, switch2Offset);
-
-  var ITSS = pe.fetchDWord(offset + 3);
-
-  //Find the default case offset, should be same in ID 54 & 67
-  var dfCase = pe.fetchHex(pe.vaToRaw(ITSS + 54), 1);
-  if (dfCase !== pe.fetchHex(pe.vaToRaw(ITSS + 67), 1))
-    return "Failed in Step 2";
-
-  //Get disable windows id list from input file
-  var fp = new TextFile();
-  var inpFile = GetInputFile(fp, "$DisableWindows", _("File Input - Disable Windows"), _("Enter the Disable Windows file"), APP_PATH + "/Input/DisableWindows.txt");
-  if (!inpFile)
-    return "Patch Cancelled";
-
-  var WndID = [];
-  while (!fp.eof())
-  {
-    var line = fp.readline().trim();
-    if (line === "") continue;
-
-    var matches;
-    if (matches = line.match(/^([\d]{1,3})$/))
+    var offset = pe.find(code, makeWnd, makeWnd + 0x200);
+    if (offset === -1)
     {
-      var value = parseInt(line.substr(0));
-      if (!isNaN(value))
-        WndID.push(value);
+        return "Failed in Step 1 - Can't find indirect table for switch statement";
     }
-  }
-  fp.close();
 
-  if (WndID.length === 0)
-    return "Patch Cancelled";
+    var ITSS = pe.fetchDWord(offset + 3);
 
-  //Make specified windows jump to default case
-  for (var i = 0; i < WndID.length; i++)
-  {
-    pe.replaceHex(pe.vaToRaw(ITSS + WndID[i]), dfCase);
-  }
+    var dfCase = pe.fetchHex(pe.vaToRaw(ITSS + 54), 1);
+    if (dfCase !== pe.fetchHex(pe.vaToRaw(ITSS + 67), 1))
+    {
+        return "Failed in Step 2";
+    }
 
-  return true;
+    var fp = new TextFile();
+    var inpFile = GetInputFile(fp, "$DisableWindows", _("File Input - Disable Windows"), _("Enter the Disable Windows file"), APP_PATH + "/Input/DisableWindows.txt");
+    if (!inpFile)
+    {
+        return "Patch Cancelled";
+    }
+
+    var WndID = [];
+    while (!fp.eof())
+    {
+        var line = fp.readline().trim();
+        if (line === "") continue;
+
+        if (line.match(/^([\d]{1,3})$/))
+        {
+            var value = parseInt(line.substr(0));
+            if (!isNaN(value))
+            {
+                WndID.push(value);
+            }
+        }
+    }
+    fp.close();
+
+    if (WndID.length === 0)
+    {
+        return "Patch Cancelled";
+    }
+
+    for (var i = 0; i < WndID.length; i++)
+    {
+        pe.replaceHex(pe.vaToRaw(ITSS + WndID[i]), dfCase);
+    }
+
+    return true;
 }

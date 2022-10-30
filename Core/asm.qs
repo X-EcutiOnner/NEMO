@@ -15,11 +15,23 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+function asm_textToBytes(addrVa, commands, vars)
+{
+    var obj = new macroAsm.create(addrVa, commands, vars);
+    macroAsm.convert(obj);
+    var res = asm.textToBytesInternal(obj.addrVa, obj.text, obj.vars);
+    if (res === false)
+    {
+        fatalError("Asm compilation failed:\n-----------------\n" + obj.text + "\n-----------------\n");
+    }
+    return res;
+}
+
 function asm_textToObjVa(addrVa, commands, vars)
 {
     checkArgs("asm.textToObjVa", arguments, [["Number", "Object", "Object"], ["Number", "String", "Object"]]);
     var ret = asm_textToBytes(addrVa, commands, vars);
-    var obj = new Object();
+    var obj = {};
     obj.bytes = ret[0];
     obj.code = obj.bytes.toHex();
     obj.vars = ret[1];
@@ -65,10 +77,14 @@ function asm_textToHexLength(commands, vars)
     var size = asm.textToHexVaLength(0, commands, vars);
     var size2 = asm.textToHexVaLength(0x5000000, commands, vars);
     if (size2 > size)
+    {
         size = size2;
+    }
     size2 = asm.textToHexVaLength(0xf000000, commands, vars);
     if (size2 > size)
+    {
         size = size2;
+    }
 
     return size;
 }
@@ -78,8 +94,10 @@ function asm_cmdToObjVa(addrVa, command, vars)
     checkArgs("asm.cmdToObjVa", arguments, [["Number", "Object", "Object"], ["Number", "String", "Object"]]);
     var ret = asm.cmdToBytes(addrVa, command, vars);
     if (ret === false)
+    {
         return false;
-    var obj = new Object();
+    }
+    var obj = {};
     obj.bestIndex = ret[0];
     obj.bytes = ret[1];
     obj.codes = [];
@@ -102,7 +120,9 @@ function asm_cmdToHexVa(addrVa, command, vars)
     checkArgs("asm.cmdToHecVa", arguments, [["Number", "Object", "Object"], ["Number", "String", "Object"]]);
     var ret = asm.cmdToBytes(addrVa, command, vars);
     if (ret === false)
+    {
         return false;
+    }
     return ret[ret[0]].toHex();
 }
 
@@ -117,16 +137,22 @@ function asm_hexToAsm(code)
     checkArgs("asm.hexToAsm", arguments, [["String"]]);
 
     if (code.length === 0)
+    {
         return "";
+    }
     code = code.trim();
     var parts = code.split(" ");
-    var data = ""
+    var data = "";
     for (var i = 0; i < parts.length; i ++)
     {
         if (parts[i].length == 0)
+        {
             continue;
+        }
         if (parts[i].length != 2)
+        {
             fatalError("Found wrong hex string: '" + code + "'");
+        }
         data += "db 0x" + parts[i] + "\n";
     }
     return data;
@@ -136,10 +162,10 @@ function asm_stringToAsm(string)
 {
     checkArgs("asm.stringToAsm", arguments, [["String"]]);
 
-    var data = ""
+    var data = "";
     for (var i = 0; i < string.length; i++)
     {
-        data += 'db 0x' + string.charCodeAt(i).toString(16) + "\n";
+        data += "db 0x" + string.charCodeAt(i).toString(16) + "\n";
     }
     return data;
 }
@@ -147,23 +173,29 @@ function asm_stringToAsm(string)
 function asm_combine()
 {
     var args = Array.prototype.slice.call(arguments);
-    var code = ""
+    var code = "";
     for (var i = 0; i < args.length; i ++)
     {
-        code = code + args[i];
+        code += args[i];
         if (code[code.length - 1] != "\n")
-            code = code + "\n";
+        {
+            code += "\n";
+        }
     }
     return code;
 }
 
 function asm_loadHex(fileName)
 {
-    if (typeof(fileName) === "undefined" || fileName === "")
+    if (typeof fileName === "undefined" || fileName === "")
+    {
         fileName = patch.getName();
+    }
     var file = new BinFile();
     if (!file.open(APP_PATH + "/Patches/asm/" + fileName + ".asm"))
+    {
         fatalError("Cant load asm file: " + fileName);
+    }
     var text = file.readHex(0, 0);
     file.close();
     return text;
@@ -173,18 +205,6 @@ function asm_load(fileName)
 {
     var text = asm_loadHex(fileName).toAscii();
     return text;
-}
-
-function asm_textToBytes(addrVa, commands, vars)
-{
-    var obj = new macroAsm.create(addrVa, commands, vars)
-    macroAsm.convert(obj);
-    var res = asm.textToBytesInternal(obj.addrVa, obj.text, obj.vars);
-    if (res === false)
-    {
-        fatalError("Asm compilation failed:\n-----------------\n" + obj.text + "\n-----------------\n");
-    }
-    return res;
 }
 
 function asm_retHex(stackSize)

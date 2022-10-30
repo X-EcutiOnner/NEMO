@@ -1,7 +1,7 @@
-//########################################################################
-//# Purpose: Disable the CGameMode::m_lastLockOnPcGid assignment         #
-//#          inside CGameMode::ProcessPcPick to ignore shift right click #
-//########################################################################
+// ########################################################################
+// # Purpose: Disable the CGameMode::m_lastLockOnPcGid assignment         #
+// #          inside CGameMode::ProcessPcPick to ignore shift right click #
+// ########################################################################
 
 function DisableAutofollow()
 {
@@ -11,10 +11,9 @@ function DisableAutofollow()
     }
     var lastLockOnPcGid = table.getHex4(table.m_lastLockOnPcGid);
 
-    //Step 1 - Find the assignment statement
     var code =
-        "8B 87 ?? ?? ?? 00 " +        // 0 mov eax, [edi+CGameActor.m_aid]
-        "A3 " + lastLockOnPcGid;      // 6 mov m_lastLockOnPcGid, eax
+        "8B 87 ?? ?? ?? 00 " +
+        "A3 " + lastLockOnPcGid;
     var starOffset = 6;
     var endOffset = 11;
 
@@ -23,8 +22,8 @@ function DisableAutofollow()
     if (offsets.length === 0)
     {
         code =
-            "8B 8B ?? ?? ?? 00 " +        // 0 mov ecx, [ebx+CGameActor.m_aid]
-            "89 0D " + lastLockOnPcGid;   // 6 mov m_lastLockOnPcGid, ecx
+            "8B 8B ?? ?? ?? 00 " +
+            "89 0D " + lastLockOnPcGid;
         starOffset = 6;
         endOffset = 12;
 
@@ -34,8 +33,8 @@ function DisableAutofollow()
     if (offsets.length === 0)
     {
         code =
-            "8B 83 ?? ?? 00 00 " +        // 0 mov eax, [ebx+CGameActor.m_aid]
-            "A3 " + lastLockOnPcGid;      // 6 mov m_lastLockOnPcGid, eax
+            "8B 83 ?? ?? 00 00 " +
+            "A3 " + lastLockOnPcGid;
         starOffset = 6;
         endOffset = 11;
 
@@ -45,8 +44,8 @@ function DisableAutofollow()
     if (offsets.length === 0)
     {
         code =
-            "FF 90 ?? ?? 00 00 " +        // 0 call [eax+value]
-            "A3 " + lastLockOnPcGid;      // 6 mov m_lastLockOnPcGid, eax
+            "FF 90 ?? ?? 00 00 " +
+            "A3 " + lastLockOnPcGid;
         starOffset = 6;
         endOffset = 11;
 
@@ -54,10 +53,10 @@ function DisableAutofollow()
     }
 
     if (offsets.length === 0)
+    {
         return "Failed in Step 1";
+    }
 
-    //Step 2 - NOP out the assignment for the correct match (pattern might match more than one location)
-    var found = false;
     for (var i = 0; i < offsets.length; i++)
     {
         var offset = offsets[i];

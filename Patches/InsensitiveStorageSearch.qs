@@ -14,107 +14,99 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-//##################################################################
-//# Purpose: Use api StrStrIA instead of _mbsstr to enable         #
-//#          case-insensitive search in storage.                   #
-//##################################################################
+// ##################################################################
+// # Purpose: Use api StrStrIA instead of _mbsstr to enable         #
+// #          case-insensitive search in storage.                   #
+// ##################################################################
+
 function InsensitiveStorageSearch()
 {
-  var GetModuleHandleA = imports.ptrValidated("GetModuleHandleA", "KERNEL32.dll");
-  var GetProcAddress = imports.ptrValidated("GetProcAddress", "KERNEL32.dll");
+    var GetModuleHandleA = imports.ptrValidated("GetModuleHandleA", "KERNEL32.dll");
+    var GetProcAddress = imports.ptrValidated("GetProcAddress", "KERNEL32.dll");
 
-  //Find string compair for storage
-  var code =
-    " 51"                 //0 push ecx
-  + " 50"                 //1 push eax
-  + " FF 15 ?? ?? ?? ??"  //2 call _mbsstr
-  + " 83 C4 08"           //8 add esp,8
-  + " 85 C0"              //11 test eax,eax
-  + " 74 04"              //13 je short
-  + " 8B 36"              //15 mov esi,[esi]
-  + " EB"                 //17 jmp short
-  ;
-  var calloffset = 2;
+    var code =
+        " 51" +
+        " 50" +
+        " FF 15 ?? ?? ?? ??" +
+        " 83 C4 08" +
+        " 85 C0" +
+        " 74 04" +
+        " 8B 36" +
+        " EB";
+    var calloffset = 2;
 
-  var offset = pe.findCode(code);
-  if (offset === -1)
-  {//newer clients
-    code = code.replace(" 51 50", " 51 0F 43 45 ?? 50");//cmovnb eax,[ebp-x]
-    offset = pe.findCode(code);
-    calloffset += 4;
-  }
-  if (offset === -1)
-    return "Failed in Step 2 - String compair not found";
+    var offset = pe.findCode(code);
+    if (offset === -1)
+    {
+        code = code.replace(" 51 50", " 51 0F 43 45 ?? 50");
+        offset = pe.findCode(code);
+        calloffset += 4;
+    }
+    if (offset === -1)
+    {
+        return "Failed in Step 2 - String compair not found";
+    }
 
-  //Fetch original code, just in case
-  var varcode = pe.fetchHex(offset + calloffset, 9);
-  var retAddr = pe.rawToVa(offset + calloffset + 9);
+    var varcode = pe.fetchHex(offset + calloffset, 9);
+    var retAddr = pe.rawToVa(offset + calloffset + 9);
 
-  //Prepare our code
-  code =
-    " 83 3D" + GenVarHex(1) + " 00"          //cmp dword ptr [StrStrIA],00
-  + " 75 2F"                                 //jne short
-  + " 68" + GenVarHex(4)                     //push "Shlwapi.dll"
-  + " FF 15" + GetModuleHandleA.packToHex(4) //call GetModuleHandleA
-  + " 68" + GenVarHex(5)                     //push "StrStrIA"
-  + " 50"                                    //push eax
-  + " FF 15" + GetProcAddress.packToHex(4)   //call GetProcAddress
-  + " 85 C0"                                 //test eax,eax
-  + " 75 0F"                                 //jne short
-  + varcode                                  //call dword ptr [_mbsstr]
-                                             //add esp,08
-  + " 68" + retAddr.packToHex(4)             //push retAddr
-  + " C3"                                    //ret
-  + " A3" + GenVarHex(2)                     //mov [StrStrIA],eax
-  + " FF 15" + GenVarHex(3)                  //call dword ptr [StrStrIA]
-  + " 68" + retAddr.packToHex(4)             //push retAddr
-  + " C3"                                    //ret
-  ;
+    code =
+        " 83 3D" + GenVarHex(1) + " 00" +
+        " 75 2F" +
+        " 68" + GenVarHex(4) +
+        " FF 15" + GetModuleHandleA.packToHex(4) +
+        " 68" + GenVarHex(5) +
+        " 50" +
+        " FF 15" + GetProcAddress.packToHex(4) +
+        " 85 C0" +
+        " 75 0F" +
+        varcode +
 
-  //Prepare the strings we need
-  var strings = ["Shlwapi.dll", "StrStrIA"];
+        " 68" + retAddr.packToHex(4) +
+        " C3" +
+        " A3" + GenVarHex(2) +
+        " FF 15" + GenVarHex(3) +
+        " 68" + retAddr.packToHex(4) +
+        " C3";
 
-  //Calculate size of free space that the code & strings will need
-  var size = code.hexlength() + 4;
-  size = size + strings[0].length + 1;
-  size = size + strings[1].length + 1;
+    var strings = ["Shlwapi.dll", "StrStrIA"];
 
-  //Find free space to inject our code
-  var free = alloc.find(size + 8);
-  if (free === -1)
-    return "Failed in Step 3 - Not enough free space";
+    var size = code.hexlength() + 4;
+    size = size + strings[0].length + 1;
+    size = size + strings[1].length + 1;
 
-  var freeRva = pe.rawToVa(free);
+    var free = alloc.find(size + 8);
+    if (free === -1)
+    {
+        return "Failed in Step 3 - Not enough free space";
+    }
 
-  //Replace the variables used in code
-  var memPosition = freeRva + code.hexlength();
-  for (var i = 1; i < 4; i++)
-  {
-    code = ReplaceVarHex(code, i, memPosition);
-  }
+    var freeRva = pe.rawToVa(free);
 
-  memPosition = memPosition + 4;
-  code = ReplaceVarHex(code, 4, memPosition);
+    var memPosition = freeRva + code.hexlength();
+    for (var i = 1; i < 4; i++)
+    {
+        code = ReplaceVarHex(code, i, memPosition);
+    }
 
-  memPosition = memPosition + strings[0].length + 1;
-  code = ReplaceVarHex(code, 5, memPosition);
+    memPosition += 4;
+    code = ReplaceVarHex(code, 4, memPosition);
 
-  //Add mem and the strings into our code as well
-  code = code + " 00 00 00 00"; //mem to hold StrStrIA address
-  code = code + strings[0].toHex() + " 00";
-  code = code + strings[1].toHex() + " 00";
-  code = code + " 90 90 90 90"; //Separate strings from other patches
+    memPosition = memPosition + strings[0].length + 1;
+    code = ReplaceVarHex(code, 5, memPosition);
 
-  //Insert everything
-  pe.insertHexAt(free, code.hexlength(), code);
+    code += " 00 00 00 00";
+    code = code + strings[0].toHex() + " 00";
+    code = code + strings[1].toHex() + " 00";
+    code += " 90 90 90 90";
 
-  //Prepare the code for jump
-  code =
-    " E9" + (freeRva - pe.rawToVa(offset + calloffset + 5)).packToHex(4)
-  + " 90 90 90 90";
+    pe.insertHexAt(free, code.hexlength(), code);
 
-  //Insert jump to our code
-  pe.replaceHex(offset + calloffset, code);
+    code =
+    " E9" + (freeRva - pe.rawToVa(offset + calloffset + 5)).packToHex(4) +
+  " 90 90 90 90";
 
-  return true;
+    pe.replaceHex(offset + calloffset, code);
+
+    return true;
 }

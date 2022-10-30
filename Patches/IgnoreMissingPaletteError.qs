@@ -1,51 +1,47 @@
-//################################################################
-//# Purpose: Change the JNZ to JMP after CFile::Open result TEST #
-//#         in CPaletteRes::Load function                        #
-//################################################################
+// ################################################################
+// # Purpose: Change the JNZ to JMP after CFile::Open result TEST #
+// #         in CPaletteRes::Load function                        #
+// ################################################################
 
 function IgnoreMissingPaletteError()
 {
+    var offsetHex = pe.stringHex4("CPaletteRes :: Cannot find File : ");
 
-  //Step 1a - Find the Error message string's offset
-  var offsetHex = pe.stringHex4("CPaletteRes :: Cannot find File : ");
+    var code =
+        " 68" + offsetHex +
+        " 8D";
+    var offset2 = pe.findCode(code);
 
-  //Step 1b - Find its reference
-  var code =
-    " 68" + offsetHex           //PUSH OFFSET addr; ASCII "CPaletteRes :: Cannot find File : "
-  + " 8D"                       //LEA ECX, [LOCAL.x]
-  ;
-  var offset2 = pe.findCode(code);
+    if (offset2 === -1)
+    {
+        code = code.replace(" 8D", " C7");
+        offset2 = pe.findCode(code);
+    }
 
-  if (offset2 === -1)
-  {
-    code = code.replace(" 8D", " C7");//mov     [ebp+var_18], 0
-    offset2 = pe.findCode(code);
-  }
+    if (offset2 === -1)
+    {
+        code = "BF" + offsetHex;
+        offset2 = pe.findCode(code);
+    }
 
+    if (offset2 === -1)
+    {
+        return "Failed in Step 1 - Message Reference missing";
+    }
 
-  if (offset2 === -1)
-  {
-    code = "BF" + offsetHex; //MOV EDI, OFFSET addr; ASCII "CPaletteRes :: Cannot find File : "
-    offset2 = pe.findCode(code);
-  }
+    code =
+        " E8 ?? ?? ?? ??" +
+        " 84 C0" +
+        " 0F 85 ?? ?? 00 00";
 
-  if (offset2 === -1)
-    return "Failed in Step 1 - Message Reference missing";
+    var offset = pe.find(code, offset2 - 0x100, offset2);
 
-  //Step 1c - Now Find the call to CFile::Open and its result comparison
-  code =
-    " E8 ?? ?? ?? ??"    //CALL CFile::Open
-  + " 84 C0"             //TEST AL, AL
-  + " 0F 85 ?? ?? 00 00" //JNZ addr
-  ;
+    if (offset === -1)
+    {
+        return "Failed in Step 1 - Function call missing";
+    }
 
-  var offset = pe.find(code, offset2 - 0x100, offset2);
+    pe.replaceHex(offset + code.hexlength() - 6, "90 E9");
 
-  if (offset === -1)
-    return "Failed in Step 1 - Function call missing";
-
-  //Step 2 - Replace JNZ with NOP + JMP
-  pe.replaceHex(offset + code.hexlength() - 6, "90 E9");
-
-  return true;
+    return true;
 }

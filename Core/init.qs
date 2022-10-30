@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2022  Andrei Karas (4144)
+// Copyright (C) 2018-2022  Andrei Karas (4144)
 //
 // Hercules is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,32 +15,21 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-function random_getRange(min, max)
+function GlobalInit()
 {
-    return parseInt(Math.random() * (max - min) + min);
-}
-
-function random_getRangeHex(min, max)
-{
-    return parseInt(Math.random() * (max - min) + min).toString(16);
-}
-
-function random_getDWord()
-{
-    return random_getRange(0, 0x7fffffff);
-}
-
-function random_getUDWord()
-{
-    return random_getRange(0, 0xffffffff);
-}
-
-function registerRandom()
-{
-    random = Object();
-
-    random.getRange = random_getRange;
-    random.getRangeHex = random_getRangeHex;
-    random.getDWord = random_getDWord;
-    random.getUDWord = random_getUDWord;
+    registerRandom();
+    registerTables();
+    registerAsm();
+    registerMacroAsm();
+    registerExe();
+    registerControls();
+    registerInput();
+    registerPe();
+    registerStorage();
+    registerImports();
+    registerHooks();
+    registerLua();
+    registerTextFile();
+    registerBinFile();
+    registerResource();
 }

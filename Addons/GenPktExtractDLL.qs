@@ -1,194 +1,175 @@
-//##########################################################################################
-//# Purpose: Generate Packet Length Extractor DLL for loaded client using the template DLL #
-//#          (ws2_pe.dll). Along with the Packet Keys for new clients                      #
-//##########################################################################################
+// ##########################################################################################
+// # Purpose: Generate Packet Length Extractor DLL for loaded client using the template DLL #
+// #          (ws2_pe.dll). Along with the Packet Keys for new clients                      #
+// ##########################################################################################
 
 function GenPktExtractDLL()
-{ //Planning to shift this into PEEK instead of here
+{
+    var code =
+      " E8 ?? ?? ?? ??" +
+    " 50" +
+    " E8 ?? ?? ?? ??" +
+    " 8B C8" +
+    " E8 ?? ?? ?? ??" +
+    " 6A 01" +
+    " E8";
+    var offset = pe.findCode(code);
+    if (offset === -1)
+    {
+        throw "SendPacket not found";
+    }
 
-  //To Do - Really Old clients have some variations in some of the patterns
-
-  //Step 1a - Find the GetPacketSize function call
-  var code =
-      " E8 ?? ?? ?? ??" //CALL CRagConnection::GetPacketSize
-    + " 50"             //PUSH EAX
-    + " E8 ?? ?? ?? ??" //CALL CRagConnection::instanceR
-    + " 8B C8"          //MOV ECX, EAX
-    + " E8 ?? ?? ?? ??" //CALL CRagConnection::SendPacket
-    + " 6A 01"          //PUSH 1
-    + " E8"             //CALL CConnection::SetBlock
-    ;
-
-  var offset = pe.findCode(code);
-  if (offset === -1)
-    throw "SendPacket not found";
-
-  //Step 1b - Look for packet key pushes before it. if not present look for the combo function that both encrypts and retrieves the packet keys
-  code =
-      " 8B 0D ?? ?? ?? 00" //MOV ECX, DWORD PTR DS:[addr1]
-    + " 68 ?? ?? ?? ??"    //PUSH key3
-    + " 68 ?? ?? ?? ??"    //PUSH key2
-    + " 68 ?? ?? ?? ??"    //PUSH key1
-    + " E8"                //CALL encryptor
-    ;
-  var offset2 = pe.find(code, offset - 0x100, offset);
-  var KeyFetcher = 0;
-
-  if (offset2 === -1)
-  {
     code =
-        " 8B 0D ?? ?? ?? 00" //MOV ecx, DS:[ADDR1] dont care what
-      + " 6A 01"             //PUSH 1
-      + " E8"                //CALL combofunction - encryptor and key fetcher combined.
-      ;
-    offset2 = pe.find(code, offset - 0x100, offset);
-    KeyFetcher = -1;
-  }
+      " 8B 0D ?? ?? ?? 00" +
+    " 68 ?? ?? ?? ??" +
+    " 68 ?? ?? ?? ??" +
+    " 68 ?? ?? ?? ??" +
+    " E8";
+    var offset2 = pe.find(code, offset - 0x100, offset);
+    var KeyFetcher = 0;
 
-  if (offset2 !== -1 && KeyFetcher === -1)
-  {
-    offset2 += code.hexlength();
-    KeyFetcher = pe.rawToVa(offset2+4) + pe.fetchDWord(offset2);
-  }
+    if (offset2 === -1)
+    {
+        code =
+            " 8B 0D ?? ?? ?? 00" +
+            " 6A 01" +
+            " E8";
+        offset2 = pe.find(code, offset - 0x100, offset);
+        KeyFetcher = -1;
+    }
 
-  //Step 1c - Go Inside the function
-  offset += pe.fetchDWord(offset+1) + 5;
+    if (offset2 !== -1 && KeyFetcher === -1)
+    {
+        offset2 += code.hexlength();
+        KeyFetcher = pe.rawToVa(offset2 + 4) + pe.fetchDWord(offset2);
+    }
 
-  //Step 1d - Look for g_PacketLenMap reference and the pktLen function call following it
-  code =
-      " B9 ?? ?? ?? ??" //MOV ECX, g_PacketLenMap
-    + " E8 ?? ?? ?? ??" //CALL addr; gets the address pointing to the packet followed by len
-    + " 8B ?? 04"       //MOV reg32_A, [EAX+4]
-    ;
+    offset += pe.fetchDWord(offset + 1) + 5;
 
-  offset = pe.find(code, offset, offset + 0x60);
-  if (offset === -1)
-    throw "g_PacketLenMap not found";
+    code =
+        " B9 ?? ?? ?? ??" +
+        " E8 ?? ?? ?? ??" +
+        " 8B ?? 04";
 
-  //Step 1e - Extract the g_PacketLenMap assignment
-  var gPacketLenMap = pe.fetchHex(offset, 5);
+    offset = pe.find(code, offset, offset + 0x60);
+    if (offset === -1)
+    {
+        throw "g_PacketLenMap not found";
+    }
 
-  //Step 2a - Go inside the pktLen function following the assignment
-  offset += pe.fetchDWord(offset+6) + 10;
+    var gPacketLenMap = pe.fetchHex(offset, 5);
 
-  //Step 2b - Look for the pattern that checks the length with -1
-  code =
-      " 8B ?? ??" //MOV reg32_A, DWORD DS:[reg32_B+lenOff]; lenOff = pktOff+4
-    + " 83 ?? FF" //CMP reg32_A, -1
-    + " 75 ??"    //JNE addr
-    + " 8B"       //MOV reg32_A, DWORD DS:[reg32_B+lenOff+4]
-    ;
+    offset += pe.fetchDWord(offset + 6) + 10;
 
-  offset2 = pe.find(code, offset, offset + 0x60);
-  if (offset2 === -1)
-    throw "PktOff not found";
+    code =
+        " 8B ?? ??" +
+        " 83 ?? FF" +
+        " 75 ??" +
+        " 8B";
 
-  //Step 2c - Extract the displacement - 4 which will be PktOff
-  var PktOff = pe.fetchByte(offset2+2)-4;
+    offset2 = pe.find(code, offset, offset + 0x60);
+    if (offset2 === -1)
+    {
+        throw "PktOff not found";
+    }
 
-  //Step 3a - Find the InitPacketMap function using g_PacketLenMap extracted
-  code =
-      gPacketLenMap
-    + " E8 ?? ?? ?? ??" //CALL CRagConnection::InitPacketMap
-    + " 68 ?? ?? ?? 00" //PUSH addr1
-    + " E8 ?? ?? ?? ??" //CALL addr2
-    + " 59"             //POP ECX
-    + " C3"             //RETN
-    ;
+    var PktOff = pe.fetchByte(offset2 + 2) - 4;
 
-  offset = pe.findCode(code);
-  if (offset === -1)
-    throw "InitPacketMap not found";
+    code =
+      gPacketLenMap +
+    " E8 ?? ?? ?? ??" +
+    " 68 ?? ?? ?? 00" +
+    " E8 ?? ?? ?? ??" +
+    " 59" +
+    " C3";
 
-  //Step 3b - Save the address after the call which will serve as the ExitAddr
-  var ExitAddr = pe.rawToVa(offset+15);
+    offset = pe.findCode(code);
+    if (offset === -1)
+    {
+        throw "InitPacketMap not found";
+    }
 
-  //Step 3c - Go Inside InitPacketMap
-  offset += pe.fetchDWord(offset+6) + 10;
+    var ExitAddr = pe.rawToVa(offset + 15);
 
-  //Step 3d - Look for InitPacketLenWithClient call
-  code =
-      " 8B CE"          //MOV ECX, ESI
-    + " E8 ?? ?? ?? ??" //CALL InitPacketLenWithClient
-    + " C7"             //MOV DWORD PTR SS:[LOCAL.x], -1
-    ;
-  offset = pe.find(code, offset, offset + 0x140);
-  if (offset === -1)
-    throw "InitPacketLenWithClient not found";
+    offset += pe.fetchDWord(offset + 6) + 10;
 
-  //Step 3e - Go Inside InitPacketLenWithClient
-  offset += pe.fetchDWord(offset+3) + 7;
+    code =
+        " 8B CE" +
+        " E8 ?? ?? ?? ??" +
+        " C7";
 
-  //Step 4a - Now comes the tricky part. We need to get all the functions called till a repeat is found.
-  //          Last unrepeated call is the std::map function we need
-  var funcs = [];
-  while (1)
-  {
-    offset = pe.find("E8 ?? ?? FF FF", offset + 1);  // CALL std::map
-    if (offset === -1) break;
-    var func = offset + pe.fetchDWord(offset+1) + 5;
-    if (funcs.indexOf(func) !== -1) break;
-    funcs.push(func);
-  }
+    offset = pe.find(code, offset, offset + 0x140);
+    if (offset === -1)
+    {
+        throw "InitPacketLenWithClient not found";
+    }
 
-  if (offset === -1 || funcs.length === 0)
-    throw "std::map not found";
+    offset += pe.fetchDWord(offset + 3) + 7;
 
-  //Step 4b - Go Inside std::map
-  offset = funcs[funcs.length-1];
+    var funcs = [];
 
-  //Step 4c - Look for all calls to std::_tree (should be either 1 or 2 calls)
-  //          The called Locations serve as our Hook Addresses
-  code =
-      " E8 ?? ?? FF FF" //CALL std::_tree
-    + " 8B ??"          //MOV reg32_A, [EAX]
-    + " 8B"             //MOV EAX, DWORD PTR SS:[ARG.1]
-    ;
+    while (true)
+    {
+        offset = pe.find("E8 ?? ?? FF FF", offset + 1);
+        if (offset === -1) break;
+        var func = offset + pe.fetchDWord(offset + 1) + 5;
+        if (funcs.indexOf(func) !== -1) break;
+        funcs.push(func);
+    }
 
-  var HookAddrs = pe.findAll(code, offset, offset + 0x100);
-  if (HookAddrs.length < 1 || HookAddrs.length > 2)
-    throw "std::_tree call count is different";
+    if (offset === -1 || funcs.length === 0)
+    {
+        throw "std::map not found";
+    }
 
-  //Step 5a - Get the DLL file
-  var fp = new BinFile();
-  if (!fp.open(APP_PATH + "/Input/ws2_pe.dll"))
-    throw "Base File - ws2_pe.dll is missing from Input folder";
+    offset = funcs[funcs.length - 1];
 
-  //Step 5b - Read the contents
-  var dllHex = fp.readHex(0, 0x1800);
-  fp.close();
+    code =
+        " E8 ?? ?? FF FF" +
+        " 8B ??" +
+        " 8B";
 
-  //Step 5c - Replace the Filename template
-  dllHex = dllHex.replace(" 64".repeat(8), ("" + pe.getDate()).toHex());//FileName
+    var HookAddrs = pe.findAll(code, offset, offset + 0x100);
+    if (HookAddrs.length < 1 || HookAddrs.length > 2)
+    {
+        throw "std::_tree call count is different";
+    }
 
-  //Step 5d - Replace all the addresses and PktOff
-  code =
-      PktOff.packToHex(4)
-    + ExitAddr.packToHex(4)
-    + pe.rawToVa(HookAddrs[0]).packToHex(4)
-    ;
+    var fp = new BinFile();
+    if (!fp.open(APP_PATH + "/Input/ws2_pe.dll"))
+    {
+        throw "Base File - ws2_pe.dll is missing from Input folder";
+    }
 
-  if (HookAddrs.length === 1)
-    code += " 00 00 00 00";
-  else
-    code += pe.rawToVa(HookAddrs[1]).packToHex(4);
+    var dllHex = fp.readHex(0, 0x1800);
+    fp.close();
 
-  code += KeyFetcher.packToHex(4);
+    dllHex = dllHex.replace(" 64".repeat(8), ("" + pe.getDate()).toHex());
 
-  dllHex = dllHex.replace(/ 01 FF 00 FF 02 FF 00 FF 03 FF 00 FF 04 FF 00 FF 05 FF 00 FF/i, code);
+    code =
+      PktOff.packToHex(4) +
+    ExitAddr.packToHex(4) +
+    pe.rawToVa(HookAddrs[0]).packToHex(4);
+    if (HookAddrs.length === 1)
+    {
+        code += " 00 00 00 00";
+    }
+    else
+    {
+        code += pe.rawToVa(HookAddrs[1]).packToHex(4);
+    }
 
-  //Step 5e - Write out the filled up contents
-  if (!fp.open(APP_PATH + "/Output/ws2_pe_" + pe.getDate() + ".dll", "w"))
-    throw "Unable to create output file";
+    code += KeyFetcher.packToHex(4);
+    dllHex = dllHex.replace(/ 01 FF 00 FF 02 FF 00 FF 03 FF 00 FF 04 FF 00 FF 05 FF 00 FF/i, code);
 
-  fp.writeHex(0, dllHex);
-  fp.close();
+    if (!fp.open(APP_PATH + "/Output/ws2_pe_" + pe.getDate() + ".dll", "w"))
+    {
+        throw "Unable to create output file";
+    }
 
-  return "DLL has been generated - Dont forget to rename it.";
+    fp.writeHex(0, dllHex);
+    fp.close();
+
+    return "DLL has been generated - Dont forget to rename it.";
 }
 
-//==================================================================================//
-// How to use - client in hex editor and replace all occurances of ws2_32 to ws2_pe //
-//              copy the generated dll to Client area and rename it to ws2_pe.dll   //
-//              Run the client. It will Extract the packets and auto-close.         //
-//==================================================================================//

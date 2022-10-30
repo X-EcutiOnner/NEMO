@@ -19,14 +19,20 @@ function AddCLSNPC()
 {
     lua.replace("Lua Files\\DataInfo\\jobName_F", ["lua files\\cls\\jobname_f"]);
     if (pe.stringRaw("Lua Files\\DataInfo\\ShadowTable_F") !== -1 || table.get(table.packetVersion) > 20120800)
+    {
         lua.replace("Lua Files\\DataInfo\\ShadowTable_F", ["lua files\\cls\\shadowtable_f"]);
+    }
 
     lua.loadBefore("Lua Files\\DataInfo\\jobName", ["lua files\\cls\\jobname"]);
     lua.loadBefore("Lua Files\\DataInfo\\NPCIdentity", ["lua files\\cls\\npcidentity"]);
     if (pe.stringRaw("Lua Files\\DataInfo\\PetInfo") !== -1 || table.get(table.packetVersion) > 20101200)
+    {
         lua.loadBefore("Lua Files\\DataInfo\\PetInfo", ["lua files\\cls\\petinfo"]);
+    }
     if (pe.stringRaw("Lua Files\\DataInfo\\ShadowTable") !== -1 || table.get(table.packetVersion) > 20120700)
+    {
         lua.loadBefore("Lua Files\\DataInfo\\ShadowTable", ["lua files\\cls\\shadowtable"]);
+    }
 
     return true;
 }

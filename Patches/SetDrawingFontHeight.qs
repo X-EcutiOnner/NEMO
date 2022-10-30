@@ -17,14 +17,16 @@
 
 function SetDrawingFontHeight_imp(name, description, def, min, max)
 {
-    var value = exe.getUserInput(name, XTYPE_DWORD,
+    var value = exe.getUserInput(
+        name, XTYPE_DWORD,
         _("Number Input"),
         description,
-        def, min, max);
+        def, min, max
+    );
 
     var vars = {
-        "value": value
-    }
+        "value": value,
+    };
 
     var hook = hooks.initTableStartHook(table.DrawDC_SetFont);
     hook.addFilePre("", vars);
@@ -33,31 +35,38 @@ function SetDrawingFontHeight_imp(name, description, def, min, max)
     return true;
 }
 
-
 function SetDrawingFontHeight()
 {
-    return SetDrawingFontHeight_imp("$SetDrawingFontHeight",
+    return SetDrawingFontHeight_imp(
+        "$SetDrawingFontHeight",
         _("Enter fixed drawing font height"),
-        12, 0, 1000);
+        12, 0, 1000
+    );
 }
 
 function SetDrawingFontHeightMin()
 {
-    return SetDrawingFontHeight_imp("$SetDrawingFontHeightMin",
+    return SetDrawingFontHeight_imp(
+        "$SetDrawingFontHeightMin",
         _("Enter minimal allowed drawing font height"),
-        1, 0, 1000);
+        1, 0, 1000
+    );
 }
 
 function SetDrawingFontHeightMax()
 {
-    return SetDrawingFontHeight_imp("$SetDrawingFontHeightMax",
+    return SetDrawingFontHeight_imp(
+        "$SetDrawingFontHeightMax",
         _("Enter maximum allowed drawing font height"),
-        1, 0, 1000);
+        1, 0, 1000
+    );
 }
 
 function SetDrawingFontHeightAdjust()
 {
-    return SetDrawingFontHeight_imp("$SetDrawingFontHeightAdjust",
+    return SetDrawingFontHeight_imp(
+        "$SetDrawingFontHeightAdjust",
         _("Enter number for adjust drawing font height"),
-        1, -1000, 1000);
+        1, -1000, 1000
+    );
 }

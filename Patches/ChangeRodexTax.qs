@@ -18,11 +18,13 @@
 function ChangeRodexTax()
 {
     var taxOffset = table.getRawValidated(table.rodexTax);
-    var value = exe.getUserInput("$RodexTax", XTYPE_DWORD,
+    var value = exe.getUserInput(
+        "$RodexTax", XTYPE_DWORD,
         _("Number Input"),
         _("Enter rodex tax per item"),
         pe.fetchDWord(taxOffset),
-        0, 0x7fffffff);
+        0, 0x7fffffff
+    );
     pe.replaceDWord(taxOffset, value);
     return true;
 }

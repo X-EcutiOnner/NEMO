@@ -18,131 +18,98 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
-//###############################################################################
-//# Purpose: Nops all offset after comparison to disable adventure agent button #
-//#          on the party window inside UIMessengerGroupWnd_virt68 function.    #
-//###############################################################################
+// ###############################################################################
+// # Purpose: Nops all offset after comparison to disable adventure agent button #
+// #          on the party window inside UIMessengerGroupWnd_virt68 function.    #
+// ###############################################################################
 
 function DisableAdventureAgent()
 {
-    consoleLog("Step 1 - Search string '유저인터페이스\\basic_interface\\mesbtn_partymaster_01.bmp' for adventure agent button");
     var btn_name = "\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA\\basic_interface\\mesbtn_partymaster_01.bmp";
     var offses = pe.stringVa(btn_name);
 
     if (offses === -1)
+    {
         return "Failed in Step 1 - String not found";
+    }
 
     var strHex = offses.packToHex(4);
 
-    consoleLog("Step 2 - Prep code for finding the adventure agent button in party window");
     var code =
-        "C6 81 ?? ?? ?? 00 00 " +     // 0 mov [ecx+UIBitmapButton.button_flag], 0
-        "FF 90 ?? ?? ?? 00 " +        // 7 call [eax+UIBitmapButton_vtable.UIWindow_SendMsg]
-        "8B 8F ?? ?? ?? 00 " +        // 13 mov ecx, [edi+UIMessengerGroupWnd.m_mesbtn]
-        "6A 00 " +                    // 19 push 0
-        "68 " + strHex +              // 21 push    offset aIBasicInterfac_1 ; ASCII "유저인터페이스\\basic_interface\\mesbtn_partymaster_01.bmp"
-        "E8 ?? ?? ?? ?? " +           // 26 call UIBitmapButton_SetBitmapName
-        "8B 8F ?? ?? ?? 00 " +        // 31 mov ecx, [edi+UIMessengerGroupWnd.m_mesbtn]
-        "6A 01 " +                    // 37 push 1
-        "68 ?? ?? ?? ?? " +           // 39 push offset aPFBasic_interfaceMesbtn_partyma_0
-        "E8 ?? ?? ?? ?? " +           // 44 call UIBitmapButton_SetBitmapName
-        "8B 8F ?? ?? ?? 00 " +        // 49 mov ecx, [edi+UIMessengerGroupWnd.m_mesbtn]
-        "6A 02 " +                    // 55 push 2
-        "68 ?? ?? ?? ?? " +           // 57 push offset aPFBasic_interfaceMesbtn_partyma_1
-        "E8 ?? ?? ?? ?? " +           // 62 call UIBitmapButton_SetBitmapName
-        "68 BA 0D 00 00 " +           // 67 push 0DBAh
-        "E8 ?? ?? ?? ?? " +           // 72 call MsgStr
-        "8B 8F ?? ?? ?? 00 " +        // 77 mov ecx, [edi+UIMessengerGroupWnd.m_mesbtn]
-        "83 C4 04 " +                 // 83 add esp, 4
-        "50 " +                       // 86 push eax
-        "E8 ?? ?? ?? ?? " +           // 87 call UIBitmapButton_SetText
-        "33 C0 " +                    // 92 xor eax, eax
-        "E9 ?? ?? ?? 00 ";            // 94 jmp loc_5EADD9
+        "C6 81 ?? ?? ?? 00 00 " +
+        "FF 90 ?? ?? ?? 00 " +
+        "8B 8F ?? ?? ?? 00 " +
+        "6A 00 " +
+        "68 " + strHex +
+        "E8 ?? ?? ?? ?? " +
+        "8B 8F ?? ?? ?? 00 " +
+        "6A 01 " +
+        "68 ?? ?? ?? ?? " +
+        "E8 ?? ?? ?? ?? " +
+        "8B 8F ?? ?? ?? 00 " +
+        "6A 02 " +
+        "68 ?? ?? ?? ?? " +
+        "E8 ?? ?? ?? ?? " +
+        "68 BA 0D 00 00 " +
+        "E8 ?? ?? ?? ?? " +
+        "8B 8F ?? ?? ?? 00 " +
+        "83 C4 04 " +
+        "50 " +
+        "E8 ?? ?? ?? ?? " +
+        "33 C0 " +
+        "E9 ?? ?? ?? 00 ";
     var nopStart = 0;
     var nopEnd = 92;
-    var buttonFlagOffset = [2, 1];
-    var sendMsgOffset = [9, 4];
-    var invalidateOffset = 0;
-    var mesBtnOffsets = [[15, 4], [33, 4], [51, 4], [79, 4]];
-    var setBitmapNameOffsets = [27, 45, 63];
-    var setBitmapButtonTextOffset = 88;
 
     var offset = pe.findCode(code);
 
     if (offset === -1)
     {
         code =
-            "C6 81 ?? ?? ?? 00 00 " +     // 0 mov [ecx+UIBitmapButton.button_flag], 0
-            "FF 90 ?? ?? ?? 00 " +        // 7 call [eax+UIBitmapButton_vtable.UIBitmapButton_Invalidate]
-            "8B 8F ?? ?? ?? 00 " +        // 13 mov ecx, [edi+UIMessengerGroupWnd.m_mesbtn]
-            "6A 00 " +                    // 19 push 0
-            "6A 00 " +                    // 21 push 0
-            "68 " + strHex +              // 23 push offset aIBasicInterface
-            "E8 ?? ?? ?? ?? " +           // 28 call UIBitmapButton_SetBitmapName
-            "8B 8F ?? ?? ?? 00 " +        // 33 mov ecx, [edi+UIMessengerGroupWnd.m_mesbtn]
-            "6A 00 " +                    // 39 push 0
-            "6A 01 " +                    // 41 push 1
-            "68 ?? ?? ?? ?? " +           // 43 push offset aIBasicInterface_0
-            "E8 ?? ?? ?? ?? " +           // 48 call UIBitmapButton_SetBitmapName
-            "8B 8F ?? ?? ?? 00 " +        // 53 mov ecx, [edi+UIMessengerGroupWnd.m_mesbtn]
-            "6A 00 " +                    // 59 push 0
-            "6A 02 " +                    // 61 push 2
-            "68 ?? ?? ?? ?? " +           // 63 push offset aIBasicInterface_1
-            "E8 ?? ?? ?? ?? " +           // 68 call UIBitmapButton_SetBitmapName
-            "68 BA 0D 00 00 " +           // 73 push 0DBAh
-            "E8 ?? ?? ?? ?? " +           // 78 call MsgStr
-            "8B 8F ?? ?? ?? 00 " +        // 83 mov ecx, [edi+UIMessengerGroupWnd.m_mesbtn]
-            "83 C4 04 " +                 // 89 add esp, 4
-            "50 " +                       // 92 push eax
-            "E8 ?? ?? ?? ?? " +           // 93 call UIBitmapButton_SetText
-            "33 C0 " +                    // 98 xor eax, eax
-            "E9 ?? ?? ?? 00 "             // 100 jmp loc_616249
+            "C6 81 ?? ?? ?? 00 00 " +
+            "FF 90 ?? ?? ?? 00 " +
+            "8B 8F ?? ?? ?? 00 " +
+            "6A 00 " +
+            "6A 00 " +
+            "68 " + strHex +
+            "E8 ?? ?? ?? ?? " +
+            "8B 8F ?? ?? ?? 00 " +
+            "6A 00 " +
+            "6A 01 " +
+            "68 ?? ?? ?? ?? " +
+            "E8 ?? ?? ?? ?? " +
+            "8B 8F ?? ?? ?? 00 " +
+            "6A 00 " +
+            "6A 02 " +
+            "68 ?? ?? ?? ?? " +
+            "E8 ?? ?? ?? ?? " +
+            "68 BA 0D 00 00 " +
+            "E8 ?? ?? ?? ?? " +
+            "8B 8F ?? ?? ?? 00 " +
+            "83 C4 04 " +
+            "50 " +
+            "E8 ?? ?? ?? ?? " +
+            "33 C0 " +
+            "E9 ?? ?? ?? 00 ";
         nopStart = 0;
         nopEnd = 98;
-        buttonFlagOffset = [2, 1];
-        sendMsgOffset = 0;
-        invalidateOffset = [9, 4];
-        mesBtnOffsets = [[15, 4], [35, 4], [55, 4], [85, 4]];
-        setBitmapNameOffsets = [29, 49, 69];
-        setBitmapButtonTextOffset = 94;
 
-        var offset = pe.findCode(code);
+        offset = pe.findCode(code);
     }
 
     if (offset === -1)
+    {
         return "Failed in Step 2 - Pattern not found";
+    }
 
-    logField("UIBitmapButton::button_flag", offset, buttonFlagOffset);
-    if (sendMsgOffset != 0)
-    {
-        logField("UIBitmapButton_vtable::UIWindow_SendMsg", offset, sendMsgOffset);
-    }
-    if (invalidateOffset != 0)
-    {
-        logField("UIBitmapButton_vtable::UIWindow_Invalidate", offset, invalidateOffset);
-    }
-    for (var i = 0; i < mesBtnOffsets.length; i ++)
-    {
-        logField("UIMessengerGroupWnd::m_mesbtn", offset, mesBtnOffsets[i]);
-    }
-    for (var i = 0; i < setBitmapNameOffsets.length; i ++)
-    {
-        logRawFunc("UIBitmapButton_SetBitmapName", offset, setBitmapNameOffsets[i]);
-    }
-    logRawFunc("UIBitmapButton_SetText", offset, setBitmapButtonTextOffset);
-
-    consoleLog("Step 3 - NOPs out the assignment for the correct match");
     pe.setNopsRange(offset + nopStart, offset + nopEnd);
 
     return true;
 }
 
-//=======================================================//
-// Disable for Unsupported Clients - Check for Reference //
-//=======================================================//
 function DisableAdventureAgent_()
 {
     var btn_name = "\xC0\xAF\xC0\xFA\xC0\xCE\xC5\xCD\xC6\xE4\xC0\xCC\xBD\xBA\\basic_interface\\mesbtn_partymaster_01.bmp";
 
-    return (pe.stringRaw(btn_name) !== -1);
+    return pe.stringRaw(btn_name) !== -1;
 }

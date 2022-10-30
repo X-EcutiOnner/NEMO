@@ -17,14 +17,16 @@
 
 function SetDrawingFontType()
 {
-    var value = exe.getUserInput("$SetDrawingFontType", XTYPE_DWORD,
+    var value = exe.getUserInput(
+        "$SetDrawingFontType", XTYPE_DWORD,
         _("Number Input"),
         _("Enter new drawing font type"),
-        0, 0, 20);
+        0, 0, 20
+    );
 
     var vars = {
-        "value": value
-    }
+        "value": value,
+    };
 
     var hook = hooks.initTableStartHook(table.DrawDC_SetFont);
     hook.addFilePre("", vars);

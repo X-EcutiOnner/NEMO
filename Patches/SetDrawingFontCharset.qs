@@ -17,15 +17,17 @@
 
 function SetDrawingFontCharset()
 {
-    var value = exe.getUserInput("$SetDrawingFontCharset", XTYPE_DWORD,
+    var value = exe.getUserInput(
+        "$SetDrawingFontCharset", XTYPE_DWORD,
         _("Number Input"),
         _("Enter new drawing font charset (0-en, 1-default, 129-kr, 204-ru, etc)"),
-        0, 0, 255);
+        0, 0, 255
+    );
 
     var vars = {
         "value": value,
         "m_charset": 0x14,
-    }
+    };
 
     var hook = hooks.initTableStartHook(table.DrawDC_SetFont);
     hook.addFilePost("", vars);

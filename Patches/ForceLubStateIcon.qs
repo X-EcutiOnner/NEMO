@@ -17,28 +17,30 @@
 
 function ForceLubStateIcon()
 {
-    consoleLog("step 1");
     var offset = pe.stringVa("GetEFSTImgFileName");
     if (offset === -1)
+    {
         return "Failed in Step 1 - Reference String Missing";
+    }
 
-    consoleLog("step 2");
     offset = pe.findCode("68" + offset.packToHex(4));
     if (offset === -1)
+    {
         return "Failed in Step 2";
+    }
 
-    consoleLog("step 3");
     var code =
-        "83 FB 04 " +                 // 0 cmp ebx, 4
-        "0F 87 ?? ?? ?? ?? " +        // 3 ja loc_AB888E
-        "FF 24 9D ";                  // 9 jmp off_AB88A4[ebx*4]
+        "83 FB 04 " +
+        "0F 87 ?? ?? ?? ?? " +
+        "FF 24 9D ";
     var patchOffset = 3;
 
     offset = pe.find(code, offset, offset + 0x80);
     if (offset === -1)
+    {
         return "Failed in Step 3";
+    }
 
-    consoleLog("step 4");
     pe.replaceHex(offset + patchOffset, " 90 E9");
 
     return true;

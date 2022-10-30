@@ -22,7 +22,7 @@ function hooks_searchCodes_add(codes, importInfo)
     var arr = [];
     for (var c = 0; c < codes.length; c ++)
     {
-        var offsets = pe.findCodes(codes[c] + importOffsetHex);  // XXX dword ptr [importOffset]
+        var offsets = pe.findCodes(codes[c] + importOffsetHex);
         for (var i = 0; i < offsets.length; i ++)
         {
             arr.push([offsets[i], importOffset]);
@@ -35,7 +35,7 @@ function hooks_searchImportCallUsage(importInfo)
 {
     return hooks_searchCodes_add(
         [
-            "FF 15"  // call dword ptr [importOffset]
+            "FF 15",
         ],
         importInfo
     );
@@ -45,7 +45,7 @@ function hooks_searchImportJmpUsage(importInfo)
 {
     return hooks_searchCodes_add(
         [
-            "FF 25"  // jmp dword ptr [importOffset]
+            "FF 25",
         ],
         importInfo
     );
@@ -55,8 +55,8 @@ function hooks_searchImportMovUsage(importInfo)
 {
     return hooks_searchCodes_add(
         [
-            "8B 3D",  // mov edi, dword ptr [importOffset]
-            "8B 35"   // mov esi, dword ptr [importOffset]
+            "8B 3D",
+            "8B 35",
         ],
         importInfo
     );
@@ -66,10 +66,10 @@ function hooks_searchImportUsage(importInfo)
 {
     return hooks_searchCodes_add(
         [
-            "FF 15",  // call dword ptr [importOffset]
-            "FF 25",  // jmp dword ptr [importOffset]
-            "8B 3D",  // mov edi, dword ptr [importOffset]
-            "8B 35"   // mov esi, dword ptr [importOffset]
+            "FF 15",
+            "FF 25",
+            "8B 3D",
+            "8B 35",
         ],
         importInfo
     );

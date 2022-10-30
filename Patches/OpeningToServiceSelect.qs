@@ -14,34 +14,32 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-//#####################################################################################
-//# Purpose: Find the indirect table for switch statement inside UILoginWnd::SendMsg, #
-//#          Make Opening button work as return Service Selection                     #
-//#####################################################################################
+// #####################################################################################
+// # Purpose: Find the indirect table for switch statement inside UILoginWnd::SendMsg, #
+// #          Make Opening button work as return Service Selection                     #
+// #####################################################################################
 
 function OpeningToServiceSelect()
 {
-
-    //Step 1 - Find the MsgString ID references of "Please enter at least %d characters. If you don't have account,"
-    var code = " 68 D5 0B 00 00 E8"; //PUSH BD5 CALL
+    var code = " 68 D5 0B 00 00 E8";
 
     var offset = pe.findCode(code);
     if (offset === -1)
+    {
         return "Failed in Step 1 - MsgString ID Missing";
+    }
 
-    //Step 2 - Find the indirect table for switch statement inside UILoginWnd::SendMsg
     code =
-      " 0F B6 80 ?? ?? ?? ??"
-    + " FF 24 85 ?? ?? ?? ??"
-    ;
-
+      " 0F B6 80 ?? ?? ?? ??" +
+    " FF 24 85 ?? ?? ?? ??";
     offset = pe.find(code, offset - 0x300, offset);
     if (offset === -1)
+    {
         return "Failed in Step 2 - Switch Table Missing";
+    }
 
     var switchTable = pe.fetchDWord(offset + 3);
 
-    //Step 2 - Change Opening button to Service Select
     var opOffset = switchTable + 100;
 
     pe.replaceByte(pe.vaToRaw(opOffset), 0);
@@ -49,10 +47,7 @@ function OpeningToServiceSelect()
     return true;
 }
 
-//======================================================================//
-// Disable for Old Clients - Only Clients with new login window need it //
-//======================================================================//
 function OpeningToServiceSelect_()
 {
-  return (pe.findCode(" 68 D5 0B 00 00 E8") !== -1);
+    return pe.findCode(" 68 D5 0B 00 00 E8") !== -1;
 }

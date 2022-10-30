@@ -1,26 +1,20 @@
 function Enable44khzAudio()
 {
-    //Step 1 - Find the code assign sampling frequency
     var code =
-        "C7 86 ?? ?? 00 00 40 1F 00 00 " + // 0 mov [esi+CSoundMgr.digitalrate], 1F40h
-        "EB 16 " +                         // 10 jmp short loc_4656C2
-        "C7 86 ?? ?? 00 00 11 2B 00 00 " + // 12 mov [esi+CSoundMgr.digitalrate], 2B11h
-        "EB 0A " +                         // 22 jmp short loc_4656C2
-        "C7 86 ?? ?? 00 00 22 56 00 00 ";  // 24 mov [esi+CSoundMgr.digitalrate], 5622h
+        "C7 86 ?? ?? 00 00 40 1F 00 00 " +
+        "EB 16 " +
+        "C7 86 ?? ?? 00 00 11 2B 00 00 " +
+        "EB 0A " +
+        "C7 86 ?? ?? 00 00 22 56 00 00 ";
 
     var patchOffset = 30;
-    var digitalRateOffsets = [[2, 4], [14, 4], [26, 4]];
     var offset = pe.findCode(code);
     if (offset === -1)
-        return "Failed in Step 1";
-
-    for (var i = 0; i < digitalRateOffsets.length; i++)
     {
-        logField("CSoundMgr::digitalrate", offset, digitalRateOffsets[i]);
+        return "Failed in Step 1";
     }
 
-    //Step 2 - Replace 22050 with 44100.
-    pe.replaceHex(offset + patchOffset, " 44 AC 00 00"); //44100
+    pe.replaceHex(offset + patchOffset, " 44 AC 00 00");
 
     return true;
 }

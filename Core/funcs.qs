@@ -9,7 +9,9 @@ function enablePatchAndCheck(name)
     {
         enablePatch(name);
         if (isPatchActive(name) !== true)
+        {
             throw "Patch '" + name + "' must be enabled";
+        }
     }
 }
 
@@ -20,7 +22,9 @@ function isOneOfPatchesActive()
     for (var idx = 0; idx < args.length; idx ++)
     {
         if (isPatchActive(args[idx]) === true)
+        {
             return true;
+        }
     }
     return false;
 }
@@ -28,7 +32,9 @@ function isOneOfPatchesActive()
 function enableOneOfPatchAndCheck()
 {
     if (isOneOfPatchesActive(arguments) === true)
+    {
         return;
+    }
     var args = Array.prototype.slice.call(arguments);
     var str = "";
     for (var idx = 0; idx < args.length; idx ++)
@@ -36,7 +42,9 @@ function enableOneOfPatchAndCheck()
         var name = args[idx];
         enablePatch(name);
         if (isPatchActive(name) === true)
+        {
             return;
+        }
         str = str + " " + name;
     }
     throw "One of patches '" + str + "' must be enabled";
@@ -44,15 +52,19 @@ function enableOneOfPatchAndCheck()
 
 function partialCheckRetNeg(func, num)
 {
-    if (typeof(num) === "undefined")
+    if (typeof num === "undefined")
+    {
         num = 0;
-    var proxyFunc = function check1()
+    }
+    var proxyFunc = function proxyFunc()
     {
         var args = Array.prototype.slice.call(arguments);
         var res = func.apply(func, args);
         if (res < 0)
+        {
             throw "Error: " + args[num] + " not found";
+        }
         return res;
-    }
+    };
     return proxyFunc;
 }

@@ -1,36 +1,26 @@
-//===============================================================================================================//
+// ===============================================================================================================//
 // Register all your Patches and Patch groups in this file. Always register group before using its id in a patch //
-//===============================================================================================================//
+// ===============================================================================================================//
 
 GlobalInit();
 
-//###################################################################################################
-//#                                                                                                 #
-//# FORMAT for registering group : registerGroup(group id, group Name, mutualexclude [true/false]); #
-//#                                                                                                 #
-//# If you wish that only 1 patch can be active at a time (default) put mutualexclude as true       #
-//#                                                                                                 #
-//###################################################################################################
+registerGroup(1, "ChatLimit", true);
 
-//0 is already registered by default as Generic
+registerGroup(2, "FixCameraAngles", true);
 
-registerGroup( 1, "ChatLimit", true);
+registerGroup(3, "IncreaseZoomOut", true);
 
-registerGroup( 2, "FixCameraAngles", true);
+registerGroup(4, "UseIcon", true);
 
-registerGroup( 3, "IncreaseZoomOut", true);
+registerGroup(5, "MultiGRFs", true);
 
-registerGroup( 4, "UseIcon", true);
+registerGroup(6, "SharedBodyPalettes", true);
 
-registerGroup( 5, "MultiGRFs", true);
+registerGroup(7, "SharedHeadPalettes", true);
 
-registerGroup( 6, "SharedBodyPalettes", true)
+registerGroup(8, "OnlySelectedLoginBackground", true);
 
-registerGroup( 7, "SharedHeadPalettes", true);
-
-registerGroup( 8, "OnlySelectedLoginBackground", true);
-
-registerGroup( 9, "PacketEncryption", true);
+registerGroup(9, "PacketEncryption", true);
 
 registerGroup(10, "LoginMode", true);
 
@@ -60,219 +50,197 @@ registerGroup(23, "LuaCustomization", false);
 
 globalVarTest = 123;
 
-//#########################################################################################################################################################
-//#                                                                                                                                                       #
-//# FORMAT for registering patch : registerPatch(patch id, functionName, patch Name, category, group id, author, description, recommended [true/false] ); #
-//#                                                                                                                                                       #
-//#  functionName is the function called when a patch is enabled. All your logic goes inside it.                                                          #
-//#  You can define your function in any .qs file in the patches folder.                                                                                  #
-//#  Remember the functionName needs to be in quotes (single or double) here but no quotes should be used while defining it.                              #
-//#                                                                                                                                                       #
-//#########################################################################################################################################################
+registerPatch(1, "UseTildeForMatk", "Use Tilde for Matk", "UI", 0, "Neo", "Make the client use tilde (~) symbol for Matk in Stats Window instead of Plus (+)", false);
 
-//==========================================================================================================================//
-// Note:                                                                                                                    //
-// Currently some of the ids are not used in between (probably some patches were removed/disabled due to errors/deprecated) //
-// It would be safer to not use those IDs for your own Patches to avoid any future conflict.                                //
-//==========================================================================================================================//
+registerPatch(2, "AllowChatFlood", "Chat Flood Allow", "UI", 1, "Shinryo", "Disable the clientside repeat limit of 3, and sets it to the specified value", false);
 
-//0 Unused - to be filled
-registerPatch(  1, "UseTildeForMatk", "Use Tilde for Matk", "UI", 0, "Neo", "Make the client use tilde (~) symbol for Matk in Stats Window instead of Plus (+)", false);
+registerPatch(3, "RemoveChatLimit", "Chat Flood Remove Limit", "UI", 1, "Neo", "Remove the clientside limitation which checks for maximum repeated lines", false);
 
-registerPatch(  2, "AllowChatFlood", "Chat Flood Allow", "UI", 1, "Shinryo", "Disable the clientside repeat limit of 3, and sets it to the specified value", false);
+registerPatch(4, "CustomAuraLimits", "Use Custom Aura Limits", "UI", 0, "Neo", "Allows the client to display standard auras within user specified limits for Classes and Levels", false);
 
-registerPatch(  3, "RemoveChatLimit", "Chat Flood Remove Limit", "UI", 1, "Neo", "Remove the clientside limitation which checks for maximum repeated lines", false);
+registerPatch(5, "EnableProxySupport", "Enable Proxy Support", "Fix", 0, "Ai4rei/AN", "Ignores server-provided IP addresses when changing servers", false);
 
-registerPatch(  4, "CustomAuraLimits", "Use Custom Aura Limits", "UI", 0, "Neo", "Allows the client to display standard auras within user specified limits for Classes and Levels", false);
+registerPatch(6, "ForceSendClientHash", "Force Send Client Hash Packet", "Packet", 0, "GreenBox, Neo", "Forces the client to send a packet with it's MD5 hash for all LangTypes. Only use if you have enabled it in your server", false);
 
-registerPatch(  5, "EnableProxySupport", "Enable Proxy Support", "Fix", 0, "Ai4rei/AN", "Ignores server-provided IP addresses when changing servers", false);
+registerPatch(8, "CustomWindowTitle", "Custom Window Title", "UI", 0, "Shinryo, 4144", "Changes window title. Normally, the window title is 'Ragnarok'", false);
 
-registerPatch(  6, "ForceSendClientHash", "Force Send Client Hash Packet", "Packet", 0, "GreenBox, Neo", "Forces the client to send a packet with it's MD5 hash for all LangTypes. Only use if you have enabled it in your server", false);
+registerPatch(9, "Disable1rag1Params", "Disable 1rag1 type parameters", "Fix", 0, "Shinryo", "Enable this to launch the client directly without patching or any 1rag1, 1sak1 etc parameters", true);
 
-//registerPatch(  7, "ChangeGravityErrorHandler", "Change Gravity Error Handler", "Fix", 0, " ", "It changes the Gravity Error Handler Mesage for a Custom One Pre-Defined by Diff Team", false);
+registerPatch(10, "Disable4LetterCharnameLimit", "Disable 4 Letter Character Name Limit", "Fix", 0, "Shinryo", "Will allow people to use character names shorter than 4 characters", false);
 
-registerPatch(  8, "CustomWindowTitle", "Custom Window Title", "UI", 0, "Shinryo, 4144", "Changes window title. Normally, the window title is 'Ragnarok'", false);
+registerPatch(11, "Disable4LetterUsernameLimit", "Disable 4 Letter User Name Limit", "Fix", 0, "Shinryo", "Will allow people to use account names shorter than 4 characters", false);
 
-registerPatch(  9, "Disable1rag1Params", "Disable 1rag1 type parameters", "Fix", 0, "Shinryo", "Enable this to launch the client directly without patching or any 1rag1, 1sak1 etc parameters", true);
+registerPatch(12, "Disable4LetterPasswordLimit", "Disable 4 Letter Password Limit", "Fix", 0, "Shinryo", "Will allow people to use passwords shorter than 4 characters", false);
 
-registerPatch( 10, "Disable4LetterCharnameLimit", "Disable 4 Letter Character Name Limit", "Fix", 0, "Shinryo", "Will allow people to use character names shorter than 4 characters", false);
+registerPatch(13, "DisableFilenameCheck", "Disable Ragexe Filename Check", "Fix", 0, "Shinryo", "Disables the check that forces the client to quit if not called an official name like ragexe.exe for all LangTypes", true);
 
-registerPatch( 11, "Disable4LetterUsernameLimit", "Disable 4 Letter User Name Limit", "Fix", 0, "Shinryo", "Will allow people to use account names shorter than 4 characters", false);
+registerPatch(14, "DisableHallucinationWavyScreen", "Disable Hallucination Wavy Screen", "Fix", 0, "Shinryo, 4144", "Disables the Hallucination effect (screen becomes wavy and lags the client), used by baphomet, horongs, and such", true);
 
-registerPatch( 12, "Disable4LetterPasswordLimit", "Disable 4 Letter Password Limit", "Fix", 0, "Shinryo", "Will allow people to use passwords shorter than 4 characters", false);
+registerPatch(15, "DisableHShield", "Disable HShield", "Fix", 0, "Ai4rei/AN, Neo", "Disables HackShield", true);
 
-registerPatch( 13, "DisableFilenameCheck", "Disable Ragexe Filename Check", "Fix", 0, "Shinryo", "Disables the check that forces the client to quit if not called an official name like ragexe.exe for all LangTypes", true);
+registerPatch(16, "DisableSwearFilter", "Disable Swear Filter", "UI", 0, "Shinryo", "The content of manner.txt has no impact on ability to send text", false);
 
-registerPatch( 14, "DisableHallucinationWavyScreen", "Disable Hallucination Wavy Screen", "Fix", 0, "Shinryo, 4144", "Disables the Hallucination effect (screen becomes wavy and lags the client), used by baphomet, horongs, and such", true);
+registerPatch(17, "EnableOfficialCustomFonts", "Enable Official Custom Fonts", "UI", 0, "Shinryo, 4144", "This option forces Official Custom Fonts (eot files int data folder) on all LangType", false);
 
-registerPatch( 15, "DisableHShield", "Disable HShield", "Fix", 0, "Ai4rei/AN, Neo", "Disables HackShield", true);
+registerPatch(18, "SkipServiceSelect", "Skip Service Selection Screen", "UI", 0, "Shinryo", "Jumps directly to the login interface without asking to select a service", false);
 
-registerPatch( 16, "DisableSwearFilter", "Disable Swear Filter", "UI", 0, "Shinryo", "The content of manner.txt has no impact on ability to send text", false);
+registerPatch(19, "EnableTitleBarMenu", "Enable Title Bar Menu (legacy)", "UI", 0, "Shinryo", "Replaced by patch 'Add close button to game window'", false);
 
-registerPatch( 17, "EnableOfficialCustomFonts", "Enable Official Custom Fonts", "UI", 0, "Shinryo, 4144", "This option forces Official Custom Fonts (eot files int data folder) on all LangType", false);
+registerPatch(20, "ExtendChatBox", "Extend Chat Box", "UI", 0, "Shinryo", "Extend the Main/Battle chat box max input chars from 70 to 234", false);
 
-registerPatch( 18, "SkipServiceSelect", "Skip Service Selection Screen", "UI", 0, "Shinryo", "Jumps directly to the login interface without asking to select a service", false);
+registerPatch(21, "ExtendChatRoomBox", "Extend Chat Room Box", "UI", 0, "Shinryo", "Extend the chat room box max input chars from 70 to 234", false);
 
-registerPatch( 19, "EnableTitleBarMenu", "Enable Title Bar Menu (legacy)", "UI", 0, "Shinryo", "Replaced by patch 'Add close button to game window'", false);
+registerPatch(22, "ExtendPMBox", "Extend PM Box", "UI", 0, "Shinryo", "Extend the PM chat box max input chars from 70 to 221", false);
 
-registerPatch( 20, "ExtendChatBox", "Extend Chat Box", "UI", 0, "Shinryo", "Extend the Main/Battle chat box max input chars from 70 to 234", false);
+registerPatch(23, "EnableWhoCommand", "Enable /who command", "UI", 0, "Neo", "Enable /w and /who command for all LangTypes", true);
 
-registerPatch( 21, "ExtendChatRoomBox", "Extend Chat Room Box", "UI", 0, "Shinryo", "Extend the chat room box max input chars from 70 to 234", false);
+registerPatch(24, "FixCameraAnglesRecomm", "Fix Camera Angles", "UI", 2, "Shinryo", "Unlocks the possible camera angles to give more freedom of placement. Gives a medium range of around 60 degrees", true);
 
-registerPatch( 22, "ExtendPMBox", "Extend PM Box", "UI", 0, "Shinryo", "Extend the PM chat box max input chars from 70 to 221", false);
+registerPatch(25, "FixCameraAnglesLess", "Fix Camera Angles (LESS)", "UI", 2, "Shinryo", "Unlocks the possible camera angles to give more freedom of placement. This enables an 30deg angle", false);
 
-registerPatch( 23, "EnableWhoCommand", "Enable /who command", "UI", 0, "Neo", "Enable /w and /who command for all LangTypes", true);
+registerPatch(26, "FixCameraAnglesFull", "Fix Camera Angles (FULL)", "UI", 2, "Shinryo", "Unlocks the possible camera angles to give more freedom of placement. This enables an almost ground-level camera", false);
 
-registerPatch( 24, "FixCameraAnglesRecomm", "Fix Camera Angles", "UI", 2, "Shinryo", "Unlocks the possible camera angles to give more freedom of placement. Gives a medium range of around 60 degrees", true);
+registerPatch(27, "HKLMtoHKCU", "HKLM To HKCU", "Fix", 0, "Shinryo", "This makes the client use HK_CURRENT_USER registry entries instead of HK_LOCAL_MACHINE. Necessary for users who have no admin privileges on their computer", false);
 
-registerPatch( 25, "FixCameraAnglesLess", "Fix Camera Angles (LESS)", "UI", 2, "Shinryo", "Unlocks the possible camera angles to give more freedom of placement. This enables an 30deg angle", false);
+registerPatch(28, "IncreaseViewID", "Increase Headgear ViewID", "Data", 0, "Shinryo", "Increases the limit for the headgear ViewIDs from 2000 to User Defined value (max 32000)", false);
 
-registerPatch( 26, "FixCameraAnglesFull", "Fix Camera Angles (FULL)", "UI", 2, "Shinryo", "Unlocks the possible camera angles to give more freedom of placement. This enables an almost ground-level camera", false);
+registerPatch(29, "DisableGameGuard", "Disable Game Guard", "Fix", 0, "Neo", "Disables Game Guard from new clients", true);
 
-registerPatch( 27, "HKLMtoHKCU", "HKLM To HKCU", "Fix", 0, "Shinryo", "This makes the client use HK_CURRENT_USER registry entries instead of HK_LOCAL_MACHINE. Necessary for users who have no admin privileges on their computer", false);
+registerPatch(30, "IncreaseZoomOut50Per", "Increase Zoom Out 50%", "UI", 3, "Shinryo, 4144", "Increases the zoom-out range by 50 percent", false);
 
-registerPatch( 28, "IncreaseViewID", "Increase Headgear ViewID", "Data", 0, "Shinryo", "Increases the limit for the headgear ViewIDs from 2000 to User Defined value (max 32000)", false);
+registerPatch(31, "IncreaseZoomOut75Per", "Increase Zoom Out 75%", "UI", 3, "Shinryo, 4144", "Increases the zoom-out range by 75 percent", false);
 
-registerPatch( 29, "DisableGameGuard", "Disable Game Guard", "Fix", 0, "Neo", "Disables Game Guard from new clients", true);
+registerPatch(32, "IncreaseZoomOutMax", "Increase Zoom Out Max", "UI", 3, "Shinryo, 4144", "Maximizes the zoom-out range", false);
 
-registerPatch( 30, "IncreaseZoomOut50Per", "Increase Zoom Out 50%", "UI", 3, "Shinryo, 4144", "Increases the zoom-out range by 50 percent", false);
+registerPatch(33, "KoreaServiceTypeXMLFix", "Always Call SelectKoreaClientInfo()", "Fix", 0, "Shinryo", "Calls SelectKoreaClientInfo() always before SelectClientInfo() allowing you to use features that would be only visible on Korean Service Type", true);
 
-registerPatch( 31, "IncreaseZoomOut75Per", "Increase Zoom Out 75%", "UI", 3, "Shinryo, 4144", "Increases the zoom-out range by 75 percent", false);
+registerPatch(34, "EnableShowName", "Enable /showname", "Fix", 0, "Neo", "Enables use of /showname command on all LangTypes", true);
 
-registerPatch( 32, "IncreaseZoomOutMax", "Increase Zoom Out Max", "UI", 3, "Shinryo, 4144", "Maximizes the zoom-out range", false);
+registerPatch(35, "ReadDataFolderFirst", "Read Data Folder First", "Data", 0, "Shinryo", "Gives the data directory contents priority over the data/sdata.grf contents", false);
 
-registerPatch( 33, "KoreaServiceTypeXMLFix", "Always Call SelectKoreaClientInfo()", "Fix", 0, "Shinryo", "Calls SelectKoreaClientInfo() always before SelectClientInfo() allowing you to use features that would be only visible on Korean Service Type", true);
+registerPatch(36, "ReadMsgstringtabledottxt", "Always read msgstringtable.txt", "Data", 22, "Shinryo, 4144", "This option will force the client to read all the user interface messages from msgstringtable.txt instead of displaying the Korean messages", true);
 
-registerPatch( 34, "EnableShowName", "Enable /showname", "Fix", 0, "Neo", "Enables use of /showname command on all LangTypes", true);
+registerPatch(37, "ReadQuestid2displaydottxt", "Read questid2display.txt", "Data", 0, "Shinryo", "Makes the client to load questid2display.txt on all LangTypes (instead of only 0)", true);
 
-registerPatch( 35, "ReadDataFolderFirst", "Read Data Folder First", "Data", 0, "Shinryo", "Gives the data directory contents priority over the data/sdata.grf contents", false);
+registerPatch(38, "RemoveGravityAds", "Remove Gravity Ads", "UI", 0, "Shinryo", "Removes Gravity ads on the login background", true);
 
-registerPatch( 36, "ReadMsgstringtabledottxt", "Always read msgstringtable.txt", "Data", 22, "Shinryo, 4144", "This option will force the client to read all the user interface messages from msgstringtable.txt instead of displaying the Korean messages", true);
+registerPatch(39, "RemoveGravityLogo", "Remove Gravity Logo", "UI", 0, "Shinryo", "Removes Gravity Logo on the login background", true);
 
-registerPatch( 37, "ReadQuestid2displaydottxt", "Read questid2display.txt", "Data", 0, "Shinryo", "Makes the client to load questid2display.txt on all LangTypes (instead of only 0)", true);
+registerPatch(40, "RestoreLoginWindow", "Restore Login Window", "Fix", 10, "Shinryo, Neo", "Circumvents Gravity's new token-based login system and restores the normal login window", true);
 
-registerPatch( 38, "RemoveGravityAds", "Remove Gravity Ads", "UI", 0, "Shinryo", "Removes Gravity ads on the login background", true);
+registerPatch(41, "DisableNagleAlgorithm", "Disable Nagle Algorithm", "Packet", 0, "Shinryo", "Disables the Nagle Algorithm. The Nagle Algorithm queues packets before they are sent in order to minimize protocol overhead. Disabling the algorithm will slightly increase network traffic, but it will decrease latency as well", true);
 
-registerPatch( 39, "RemoveGravityLogo", "Remove Gravity Logo", "UI", 0, "Shinryo", "Removes Gravity Logo on the login background", true);
+registerPatch(42, "SkipResurrectionButton", "Skip Resurrection Button", "UI", 15, "Shinryo", "Skip showing resurrection button when you die with Token of Ziegfried in inventory", false);
 
-registerPatch( 40, "RestoreLoginWindow", "Restore Login Window", "Fix", 10, "Shinryo, Neo", "Circumvents Gravity's new token-based login system and restores the normal login window", true);
+registerPatch(43, "DeleteCharWithEmail", "Always Use Email for Char Deletion", "Fix", 0, "Neo", "Makes the Client use Email as Deletion Password for all LangTypes", false);
 
-registerPatch( 41, "DisableNagleAlgorithm", "Disable Nagle Algorithm", "Packet", 0, "Shinryo", "Disables the Nagle Algorithm. The Nagle Algorithm queues packets before they are sent in order to minimize protocol overhead. Disabling the algorithm will slightly increase network traffic, but it will decrease latency as well", true);
+registerPatch(44, "TranslateClient", "Translate Client", "UI", 0, "Ai4rei/AN, Neo", "This will translate some of the Hard-coded Korean phrases with strings stored in TranslateClient.txt", true);
 
-registerPatch( 42, "SkipResurrectionButton", "Skip Resurrection Button", "UI", 15, "Shinryo", "Skip showing resurrection button when you die with Token of Ziegfried in inventory", false);
+registerPatch(45, "UseCustomAuraSprites", "Use Custom Aura Sprites", "Data", 0, "Shinryo", "This option will make it so your warp portals will not be affected by your aura sprites. For this you will have to make aurafloat.tga and auraring.bmp and place them in your 'data\\texture\\effect' folder", false);
 
-registerPatch( 43, "DeleteCharWithEmail", "Always Use Email for Char Deletion", "Fix", 0, "Neo", "Makes the Client use Email as Deletion Password for all LangTypes", false);
+registerPatch(46, "UseNormalGuildBrackets", "Use Normal Guild Brackets", "UI", 0, "Shinryo", "On LangType 0, instead of square-brackets, japanese style brackets are used, this option reverts that behaviour to the normal square brackets '[' and ']'", true);
 
-registerPatch( 44, "TranslateClient", "Translate Client", "UI", 0, "Ai4rei/AN, Neo", "This will translate some of the Hard-coded Korean phrases with strings stored in TranslateClient.txt", true);
+registerPatch(47, "UseRagnarokIcon", "Use Ragnarok Icon", "Icon", 4, "Shinryo, Neo", "Makes the hexed client use the RO program icon instead of the generic Win32 app icon", false);
 
-registerPatch( 45, "UseCustomAuraSprites", "Use Custom Aura Sprites", "Data", 0, "Shinryo", "This option will make it so your warp portals will not be affected by your aura sprites. For this you will have to make aurafloat.tga and auraring.bmp and place them in your 'data\\texture\\effect' folder", false);
+registerPatch(48, "UsePlainTextDescriptions", "Use Plain Text Descriptions", "Data", 0, "Shinryo", "Signals that the contents of text files are text files, not encoded", true);
 
-registerPatch( 46, "UseNormalGuildBrackets", "Use Normal Guild Brackets", "UI", 0, "Shinryo", "On LangType 0, instead of square-brackets, japanese style brackets are used, this option reverts that behaviour to the normal square brackets '[' and ']'", true);
+registerPatch(49, "EnableMultipleGRFs", "Enable Multiple GRFs", "UI", 5, "Shinryo", "Enables the use of multiple grf files by putting them in a data.ini file in your client folder.You can only load up to 10 total grf files with this option ( -9)", true);
 
-registerPatch( 47, "UseRagnarokIcon", "Use Ragnarok Icon", "Icon", 4, "Shinryo, Neo", "Makes the hexed client use the RO program icon instead of the generic Win32 app icon", false);
+registerPatch(50, "SkipLicenseScreen", "Skip License Screen", "UI", 14, "Shinryo, MS", "Skip the warning screen and goes directly to the main window with the Service Select", false);
 
-registerPatch( 48, "UsePlainTextDescriptions", "Use Plain Text Descriptions", "Data", 0, "Shinryo", "Signals that the contents of text files are text files, not encoded", true);
+registerPatch(51, "ShowLicenseScreen", "Always Show License Screen", "UI", 14, "Neo", "Makes the client always show the License for all LangTypes", false);
 
-registerPatch( 49, "EnableMultipleGRFs", "Enable Multiple GRFs", "UI", 5, "Shinryo", "Enables the use of multiple grf files by putting them in a data.ini file in your client folder.You can only load up to 10 total grf files with this option ( -9)", true);
+registerPatch(52, "UseCustomFont", "Use Custom Font", "UI", 0, "Ai4rei/AN", "Allows the use of user-defined font for all LangTypes. The LangType-specific charset is still being enforced, so if the selected font does not support it, the system falls back to a font that does", false);
 
-registerPatch( 50, "SkipLicenseScreen", "Skip License Screen", "UI", 14, "Shinryo, MS", "Skip the warning screen and goes directly to the main window with the Service Select", false);
+registerPatch(53, "UseAsciiOnAllLangTypes", "Use Ascii on All LangTypes", "UI", 0, "Ai4rei/AN", "Makes the Client Enable ASCII irrespective of Font or LangTypes", true);
 
-registerPatch( 51, "ShowLicenseScreen", "Always Show License Screen", "UI", 14, "Neo", "Makes the client always show the License for all LangTypes", false);
+registerPatch(54, "ChatColorGM", "Chat Color - GM", "Color", 0, "Ai4rei/AN, Shakto", "Changes the GM Chat color and sets it to the specified value. Default value is ffff00 (Yellow)", false);
 
-registerPatch( 52, "UseCustomFont", "Use Custom Font", "UI", 0, "Ai4rei/AN", "Allows the use of user-defined font for all LangTypes. The LangType-specific charset is still being enforced, so if the selected font does not support it, the system falls back to a font that does", false);
+registerPatch(55, "ChatColorPlayerOther", "Chat Color - Other Player", "Color", 0, "Ai4rei/AN, Shakto", "Changes other players Chat color and sets it to the specified value. Default value is ffffff (White)");
 
-registerPatch( 53, "UseAsciiOnAllLangTypes", "Use Ascii on All LangTypes", "UI", 0, "Ai4rei/AN", "Makes the Client Enable ASCII irrespective of Font or LangTypes", true);
+registerPatch(57, "ChatColorGuild", "Chat Color - Guild", "Color", 0, "Ai4rei/AN, Shakto", "Changes the Guild Chat color and sets it to the specified value. Default Value is b4ffb4 (Light Green)", false);
 
-registerPatch( 54, "ChatColorGM", "Chat Color - GM", "Color", 0, "Ai4rei/AN, Shakto", "Changes the GM Chat color and sets it to the specified value. Default value is ffff00 (Yellow)", false);
+registerPatch(58, "ChatColorPartyOther", "Chat Color - Other Party ", "Color", 0, "Ai4rei/AN, Shakto", "Changes the Other Party members Chat color and sets it to the specified value. Default value is ffc8c8 (Pinkish)", false);
 
-registerPatch( 55, "ChatColorPlayerOther", "Chat Color - Other Player", "Color", 0, "Ai4rei/AN, Shakto", "Changes other players Chat color and sets it to the specified value. Default value is ffffff (White)" );
+registerPatch(59, "ChatColorPartySelf", "Chat Color - Your Party", "Color", 0, "Ai4rei/AN, Shakto", "Changes Your Party Chat color and sets it to the specified value. Default value is ffc800 (Orange)", false);
 
-//Disabled since GM Chat Color also patches the Main color - to be removed
-//registerPatch( 56, "ChatColorMain", "Chat Color - Main", "Color", 0, "Ai4rei/AN, Shakto", "Changes the Main Chat color and sets it to the specified value", false);
+registerPatch(60, "ChatColorPlayerSelf", "Chat Color - Self", "Color", 0, "Ai4rei/AN, Shakto", "Changes your character's Chat color and sets it to the specified value. Default value is 00ff00 (Green)", false);
 
-registerPatch( 57, "ChatColorGuild", "Chat Color - Guild", "Color", 0, "Ai4rei/AN, Shakto", "Changes the Guild Chat color and sets it to the specified value. Default Value is b4ffb4 (Light Green)", false);
+registerPatch(61, "DisablePacketEncryptionOld", "Disable Packet Encryption", "UI", 0, "Ai4rei/AN", "Disable kRO Packet ID Encryption. Also known as Skip Packet Obfuscation", false);
 
-registerPatch( 58, "ChatColorPartyOther", "Chat Color - Other Party ", "Color", 0, "Ai4rei/AN, Shakto", "Changes the Other Party members Chat color and sets it to the specified value. Default value is ffc8c8 (Pinkish)", false);
+registerPatch(62, "DisableLoginEncryption", "Disable Login Encryption", "Fix", 0, "Neo", "Disable Encryption in Login Packet 0x2b0", true);
 
-registerPatch( 59, "ChatColorPartySelf", "Chat Color - Your Party", "Color", 0, "Ai4rei/AN, Shakto", "Changes Your Party Chat color and sets it to the specified value. Default value is ffc800 (Orange)", false);
+registerPatch(63, "UseOfficialClothPalette", "Use Official Cloth Palettes", "UI", 0, "Neo", "Use Official Cloth Palette on all LangTypes. Do not use this if you are using the 'Enable Custom Jobs' patch", false);
 
-registerPatch( 60, "ChatColorPlayerSelf", "Chat Color - Self", "Color", 0, "Ai4rei/AN, Shakto", "Changes your character's Chat color and sets it to the specified value. Default value is 00ff00 (Green)", false);
+registerPatch(64, "FixChatAt", "@ Bug Fix", "UI", 0, "Shinryo", "Correct the bug to write @ in chat", true);
 
-registerPatch( 61, "DisablePacketEncryptionOld", "Disable Packet Encryption", "UI", 0, "Ai4rei/AN", "Disable kRO Packet ID Encryption. Also known as Skip Packet Obfuscation", false);
+registerPatch(65, "ChangeItemInfo", "Load Custom lua file instead of iteminfo*.lub", "UI", 0, "Neo", "Makes the client load your own lua file instead of iteminfo*.lub . If you directly use itemInfo*.lub for your translated items, it may become lost during the next kRO update", true);
 
-registerPatch( 62, "DisableLoginEncryption", "Disable Login Encryption", "Fix", 0, "Neo", "Disable Encryption in Login Packet 0x2b0", true);
+registerPatch(66, "LoadItemInfoPerServer", "Load iteminfo with char server", "Data", 0, "Neo", "Load ItemInfo file and call main function with selected char server name as argument", false);
 
-registerPatch( 63, "UseOfficialClothPalette", "Use Official Cloth Palettes", "UI", 0, "Neo", "Use Official Cloth Palette on all LangTypes. Do not use this if you are using the 'Enable Custom Jobs' patch", false);
+registerPatch(67, "DisableQuakeEffect", "Disable Quake skill effect", "UI", 0, "Ai4rei/AN", " Disables the Earthquake skill effect", false);
 
-registerPatch( 64, "FixChatAt", "@ Bug Fix", "UI", 0, "Shinryo", "Correct the bug to write @ in chat", true);
+registerPatch(68, "Enable64kHairstyle", "Enable 64k Hairstyle", "UI", 19, "Ai4rei/AN", "Increases Max Hairstyle limit to 64k from default 27", false);
 
-registerPatch( 65, "ChangeItemInfo", "Load Custom lua file instead of iteminfo*.lub", "UI", 0, "Neo", "Makes the client load your own lua file instead of iteminfo*.lub . If you directly use itemInfo*.lub for your translated items, it may become lost during the next kRO update", true);
+registerPatch(69, "ExtendNpcBox", "Extend Npc Dialog Box", "UI", 0, "Ai4rei/AN", "Increases Max input chars of NPC Dialog boxes from 2052 to 4096", false);
 
-registerPatch( 66, "LoadItemInfoPerServer", "Load iteminfo with char server", "Data", 0, "Neo", "Load ItemInfo file and call main function with selected char server name as argument", false);
+registerPatch(70, "CustomExpBarLimits", "Use Custom Exp Bar Limits", "UI", 0, "Neo", "Allows client to use user specified limits for Exp Bars", false);
 
-registerPatch( 67, "DisableQuakeEffect", "Disable Quake skill effect", "UI", 0, "Ai4rei/AN", " Disables the Earthquake skill effect", false);
+registerPatch(71, "IgnoreResourceErrors", "Ignore Resource Errors", "Error", 0, "Shinryo", "Prevents the client from displaying a variety of Error messages (but not all of them) including missing files. This does not guarantee the client will work in-spite of missing files", false);
 
-registerPatch( 68, "Enable64kHairstyle", "Enable 64k Hairstyle", "UI", 19, "Ai4rei/AN", "Increases Max Hairstyle limit to 64k from default 27", false);
+registerPatch(72, "IgnoreMissingPaletteError", "Ignore Missing Palette Error", "Error", 0, "Shinryo", "Prevents the client from displaying error messages about missing palettes. It does not guarantee client will not crash if files are missing", false);
 
-registerPatch( 69, "ExtendNpcBox", "Extend Npc Dialog Box", "UI", 0, "Ai4rei/AN", "Increases Max input chars of NPC Dialog boxes from 2052 to 4096", false);
+registerPatch(73, "RemoveHourlyAnnounce", "Remove Hourly Announce", "UI", 0, "Ai4rei/AN", "Remove hourly game grade and hourly play time minder announcements", true);
 
-registerPatch( 70, "CustomExpBarLimits", "Use Custom Exp Bar Limits", "UI", 0, "Neo", "Allows client to use user specified limits for Exp Bars", false);
+registerPatch(74, "IncreaseScreenshotQuality", "Increase Screenshot Quality", "UI", 0, "Ai4rei/AN", "Allows changing the JPEG quality parameter for screenshots", false);
 
-registerPatch( 71, "IgnoreResourceErrors", "Ignore Resource Errors", "Error", 0, "Shinryo", "Prevents the client from displaying a variety of Error messages (but not all of them) including missing files. This does not guarantee the client will work in-spite of missing files", false);
+registerPatch(75, "EnableFlagEmotes", "Enable Flag Emoticons", "UI", 0, "Neo", "Enable Selected Flag Emoticons for all LangTypes. You need to specify a txt file as input with the flag constants assigned to 1-9", false);
 
-registerPatch( 72, "IgnoreMissingPaletteError", "Ignore Missing Palette Error", "Error", 0, "Shinryo", "Prevents the client from displaying error messages about missing palettes. It does not guarantee client will not crash if files are missing", false);
+registerPatch(76, "EnforceOfficialLoginBackground", "Enforce Official Login Background", "UI", 0, "Shinryo", "Enforce Official Login Background for all LangType", false);
 
-registerPatch( 73, "RemoveHourlyAnnounce", "Remove Hourly Announce", "UI", 0, "Ai4rei/AN", "Remove hourly game grade and hourly play time minder announcements", true);
+registerPatch(77, "EnableCustom3DBones", "Enable Custom 3D Bones", "Data", 0, "Ai4rei/AN", "Enables the use of custom 3D monsters (Granny) by lifting Hard-coded ID limit", false);
 
-registerPatch( 74, "IncreaseScreenshotQuality", "Increase Screenshot Quality", "UI", 0, "Ai4rei/AN", "Allows changing the JPEG quality parameter for screenshots", false);
+registerPatch(78, "MoveCashShopIcon", "Move Cash Shop Icon", "UI",  11, "Neo, 4144", "Move the Cash Shop icon to user specified co-ordinates. Positive values are relative to left and top, Negative values are relative to right and bottom", false);
 
-registerPatch( 75, "EnableFlagEmotes", "Enable Flag Emoticons", "UI", 0, "Neo", "Enable Selected Flag Emoticons for all LangTypes. You need to specify a txt file as input with the flag constants assigned to 1-9", false);
+registerPatch(79, "SharedBodyPalettesV2", "Shared Body Palettes Type2", "UI", 6, "Ai4rei/AN, Neo", "Makes the client use a single cloth palette set (body_%d.pal) for all job classes both genders", false);
 
-registerPatch( 76, "EnforceOfficialLoginBackground", "Enforce Official Login Background", "UI", 0, "Shinryo", "Enforce Official Login Background for all LangType", false);
+registerPatch(80, "SharedBodyPalettesV1", "Shared Body Palettes Type1", "UI", 6, "Ai4rei/AN, Neo", "Makes the client use a single cloth palette set (body_%s_%d.pal) for all job classes but separate for both genders", false);
 
-registerPatch( 77, "EnableCustom3DBones", "Enable Custom 3D Bones", "Data", 0, "Ai4rei/AN", "Enables the use of custom 3D monsters (Granny) by lifting Hard-coded ID limit", false);
+registerPatch(81, "RenameLicenseTxt", "Rename License File", "Data", 0, "Neo", "Rename the filename used for EULA from '..\\licence.txt' to user specified name (Path is relative to Data folder)", false);
 
-registerPatch( 78, "MoveCashShopIcon", "Move Cash Shop Icon", "UI",  11, "Neo, 4144", "Move the Cash Shop icon to user specified co-ordinates. Positive values are relative to left and top, Negative values are relative to right and bottom", false);
+registerPatch(82, "SharedHeadPalettesV1", "Shared Head Palettes Type1", "UI", 7, "Ai4rei/AN, Neo", "Makes the client use a single hair palette set (head_%s_%d.pal) for all job classes but separate for both genders", false);
 
-registerPatch( 79, "SharedBodyPalettesV2", "Shared Body Palettes Type2", "UI", 6, "Ai4rei/AN, Neo", "Makes the client use a single cloth palette set (body_%d.pal) for all job classes both genders", false);
+registerPatch(83, "SharedHeadPalettesV2", "Shared Head Palettes Type2", "UI", 7, "Ai4rei/AN, Neo", "Makes the client use a single hair palette set (head_%d.pal) for all job classes both genders", false);
 
-registerPatch( 80, "SharedBodyPalettesV1", "Shared Body Palettes Type1", "UI", 6, "Ai4rei/AN, Neo", "Makes the client use a single cloth palette set (body_%s_%d.pal) for all job classes but separate for both genders", false);
+registerPatch(84, "RemoveSerialDisplay", "Remove Serial Display", "UI", 0, "Shinryo, 4144", "Removes the display of the client serial number in the login window (bottom right corner)", true);
 
-registerPatch( 81, "RenameLicenseTxt", "Rename License File", "Data", 0, "Neo", "Rename the filename used for EULA from '..\\licence.txt' to user specified name (Path is relative to Data folder)", false);
+registerPatch(85, "ShowCancelToServiceSelect", "Show Cancel To Service Select", "UI", 0, "Neo", "Restores the Cancel button in Login Window for switching back to Service Select Window. The button will be placed in between Login and Exit buttons", false);
 
-registerPatch( 82, "SharedHeadPalettesV1", "Shared Head Palettes Type1", "UI", 7, "Ai4rei/AN, Neo", "Makes the client use a single hair palette set (head_%s_%d.pal) for all job classes but separate for both genders", false);
+registerPatch(86, "OnlyFirstLoginBackground", "Only First Login Background", "UI", 8, "Shinryo", "Displays always the first login background", false);
 
-registerPatch( 83, "SharedHeadPalettesV2", "Shared Head Palettes Type2", "UI", 7, "Ai4rei/AN, Neo", "Makes the client use a single hair palette set (head_%d.pal) for all job classes both genders", false);
+registerPatch(87, "OnlySecondLoginBackground", "Only Second Login Background", "UI", 8, "Shinryo", "Displays always the second login background", false);
 
-registerPatch( 84, "RemoveSerialDisplay", "Remove Serial Display", "UI", 0, "Shinryo, 4144", "Removes the display of the client serial number in the login window (bottom right corner)", true);
+registerPatch(88, "AllowSpaceInGuildName", "Allow space in guild name", "UI", 0, "Shakto", "Allow player to create a guild with space in the name (/guild \"Space Name\")", false);
 
-registerPatch( 85, "ShowCancelToServiceSelect","Show Cancel To Service Select", "UI", 0, "Neo", "Restores the Cancel button in Login Window for switching back to Service Select Window. The button will be placed in between Login and Exit buttons", false);
+registerPatch(90, "EnableDNSSupport", "Enable DNS Support", "UI", 0, "Shinryo", "Enable DNS support for clientinfo.xml", true);
 
-registerPatch( 86, "OnlyFirstLoginBackground", "Only First Login Background", "UI", 8, "Shinryo", "Displays always the first login background", false);
+registerPatch(91, "DCToLoginWindow", "Disconnect to Login Window", "UI", 0, "Neo", "Make the client return to Login Window upon disconnection", false, [40]);
 
-registerPatch( 87, "OnlySecondLoginBackground", "Only Second Login Background", "UI", 8, "Shinryo", "Displays always the second login background", false);
+registerPatch(92, "PacketFirstKeyEncryption", "Packet First Key Encryption", "Packet", 0, "Shakto, Neo", "Change the 1st key for packet encryption. Dont select the patch Disable Packet Header Encryption if you are using this. Don't use it if you don't know what you are doing", false);
 
-registerPatch( 88, "AllowSpaceInGuildName", "Allow space in guild name", "UI", 0, "Shakto", "Allow player to create a guild with space in the name (/guild \"Space Name\")", false);
+registerPatch(93, "PacketSecondKeyEncryption", "Packet Second Key Encryption", "Packet", 0, "Shakto, Neo", "Change the 2nd key for packet encryption. Dont select the patch Disable Packet Header Encryption if you are using this. Don't use it if you don't know what you are doing", false);
 
-registerPatch( 90, "EnableDNSSupport", "Enable DNS Support", "UI", 0, "Shinryo", "Enable DNS support for clientinfo.xml", true);
+registerPatch(94, "PacketThirdKeyEncryption", "Packet Third Key Encryption", "Packet", 0, "Shakto, Neo", "Change the 3rd key for packet encryption. Dont select the patch Disable Packet Header Encryption if you are using this. Don't use it if you don't know what you are doing", false);
 
-registerPatch( 91, "DCToLoginWindow", "Disconnect to Login Window", "UI", 0, "Neo", "Make the client return to Login Window upon disconnection", false, [40]);
+registerPatch(95, "UseSSOLoginPacket", "Use SSO Login Packet", "Packet", 10, "Ai4rei/AN", "Enable using SSO packet on all LangType (to use login and pass with a launcher)", false);
 
-registerPatch( 92, "PacketFirstKeyEncryption", "Packet First Key Encryption", "Packet", 0, "Shakto, Neo", "Change the 1st key for packet encryption. Dont select the patch Disable Packet Header Encryption if you are using this. Don't use it if you don't know what you are doing", false);
+registerPatch(96, "RemoveGMSprite", "Remove GM Sprites", "UI", 0, "Neo", "Remove the GM sprites and keeping all the functionality like Yellow name and Admin right click menu", false);
 
-registerPatch( 93, "PacketSecondKeyEncryption", "Packet Second Key Encryption", "Packet", 0, "Shakto, Neo", "Change the 2nd key for packet encryption. Dont select the patch Disable Packet Header Encryption if you are using this. Don't use it if you don't know what you are doing", false);
+registerPatch(97, "CancelToLoginWindow", "Cancel to Login Window", "Fix", 0, "Neo", "Makes clicking the Cancel button in Character selection window return to login window instead of Quitting", true, [40]);
 
-registerPatch( 94, "PacketThirdKeyEncryption", "Packet Third Key Encryption", "Packet", 0, "Shakto, Neo", "Change the 3rd key for packet encryption. Dont select the patch Disable Packet Header Encryption if you are using this. Don't use it if you don't know what you are doing", false);
+registerPatch(98, "DisableDCScream", "Disable dc_scream.txt", "UI", 0, "Neo", "Disable chat on file dc_scream", false);
 
-registerPatch( 95, "UseSSOLoginPacket", "Use SSO Login Packet", "Packet", 10, "Ai4rei/AN", "Enable using SSO packet on all LangType (to use login and pass with a launcher)", false);
-
-registerPatch( 96, "RemoveGMSprite", "Remove GM Sprites", "UI", 0, "Neo", "Remove the GM sprites and keeping all the functionality like Yellow name and Admin right click menu", false);
-
-registerPatch( 97, "CancelToLoginWindow", "Cancel to Login Window", "Fix", 0, "Neo", "Makes clicking the Cancel button in Character selection window return to login window instead of Quitting", true, [40]);
-
-registerPatch( 98, "DisableDCScream", "Disable dc_scream.txt", "UI", 0, "Neo", "Disable chat on file dc_scream", false);
-
-registerPatch( 99, "DisableBAFrostJoke", "Disable ba_frostjoke.txt", "UI", 0, "Neo", "Disable chat on file ba_frostjoke", false);
+registerPatch(99, "DisableBAFrostJoke", "Disable ba_frostjoke.txt", "UI", 0, "Neo", "Disable chat on file ba_frostjoke", false);
 
 registerPatch(100, "DisableMultipleWindows", "Disable Multiple Windows", "UI", 0, "Shinryo, Ai4rei/AN", "Prevents the client from creating more than one instance on all LangTypes", false);
 
@@ -305,12 +273,6 @@ registerPatch(113, "HideQuest", "Hide Quest Button", "UI", 12, "Neo", "Hide Ques
 registerPatch(114, "ChangeVendingLimit", "Change Vending Limit [Experimental]", "Data", 0, "Neo", "Change the Vending Limit of 1 Billion zeny to user specified value", false);
 
 registerPatch(115, "EnableEffectForAllMaps", "Enable Effect for all Maps [Experimental]", "Data", 0, "Neo", "Make the client load the corresponding file in EffectTool folder for all maps", false);
-
-//registerPatch(151, "UseArialOnAllLangTypes", "Use Arial on All LangTypes", "UI", 0, "Ai4rei/AN, Shakto", "Makes Arial the default font on all LangTypes (it's enable ascii by default)", true);
-
-//======================================//
-// Special Patches by Neo and Curiosity //
-//======================================//
 
 registerPatch(200, "EnableMultipleGRFsV2", "Enable Multiple GRFs - Embedded", "Custom", 5, "Neo", "Enables the use of multiple grf files without needing INI file in client folder. Instead you specify the INI file as input to the patch", false);
 
@@ -359,8 +321,6 @@ registerPatch(221, "RemoveJobsFromBooking", "Remove Jobs from Booking", "Custom"
 registerPatch(222, "ShowReplayButton", "Show Replay Button", "Custom", 0, "Neo", "Makes the client show Replay button on Service Select screen that opens the Replay File List window", false);
 
 registerPatch(223, "MoveItemCountUpwards", "Move Item Count Upwards [Experimental]", "Custom", 0, "Neo", "Move Item Count upwards in Shortcut Window so as to align with Skill Level display", false);
-
-//registerPatch(224, "IncreaseNpcIDs", "Increase NPC Ids [Experimental]", "Custom", 0, "Neo", "Increase the Loaded NPC IDs to include 10K+ range IDs. Limits are configurable", false);
 
 registerPatch(225, "ShowRegisterButton", "Show Register Button", "Custom", 0, "Neo", "Makes the client always show register button on Login Window for all Langtypes. Clicking the button will open <registrationweb> from clientinfo and closes the client.", false);
 
@@ -496,11 +456,7 @@ registerPatch(290, "HideBuildInfo", "Hide build info in client", "Protection", 0
 
 registerPatch(291, "HidePacketsFromPeek", "Hide packets from peek", "Protection", 0, "4144", "Simple way for hide packets from peek and bpe", true);
 
-// registerPatch(292, "FixShortcutsInWine", "Fix shortcuts in wine", "Wine", 0, "4144", "Allow to use keyboard shortcuts in wine", false);
-
 registerPatch(293, "IncreaseHairSpritesOld", "Increase hair style limit for human only in game (old)", "Custom", 19, "4144", "Allow use more hair styles than default limit", false);
-
-// 294 reserved
 
 registerPatch(295, "ChangeMaxPartyValue", "Change Max Party Value", "UI", 0, "Jchcc", "Change max party value displayed on Alt+Z", false);
 
@@ -540,8 +496,6 @@ registerPatch(312, "Intravision", "Always see hidden/cloaked objects", "Custom",
 
 registerPatch(313, "ChangeMapInfoPath", "Change MapInfo*.lub path", "Custom", 20, "X-EcutiOnner", "Change MapInfo*.lub path", false);
 
-// 314 reserved
-
 registerPatch(315, "HighlightSkillSlotColor", "Highlight Skillslot Color", "Color", 0, "Hanashi, 4144", "Changes the highlight skillslot color and sets it to the specified value. Default value is b4ffb4 (Celadon)", false);
 
 registerPatch(316, "RemoveEquipmentSwap", "Remove Equipment Swap Button", "UI", 12, "Functor, X-EcutiOnner", "Remove equipment swap button on the equipment window", false);
@@ -576,8 +530,6 @@ registerPatch(330, "IgnoreSignBoardReading", "Ignore SignBoardList.lub Reading",
 
 registerPatch(331, "DisableBlindEffect", "Disable Blind skills effect", "UI", 0, "X-EcutiOnner", "Disables the Blind skill effect (screen becomes darkness)", false);
 
-//registerPatch(332, "SimpleReplaceDemo", "Simple replace functions demo", "DEMO", 0, "4144", "Demonstrate simple replace functions usage", false);
-
 registerPatch(333, "ChangeMaxFriendsValue", "Change Max Friends Value", "UI", 0, "X-EcutiOnner", "Change max friends value displayed on Alt+H", false);
 
 registerPatch(334, "RemoveHardcodedHttpIP", "Remove Hardcoded HTTP IP", "Fix", 0, "jchcc", "Remove hardcoded HTTP service ip address, Prevent client from sending HTTP request to official server.", false);
@@ -590,7 +542,7 @@ registerPatch(337, "ChangeAdventureAgencyLevelRange", "Change adventurer agency 
 
 registerPatch(338, "ValidateClient", "Additional client validation", "Nemo", 0, "4144", "Validate is loaded client detected as correct client. If this patch failed, other patches can be wrong.", true);
 
-registerPatch(339, "IgnoreEntryQueueErrors", "Ignore Entry Queue Errors", "Error", 0, "X-EcutiOnner, 4144", "Prevents the client from displaying a error messages like 'Load Failed Data\Table\EntryQueue.bex'.", false);
+registerPatch(339, "IgnoreEntryQueueErrors", "Ignore Entry Queue Errors", "Error", 0, "X-EcutiOnner, 4144", "Prevents the client from displaying a error messages like 'Load Failed Data\\Table\\EntryQueue.bex'.", false);
 
 registerPatch(340, "DisableBGMAudio", "Disable mp3NameTable.txt", "Custom", 0, "X-EcutiOnner", "Disable all .mp3 audio files in BGM folder for playing background music", false);
 
@@ -620,49 +572,27 @@ registerPatch(352, "IncreaseZoomOut25Per", "Increase Zoom Out 25%", "UI", 3, "Sh
 
 registerPatch(353, "IncreaseZoomOutCustom", "Increase Zoom Out to custom value", "UI", 3, "Shinryo, 4144", "Increases the zoom-out range by custom value", false);
 
-// 354 - 360 reserved
-
 registerPatch(361, "LoadCustomLuaBeforeAfterFiles", "Load custom lua files for most loaded lua files", "Custom", 0, "4144", "Load custom lua files before and after for most loaded lua files", false);
 
 registerPatch(362, "TaekwonJobNameFix", "Fixes the Korean Job name issue with LangType", "UI", 0, "Ai4rei/AN, Neo, 4144", "Fixes the Korean Job name issue with LangType", true);
 
-// 363
-
 registerPatch(364, "ChangeUIBalloonTextFontSize", "Change default font size for base class of all balloons", "Size", 0, "4144", "Change default font size for class UIBalloonText", false);
-
-//registerPatch(365, "ChangeUINameBalloonTextFontSize", "Change default font size for class UINameBalloonText", "Size", 0, "4144", "Change default font size for class UINameBalloonText", false);
 
 registerPatch(366, "ChangeUITransBalloonTextFontSize", "Change default font size for class UITransBalloonText", "Size", 0, "4144", "Change default font size for class UITransBalloonText", false);
 
-//registerPatch(367, "ChangeUIAchBalloonTextFontSize", "Change default font size for class UIAchBalloonText", "Size", 0, "4144", "Change default font size for class UIAchBalloonText", false);
-
 registerPatch(368, "ChangeUICharInfoBalloonTextFontSize", "Change default font size for class UICharInfoBalloonText", "Size", 0, "4144", "Change default font size for class UICharInfoBalloonText", false);
-
-//registerPatch(369, "ChangeUIVerticalNameBalloonTextFontSize", "Change default font size for class UIVerticalNameBalloonText", "Size", 0, "4144", "Change default font size for class UIVerticalNameBalloonText", false);
 
 registerPatch(370, "ChangeUIBalloonTextFontColor", "Change default font color for base class of all balloons", "Color", 0, "4144", "Change default font color for class UIBalloonText", false);
 
-//registerPatch(371, "ChangeUINameBalloonTextFontColor", "Change default font color for class UINameBalloonText", "Color", 0, "4144", "Change default font color for class UINameBalloonText", false);
-
 registerPatch(372, "ChangeUITransBalloonTextFontColor", "Change default font color for class UITransBalloonText", "Color", 0, "4144", "Change default font color for class UITransBalloonText", false);
-
-//registerPatch(373, "ChangeUIAchBalloonTextFontColor", "Change default font color for class UIAchBalloonText", "Color", 0, "4144", "Change default font color for class UIAchBalloonText", false);
 
 registerPatch(374, "ChangeUICharInfoBalloonTextFontColor", "Change default font color for class UICharInfoBalloonText", "Color", 0, "4144", "Change default font color for class UICharInfoBalloonText", false);
 
-//registerPatch(375, "ChangeUIVerticalNameBalloonTextFontColor", "Change default font color for class UIVerticalNameBalloonText", "Color", 0, "4144", "Change default font color for class UIVerticalNameBalloonText", false);
-
 registerPatch(376, "ChangeUIBalloonTextBgColor", "Change default shadow color for base class of all balloons", "Color", 0, "4144", "Change default shadow color for class UIBalloonText", false);
-
-//registerPatch(377, "ChangeUINameBalloonTextBgColor", "Change default shadow color for class UINameBalloonText", "Color", 0, "4144", "Change default shadow color for class UINameBalloonText", false);
 
 registerPatch(378, "ChangeUITransBalloonTextBgColor", "Change default shadow color for class UITransBalloonText", "Color", 0, "4144", "Change default shadow color for class UITransBalloonText", false);
 
-//registerPatch(379, "ChangeUIAchBalloonTextBgColor", "Change default shadow color for class UIAchBalloonText", "Color", 0, "4144", "Change default shadow color for class UIAchBalloonText", false);
-
 registerPatch(380, "ChangeUICharInfoBalloonTextBgColor", "Change default shadow color for class UICharInfoBalloonText", "Color", 0, "4144", "Change default shadow color for class UICharInfoBalloonText", false);
-
-//registerPatch(381, "ChangeUIVerticalNameBalloonTextBgColor", "Change default shadow color for class UIVerticalNameBalloonText", "Color", 0, "4144", "Change default shadow color for class UIVerticalNameBalloonText", false);
 
 registerPatch(382, "ChangeUINameBalloonTextIconType", "Change default icon type for class UINameBalloonText", "Icon", 0, "4144", "Change default icon type for class UINameBalloonText", false);
 
@@ -732,9 +662,9 @@ registerPatch(414, "FixNewCharCreationPos", "Fix default position of new char cr
 
 registerPatch(415, "RemoveNewCharCreationBluredBackground", "Remove blured background from new char creation window", "Fix", 0, "4144", "Remove blured background from new char creation window", false);
 
-registerPatch(416, "FixTetraVortex", 'Fix Tetra Vortex', 'UI', 0, "sanosan33, Neo", 'Fixes the black screen animation issue of tetra vortex', false);
+registerPatch(416, "FixTetraVortex", "Fix Tetra Vortex", "UI", 0, "sanosan33, Neo", "Fixes the black screen animation issue of tetra vortex", false);
 
-registerPatch(417, "DisablePasswordEncryption", 'Disable password encryption for lang types 4, 7', 'Login', 0, "Jchcc, 4144", 'Disable password encryption for lang types 4, 7', false);
+registerPatch(417, "DisablePasswordEncryption", "Disable password encryption for lang types 4, 7", "Login", 0, "Jchcc, 4144", "Disable password encryption for lang types 4, 7", false);
 
 registerPatch(418, "HideReputationButton", "Hide reputation button", "UI", 12, "4144", "Hide reputation button", false);
 
@@ -747,10 +677,6 @@ registerPatch(421, "ChangeRouletteGoldLimit", "Change minimal gold amount for st
 registerPatch(422, "ChangeRouletteSilverLimit", "Change minimal silver amount for start roulette", "Roulette", 0, "4144", "Also need change this limit in emulator side", false);
 
 registerPatch(423, "ChangeRouletteBronzeLimit", "Change minimal bronze amount for start roulette", "Roulette", 0, "4144", "Also need change this limit in emulator side", false);
-
-// 424 reserved
-
-// 425 reserved
 
 registerPatch(426, "SetWalkToDelayCmd", "Change Walk To Delay from chat.", "Fix", 16, "4144", "Allow enable/disable walk delay from chat command", false);
 
@@ -825,7 +751,5 @@ registerPatch(460, "AddCLSTitle", "Add custom lua support [Title]", "Translation
 registerPatch(461, "AddCLSWeapon", "Add custom lua support [Weapon]", "Translation", 23, "llchrisll, 4144", "Add the custom lua support by llchrisll for weapons.\nCheck his wiki for more info.", false);
 
 registerPatch(462, "AddCLSWorldView", "Add custom lua support [World Map]", "Translation", 23, "llchrisll, 4144", "Add the custom lua support by llchrisll for world map.\nCheck his wiki for more info.", false);
-
-// 463 reserved
 
 GlobalPostInit();

@@ -1,14 +1,11 @@
-//######################################################################
-//# Purpose: Extract the Hardcoded msgStringTable in the loaded Client #
-//######################################################################
+// ######################################################################
+// # Purpose: Extract the Hardcoded msgStringTable in the loaded Client #
+// ######################################################################
 
 function ExtractMsgTable()
 {
-    consoleLog("Step 1a - Search string 'msgStringTable.txt'");
-
     var offset = table.getRaw(table.msgStringTable) - 4;
 
-    consoleLog("Step 3 - Loop through the table inside the client (Each Entry)");
     var done = false;
     var id = 0;
     var msgStr = "";
@@ -20,7 +17,6 @@ function ExtractMsgTable()
     {
         if (pe.fetchDWord(offset) === id)
         {
-            consoleLog("Step 3a - Get the string for id: " + id);
             var start_offset = pe.vaToRaw(pe.fetchDWord(offset + 4));
             if (start_offset === -1)
             {

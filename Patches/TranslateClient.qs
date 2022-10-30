@@ -1,62 +1,66 @@
-//###########################################################################
-//# Purpose: Translate Korean strings to user specified strings both loaded #
-//#          from TranslateClient.txt . Also fixes Taekwon branch Job names #
-//###########################################################################
+// ###########################################################################
+// # Purpose: Translate Korean strings to user specified strings both loaded #
+// #          from TranslateClient.txt . Also fixes Taekwon branch Job names #
+// ###########################################################################
 
 function TranslateClient()
 {
-    // Step 1 - Open the text file for reading
     var f = new TextFile();
-    if (!f.open(APP_PATH + "/Patches/TranslateClient.txt") )
+    if (!f.open(APP_PATH + "/Patches/TranslateClient.txt"))
+    {
         return "Failed in Step 1 - Unable to open file";
+    }
 
     var offset = -1;
     var msg = "";
-    var failmsgs = [];  // Array to store all Failure messages
+    var failmsgs = [];
     var fStr = "";
     var fStr0 = "";
     var rStr = "";
 
-    // Step 2 - Loop through the text file, get the respective strings & do find string + replace
     var found = false;
     while (!f.eof())
     {
         var str = f.readline().trim();
 
         if (str.charAt(0) === "M")
-        {   // M: = Failure message string
+        {
             msg = str.substring(2).trim();
         }
         else if (str.charAt(0) === "F")
-        {   // F: = Find string
+        {
             fStr0 = str;
             str = str.substring(2).trim();
 
-            if (str.charAt(0) === "'")  // ASCII
+            if (str.charAt(0) === "'")
+            {
                 str = str.substring(1, str.length - 1);
-            else  // HEX
+            }
+            else
+            {
                 str = str.toAscii();
+            }
             fStr = str;
         }
         else if (str.charAt(0) === "R")
-        {   // R: = Replace string. At this point we have both location and string to replace with
+        {
             offset = pe.stringRaw(fStr);
             if (offset === -1)
             {
-                failmsgs.push(msg);  // No Match = Collect Failure message
+                failmsgs.push(msg);
                 continue;
             }
 
             str = str.substring(2).trim();
 
             if (str.charAt(0) === "'")
-            { // ASCII
+            {
                 str = str.substring(1, str.length - 1);
-                rStr = str
+                rStr = str;
                 pe.replace(offset, str + "\x00");
             }
             else
-            { // HEX
+            {
                 rStr = str.toAscii();
                 pe.replaceHex(offset, str + " 00");
             }
@@ -71,14 +75,14 @@ function TranslateClient()
         }
     }
     f.close();
-    // Step 3 - Dump all the Failure messages collected to FailedTranslations.txt
+
     if (failmsgs.length != 0)
     {
         var outfile = new TextFile();
 
         if (outfile.open(APP_PATH + "/FailedTranslations.txt", "w"))
         {
-            for (var i=0; i< failmsgs.length; i++)
+            for (var i = 0; i < failmsgs.length; i++)
             {
                 outfile.writeline(failmsgs[i]);
             }

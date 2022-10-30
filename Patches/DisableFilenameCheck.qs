@@ -1,136 +1,134 @@
-//#######################################################################
-//# Purpose: Change the JNZ inside WinMain (or function called from it) #
-//#          to JMP which will skip showing the "Invalid Exe" Message   #
-//#######################################################################
+// #######################################################################
+// # Purpose: Change the JNZ inside WinMain (or function called from it) #
+// #          to JMP which will skip showing the "Invalid Exe" Message   #
+// #######################################################################
 
 function DisableFilenameCheck()
 {
     var hwndHex = table.getHex4(table.g_hMainWnd);
 
-    //Step 1 - Find the Comparison pattern
     var code =
-        " 84 C0"          //TEST AL, AL
-      + " 74 07"          //JZ SHORT addr1
-      + " E8 ?? ?? FF FF" //CALL SearchProcessIn9X
-      + " EB 05"          //JMP SHORT addr2
-      + " E8 ?? ?? FF FF" //CALL SearchProcessInNT <= addr1
-      + " 84 C0"          //TEST AL, AL <= addr2
-      + " 75"             //JNZ addr3
-      ;
+        " 84 C0" +
+        " 74 07" +
+        " E8 ?? ?? FF FF" +
+        " EB 05" +
+        " E8 ?? ?? FF FF" +
+        " 84 C0" +
+        " 75";
     var patchOffset = 18;
     var offset = pe.findCode(code);
 
     if (offset === -1)
     {
         code =
-            " 84 C0"          //TEST AL, AL
-          + " 74 0C"          //JZ SHORT addr1
-          + " E8 ?? ?? FF FF" //CALL SearchProcessIn9X
-          + " EB 0A BE 01 00 00 00" //JMP SHORT addr2
-          + " E8 ?? ?? FF FF" //CALL SearchProcessInNT <= addr1
-          + " 84 C0"          //TEST AL, AL <= addr2
-          + " 75"             //JNZ addr3
-          ;
+            " 84 C0" +
+            " 74 0C" +
+            " E8 ?? ?? FF FF" +
+            " EB 0A BE 01 00 00 00" +
+            " E8 ?? ?? FF FF" +
+            " 84 C0" +
+            " 75";
         patchOffset = 23;
         offset = pe.findCode(code);
     }
 
     if (offset === -1)
-    {   // 2019-02-13
+    {
         code =
-            "85 C0 " +                    // 0 test eax, eax
-            "74 10 " +                    // 2 jz short loc_AB8DEB
-            "83 BD ?? ?? ?? FF 01 " +     // 4 cmp [ebp+VersionInformation.dwPlatformId], 1
-            "75 07 " +                    // 11 jnz short loc_AB8DEB
-            "E8 ?? ?? ?? FF " +           // 13 call SearchProcessIn9X
-            "EB 05 " +                    // 18 jmp short loc_AB8DF0
-            "E8 ?? ?? ?? FF " +           // 20 call SearchProcessInNT
-            "84 C0 " +                    // 25 test al, al
-            "75 1C " +                    // 27 jnz short loc_AB8E10
-            "6A 00 " +                    // 29 push 0
-            "6A 00 " +                    // 31 push 0
-            "68 ?? ?? ?? 00 " +           // 33 push offset aDKIMOJRT_
-            "FF 35 ?? ?? ?? 00 " +        // 38 push hWnd
-            "FF 15 ?? ?? ?? ?? " +        // 44 call ds:MessageBoxA
-            "33 C0 " +                    // 50 xor eax, eax
-            "E9 ";                        // 52 jmp loc_AB9361
-        patchOffset = 27;
-        offset = pe.findCode(code);
-    }
-
-    if (offset === -1)
-    {   // 2019-03-06
-        code =
-            "85 C0 " +                    // 0 test eax, eax
-            "74 10 " +                    // 2 jz short loc_AB8DEB
-            "83 BD ?? ?? ?? FF 01 " +     // 4 cmp [ebp+VersionInformation.dwPlatformId], 1
-            "75 07 " +                    // 11 jnz short loc_AB8DEB
-            "E8 ?? ?? ?? FF " +           // 13 call SearchProcessIn9X
-            "EB 05 " +                    // 18 jmp short loc_AB8DF0
-            "E8 ?? ?? ?? FF " +           // 20 call SearchProcessInNT
-            "84 C0 " +                    // 25 test al, al
-            "75 1C " +                    // 27 jnz short loc_AB8E10
-            "6A 00 " +                    // 29 push 0
-            "6A 00 " +                    // 31 push 0
-            "68 ?? ?? ?? 00 " +           // 33 push offset aDKIMOJRT_
-            "FF 35 ?? ?? ?? 01 " +        // 38 push hWnd
-            "FF 15 ?? ?? ?? ?? " +        // 44 call ds:MessageBoxA
-            "33 C0 " +                    // 50 xor eax, eax
-            "E9 ";                        // 52 jmp loc_AB9361
-        patchOffset = 27;
-        offset = pe.findCode(code);
-    }
-
-    if (offset === -1)
-    {   // 2022-03-30
-        code =
-            "85 C0 " +                    // 0 test eax, eax
-            "74 10 " +                    // 2 jz short loc_8A657E
-            "83 BD ?? ?? ?? FF 01 " +     // 4 cmp [ebp+VersionInformation.dwPlatformId], 1
-            "75 07 " +                    // 11 jnz short loc_8A657E
-            "E8 54 ?? ?? FF " +           // 13 call SearchProcessIn9X
-            "EB 05 " +                    // 18 jmp short loc_8A6583
-            "E8 2D ?? ?? FF " +           // 20 call SearchProcessInNT
-            "84 C0 " +                    // 25 test al, al
-            "75 18 " +                    // 27 jnz short loc_8A659F
-            "6A 00 " +                    // 29 push 0
-            "6A 00 " +                    // 31 push 0
-            "68 ?? ?? ?? 00 " +           // 33 push offset aD_27
-            "FF ?? " + hwndHex +          // 38 push g_hMainWnd
-            "FF D7 " +                    // 44 call edi
-            "33 C0 " +                    // 46 xor eax, eax
-            "E9 "                         // 48 jmp loc_8A6AB3
+            "85 C0 " +
+            "74 10 " +
+            "83 BD ?? ?? ?? FF 01 " +
+            "75 07 " +
+            "E8 ?? ?? ?? FF " +
+            "EB 05 " +
+            "E8 ?? ?? ?? FF " +
+            "84 C0 " +
+            "75 1C " +
+            "6A 00 " +
+            "6A 00 " +
+            "68 ?? ?? ?? 00 " +
+            "FF 35 ?? ?? ?? 00 " +
+            "FF 15 ?? ?? ?? ?? " +
+            "33 C0 " +
+            "E9 ";
         patchOffset = 27;
         offset = pe.findCode(code);
     }
 
     if (offset === -1)
     {
-        var code =
-            "85 C0 " +                    // 0 test eax, eax
-            "74 10 " +                    // 2 jz short loc_889A78
-            "83 BD ?? ?? ?? FF 01 " +     // 4 cmp [ebp+VersionInformation.dwPlatformId], 1
-            "75 07 " +                    // 11 jnz short loc_889A78
-            "E8 ?? ?? ?? FF " +           // 13 call sub_887360
-            "EB 05 " +                    // 18 jmp short loc_889A7D
-            "E8 ?? ?? ?? FF " +           // 20 call sub_887740
-            "84 C0 " +                    // 25 test al, al
-            "75 18 " +                    // 27 jnz short loc_889A99
-            "6A 00 " +                    // 29 push 0
-            "6A 00 " +                    // 31 push 0
-            "68 ?? ?? ?? 00 " +           // 33 push offset aD_14
-            "FF 35 " + hwndHex +          // 38 push g_hMainWnd
-            "FF D6 " +                    // 44 call esi
-            "33 C0 " +                    // 46 xor eax, eax
-            "E9 ";                        // 48 jmp loc_889F02
+        code =
+            "85 C0 " +
+            "74 10 " +
+            "83 BD ?? ?? ?? FF 01 " +
+            "75 07 " +
+            "E8 ?? ?? ?? FF " +
+            "EB 05 " +
+            "E8 ?? ?? ?? FF " +
+            "84 C0 " +
+            "75 1C " +
+            "6A 00 " +
+            "6A 00 " +
+            "68 ?? ?? ?? 00 " +
+            "FF 35 ?? ?? ?? 01 " +
+            "FF 15 ?? ?? ?? ?? " +
+            "33 C0 " +
+            "E9 ";
         patchOffset = 27;
         offset = pe.findCode(code);
     }
 
     if (offset === -1)
-        return "Failed in Step 1";
+    {
+        code =
+            "85 C0 " +
+            "74 10 " +
+            "83 BD ?? ?? ?? FF 01 " +
+            "75 07 " +
+            "E8 54 ?? ?? FF " +
+            "EB 05 " +
+            "E8 2D ?? ?? FF " +
+            "84 C0 " +
+            "75 18 " +
+            "6A 00 " +
+            "6A 00 " +
+            "68 ?? ?? ?? 00 " +
+            "FF ?? " + hwndHex +
+            "FF D7 " +
+            "33 C0 " +
+            "E9 ";
+        patchOffset = 27;
+        offset = pe.findCode(code);
+    }
 
-    //Step 2 - Replace JNZ/JNE to JMP
+    if (offset === -1)
+    {
+        code =
+            "85 C0 " +
+            "74 10 " +
+            "83 BD ?? ?? ?? FF 01 " +
+            "75 07 " +
+            "E8 ?? ?? ?? FF " +
+            "EB 05 " +
+            "E8 ?? ?? ?? FF " +
+            "84 C0 " +
+            "75 18 " +
+            "6A 00 " +
+            "6A 00 " +
+            "68 ?? ?? ?? 00 " +
+            "FF 35 " + hwndHex +
+            "FF D6 " +
+            "33 C0 " +
+            "E9 ";
+        patchOffset = 27;
+        offset = pe.findCode(code);
+    }
+
+    if (offset === -1)
+    {
+        return "Failed in Step 1";
+    }
+
     pe.replaceByte(offset + patchOffset, 0xEB);
 
     return true;

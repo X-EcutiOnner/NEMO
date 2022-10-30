@@ -27,7 +27,13 @@ function Global_clear()
     delete Import_Info;
     delete PEncInsert;
     delete PEncActive;
-
+    SKL =
+    {
+        "Offset": -1,
+        "Prefix": "",
+        "PatchID": false,
+        "Error": false,
+    };
     dllFile = false;
 
     registerStorage();

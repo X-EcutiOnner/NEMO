@@ -22,20 +22,26 @@ function UITransBalloonTextDecoration(addrId, name)
 
     var value = exe.getUserInput(paramStr, XTYPE_DWORD, _("Number Input"), _("Enable text decoration for @@").replace("@@", name), 0, 0, 1);
     if (value === 0)
+    {
         throw "New decoration type is same";
+    }
 
     if (table.get(addrId) === 0)
+    {
         throw name + "::" + name + " ret not set";
+    }
     var addrRaw = table.getRaw(addrId);
 
     var field = table.get(fieldId);
     if (field === 0)
+    {
         throw "UITransBalloonText::m_drawTextDecoration not set";
+    }
 
     var text = "mov dword ptr [eax + m_drawTextDecoration], drawTextDecoration";
     var vars = {
         "m_drawTextDecoration": field,
-        "drawTextDecoration": value
+        "drawTextDecoration": value,
     };
 
     var hook = hooks.initEndHook(addrRaw);

@@ -19,17 +19,21 @@ function ChangeMissingLauncherError()
 {
     var hooksList = hooks.initImportHooks("_BinkSetSoundSystem@8", "binkw32.dll");
     if (hooksList.length === 0)
+    {
         throw "CreateFontA call usages not found";
+    }
 
-    var errorText = exe.getUserInput("$ChangeMissingLauncherError", XTYPE_STRING,
+    var errorText = exe.getUserInput(
+        "$ChangeMissingLauncherError", XTYPE_STRING,
         _("String input"),
         _("Enter new error message for missing launcher"),
-        "Please run LAUNCHER.exe.");
+        "Please run LAUNCHER.exe."
+    );
 
     var errorBuf = pe.rawToVa(pe.insertString(errorText));
     var vars = {
         "message": errorBuf,
-    }
+    };
     hooksList.addFilePre("", vars);
     hooksList.validate();
 

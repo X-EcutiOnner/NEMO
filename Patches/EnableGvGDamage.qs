@@ -18,68 +18,58 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
-//#####################################################################
-//# Purpose: NOPs out the JZ following TEST EAX, EAX after Comparison #
-//#          to Show Damage on GvG Maps during the Guild War.         #
-//#####################################################################
+// #####################################################################
+// # Purpose: NOPs out the JZ following TEST EAX, EAX after Comparison #
+// #          to Show Damage on GvG Maps during the Guild War.         #
+// #####################################################################
 
 function EnableGvGDamage()
 {
-    consoleLog("Step 1 - Prep code for finding the GvG Damage display");
     var code =
-        getEcxSessionHex() +          // 0 mov ecx, offset g_session
-        "E8 ?? ?? ?? ?? " +           // 5 call CSession_IsSiegeMode
-        "85 C0 " +                    // 10 test eax, eax
-        "75 0E " +                    // 12 jnz short loc_99A826
-        getEcxSessionHex() +          // 14 mov ecx, offset g_session
-        "E8 ?? ?? ?? ?? " +           // 19 call CSession_IsBattleFieldMode
-        "85 C0 " +                    // 24 test eax, eax
-        "74 14 " +                    // 26 jz short loc_99A83A
-        "6A 07 " +                    // 28 push 7
-        getEcxSessionHex() +          // 30 mov ecx, offset g_session
-        "E8 ?? ?? ?? ?? " +           // 35 call CSession_IsMasterAid
-        "85 C0 " +                    // 40 test eax, eax
-        "0F 84 ?? ?? 00 00 ";         // 42 jz loc_9A1A84
+        getEcxSessionHex() +
+        "E8 ?? ?? ?? ?? " +
+        "85 C0 " +
+        "75 0E " +
+        getEcxSessionHex() +
+        "E8 ?? ?? ?? ?? " +
+        "85 C0 " +
+        "74 14 " +
+        "6A 07 " +
+        getEcxSessionHex() +
+        "E8 ?? ?? ?? ?? " +
+        "85 C0 " +
+        "0F 84 ?? ?? 00 00 ";
     var nopsStart = 0;
     var nopsEnd = 48;
-    var IsSiegeModeOffset = 6;
-    var IsBattleFieldModeOffset = 20;
-    var isMasterAid = 36;
 
     var offset = pe.findCode(code);
 
     if (offset === -1)
+    {
         return "Failed in Step 1 - Pattern not found";
+    }
 
-    logRawFunc("CSession_IsSiegeMode", offset, IsSiegeModeOffset);
-    logRawFunc("CSession_IsBattleFieldMode", offset, IsBattleFieldModeOffset);
-    logRawFunc("CSession_IsMasterAid", offset, isMasterAid);
-
-    consoleLog("Step 2 - Replace offset found in step 1 with NOPs");
     pe.setNopsRange(offset + nopsStart, offset + nopsEnd);
 
     return true;
 }
 
-//=======================================================//
-// Disable for Unsupported Clients - Check for Reference //
-//=======================================================//
 function EnableGvGDamage_()
 {
     var code =
-        getEcxSessionHex() +          // 0 mov ecx, offset g_session
-        "E8 ?? ?? ?? ?? " +           // 5 call CSession_IsSiegeMode
-        "85 C0 " +                    // 10 test eax, eax
-        "75 0E " +                    // 12 jnz short loc_99A826
-        getEcxSessionHex() +          // 14 mov ecx, offset g_session
-        "E8 ?? ?? ?? ?? " +           // 19 call CSession_IsBattleFieldMode
-        "85 C0 " +                    // 24 test eax, eax
-        "74 14 " +                    // 26 jz short loc_99A83A
-        "6A 07 " +                    // 28 push 7
-        getEcxSessionHex() +          // 30 mov ecx, offset g_session
-        "E8 ?? ?? ?? ?? " +           // 35 call CSession_IsMasterAid
-        "85 C0 " +                    // 40 test eax, eax
-        "0F 84 ?? ?? 00 00 ";         // 42 jz loc_9A1A84
+        getEcxSessionHex() +
+        "E8 ?? ?? ?? ?? " +
+        "85 C0 " +
+        "75 0E " +
+        getEcxSessionHex() +
+        "E8 ?? ?? ?? ?? " +
+        "85 C0 " +
+        "74 14 " +
+        "6A 07 " +
+        getEcxSessionHex() +
+        "E8 ?? ?? ?? ?? " +
+        "85 C0 " +
+        "0F 84 ?? ?? 00 00 ";
 
-    return (pe.findCode(code) !== -1);
+    return pe.findCode(code) !== -1;
 }

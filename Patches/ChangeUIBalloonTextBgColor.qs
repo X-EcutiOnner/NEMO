@@ -22,20 +22,26 @@ function UIBalloonTextBgColor(addrId, name)
 
     var value = exe.getUserInput(colorStr, XTYPE_COLOR, _("Color input"), _("Select new default shadow font color in @@").replace("@@", name), 0xFFFFFF).reverseRGB();
     if (value === 0xFFFFFF)
+    {
         throw "New shadow font color is same";
+    }
 
     if (table.get(addrId) === 0)
+    {
         throw name + "::" + name + " ret not set";
+    }
     var addrRaw = table.getRaw(addrId);
 
     var field = table.get(fieldId);
     if (field === 0)
+    {
         throw "UIBalloonText::m_bgColor not set";
+    }
 
     var text = "mov dword ptr [eax + m_bgColor], bgColor";
     var vars = {
         "m_bgColor": field,
-        "bgColor": value
+        "bgColor": value,
     };
 
     var hook = hooks.initEndHook(addrRaw);

@@ -14,31 +14,31 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-//####################################################
-//# Purpose: Replace arguments of ShellExecuteA in   #
-//#          order to open URL with default browser  #
-//####################################################
+// ####################################################
+// # Purpose: Replace arguments of ShellExecuteA in   #
+// #          order to open URL with default browser  #
+// ####################################################
 
 function DefaultBrowserInCashshop()
 {
-    //Step 1 - Find address of "iexplore.exe"
     var offset = pe.stringRaw("iexplore.exe");
 
     if (offset === -1)
+    {
         return "Failed in Step 1 - String not found.";
+    }
 
-    //Step 2 - Find the string reference.
     var offsets = pe.findCodes(" 50 68" + pe.rawToVa(offset).packToHex(4));
 
     if (offsets.length === 0)
+    {
         return "Failed in Step 2 - String reference missing.";
+    }
 
-    //Step 3 - Replace the arguments of ShellExecuteA
     var code =
-        " 6A 00"    //PUSH 00
-      + " 50"        //PUSH EAX
-      + " 90 90 90"    //NOPS
-      ;
+        " 6A 00" +
+        " 50" +
+        " 90 90 90";
 
     for (var i = 0; i < offsets.length; i++)
     {
@@ -49,11 +49,7 @@ function DefaultBrowserInCashshop()
     return true;
 }
 
-//=======================================================================//
-// Disable for Unsupported Clients - Check for string "iexplore.exe"     //
-//=======================================================================//
-
 function DefaultBrowserInCashshop_()
 {
-    return (pe.stringVa("iexplore.exe") !== -1);
+    return pe.stringVa("iexplore.exe") !== -1;
 }

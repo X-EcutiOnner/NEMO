@@ -18,126 +18,118 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
-//#######################################################################
-//# Purpose: Modify TownInfoErrorMsg function to return without showing #
-//#          the MessageBox and ignore to reading Towninfo.lub file.    #
-//#######################################################################
+// #######################################################################
+// # Purpose: Modify TownInfoErrorMsg function to return without showing #
+// #          the MessageBox and ignore to reading Towninfo.lub file.    #
+// #######################################################################
 
 function IgnoreTownInfoReading()
 {
-    consoleLog("Step 1a - Search string 'TownInfo file Init'");
     var offset = pe.stringVa("TownInfo file Init");
 
     if (offset === -1)
+    {
         return "Failed in Step 1a - String not found";
+    }
 
     var strHex = offset.packToHex(4);
 
-    consoleLog("Step 1b - Prep code for finding the TownInfoErrorMsg");
     var code =
-        "E8 ?? ?? ?? ?? " +     // 00 call sub_892FA0
-        "8B ?? ?? ?? ?? 00 " +  // 05 mov  esi, ds:MessageBoxA
-        "84 C0 " +              // 11 test al, al
-        "75 ?? " +              // 13 jnz  short loc_841775
-        "6A 00 " +              // 15 push 0
-        "68 ?? ?? ?? 00 " +     // 17 push offset aError
-        "68 " + strHex +        // 22 push offset aTowninfoFileIn
-        "6A 00 " +              // 27 push 0
-        "FF ?? " +              // 29 call esi ; MessageBoxA
-        "E8 ?? ?? ?? ?? ";      // 31 call sub_A4F320
+        "E8 ?? ?? ?? ?? " +
+        "8B ?? ?? ?? ?? 00 " +
+        "84 C0 " +
+        "75 ?? " +
+        "6A 00 " +
+        "68 ?? ?? ?? 00 " +
+        "68 " + strHex +
+        "6A 00 " +
+        "FF ?? " +
+        "E8 ?? ?? ?? ?? ";
 
     var hloc = 15;
     var head = "90 90 ";
     var foot = "90 90 ";
-    var loadOffset = 1;
-    var offset = pe.findCode(code);
+    offset = pe.findCode(code);
 
     if (offset === -1)
     {
         code =
-            "E8 ?? ?? ?? ?? " +     // 00 call sub_7808E0
-            "84 C0 " +              // 05 test al, al
-            "75 ?? " +              // 07 jnz short loc_A76B29
-            "6A 00 " +              // 09 push 0
-            "68 ?? ?? ?? 00 " +     // 11 push offset Caption
-            "68 " + strHex +        // 16 push offset aTowninfoFileIn
-            "6A 00 " +              // 21 push 0
-            "FF 15 ?? ?? ?? 00 " +  // 23 call ds:MessageBoxA
-            "E8 ?? ?? ?? FF ";      // 29 call sub_920200
+            "E8 ?? ?? ?? ?? " +
+            "84 C0 " +
+            "75 ?? " +
+            "6A 00 " +
+            "68 ?? ?? ?? 00 " +
+            "68 " + strHex +
+            "6A 00 " +
+            "FF 15 ?? ?? ?? 00 " +
+            "E8 ?? ?? ?? FF ";
 
         hloc = 9;
         head = "90 90 ";
         foot = "90 90 90 90 90 90 ";
-        loadOffset = 1;
         offset = pe.findCode(code);
     }
 
     if (offset === -1)
     {
         code =
-            "E8 ?? ?? ?? ?? " +     // 00 call sub_617080
-            "8B 35 ?? ?? ?? 00 " +  // 05 mov  esi, ds:MessageBoxA
-            "84 C0 " +              // 11 test al, al
-            "75 ?? " +              // 13 jnz  short loc_8D8C14
-            "53 " +                 // 15 push ebx
-            "68 ?? ?? ?? 00 " +     // 16 push offset Caption
-            "68 " + strHex +        // 21 push offset aTowninfoFileIn
-            "53 " +                 // 26 push ebx
-            "FF D6 " +              // 27 call esi ; MessageBoxA
-            "E8 ?? ?? ?? FF ";      // 29 call sub_7B9D30
+            "E8 ?? ?? ?? ?? " +
+            "8B 35 ?? ?? ?? 00 " +
+            "84 C0 " +
+            "75 ?? " +
+            "53 " +
+            "68 ?? ?? ?? 00 " +
+            "68 " + strHex +
+            "53 " +
+            "FF D6 " +
+            "E8 ?? ?? ?? FF ";
 
         hloc = 15;
         head = "90 ";
         foot = "90 90 ";
-        loadOffset = 1;
         offset = pe.findCode(code);
     }
 
     if (offset === -1)
     {
         code =
-            "E8 ?? ?? ?? ?? " +     // 00 call sub_59ACF0
-            "84 C0 " +              // 05 test al, al
-            "75 ?? " +              // 07 jnz  short loc_801881
-            "53 " +                 // 09 push ebx
-            "68 ?? ?? ?? 00 " +     // 10 push offset Caption
-            "68 " + strHex +        // 15 push offset aTowninfoFileIn
-            "53 " +                 // 20 push ebx
-            "FF 15 ?? ?? ?? 00 " +  // 21 call ds:MessageBoxA
-            "E8 ?? ?? ?? FF ";      // 27 call sub_709360
+            "E8 ?? ?? ?? ?? " +
+            "84 C0 " +
+            "75 ?? " +
+            "53 " +
+            "68 ?? ?? ?? 00 " +
+            "68 " + strHex +
+            "53 " +
+            "FF 15 ?? ?? ?? 00 " +
+            "E8 ?? ?? ?? FF ";
 
         hloc = 9;
         head = "90 ";
         foot = "90 90 90 90 90 90 ";
-        loadOffset = 1;
         offset = pe.findCode(code);
     }
 
     if (offset === -1)
+    {
         return "Failed in Step 1b - Pattern not found";
+    }
 
-    logRawFunc("CTownInfoMgr_Load", offset, loadOffset);
-
-    consoleLog("Step 1c - Replace with xor eax, eax followed by nops");
-    pe.replaceHex(offset, "33 C0 90 90 90 ");  // xor eax, eax + nops
+    pe.replaceHex(offset, "33 C0 90 90 90 ");
 
     var hcode =
-        head +               // nops
-        "33 C0 90 90 90 " +  // xor eax, eax + nops
-        "33 C0 90 90 90 " +  // xor eax, eax + nops
-        head +               // nops
-        foot +               // nops
-        "E8 ";               // call sub_A4F320
+        head +
+        "33 C0 90 90 90 " +
+        "33 C0 90 90 90 " +
+        head +
+        foot +
+        "E8 ";
 
     pe.replaceHex(offset + hloc, hcode);
 
     return true;
 }
 
-//=======================================================//
-// Disable for Unsupported Clients - Check for Reference //
-//=======================================================//
 function IgnoreTownInfoReading_()
 {
-    return (pe.stringVa("System/Towninfo.lub") !== -1);
+    return pe.stringVa("System/Towninfo.lub") !== -1;
 }

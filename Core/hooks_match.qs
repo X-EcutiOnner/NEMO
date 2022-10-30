@@ -19,13 +19,13 @@ function hooks_matchFunctionStart(storageKey, offset)
 {
     checkArgs("hooks.matchFunctionStart", arguments, [["Number", "Number"]]);
 
-    var offsetVa = pe.rawToVa(offset)
+    var offsetVa = pe.rawToVa(offset);
 
     var code =
-        "55 " +                       // 0 push ebp
-        "8B EC " +                    // 1 mov ebp, esp
-        "53 " +                       // 3 push ebx
-        "8B D9 ";                     // 4 mov ebx, ecx
+        "55 " +
+        "8B EC " +
+        "53 " +
+        "8B D9 ";
     var stolenCodeOffset = [0, 6];
     var continueOffset = 6;
     var found = pe.match(code, offset);
@@ -33,10 +33,10 @@ function hooks_matchFunctionStart(storageKey, offset)
     if (found !== true)
     {
         code =
-            "53 " +                       // 0 push ebx
-            "56 " +                       // 1 push esi
-            "8B F1 " +                    // 2 mov esi, ecx
-            "8B 4E ??";                   // 4 mov ecx, [esi+18h]
+            "53 " +
+            "56 " +
+            "8B F1 " +
+            "8B 4E ??";
         stolenCodeOffset = [0, 7];
         continueOffset = 7;
         found = pe.match(code, offset);
@@ -45,10 +45,10 @@ function hooks_matchFunctionStart(storageKey, offset)
     if (found !== true)
     {
         code =
-            "55 " +                       // 0 push ebp
-            "8B EC " +                    // 1 mov ebp, esp
-            "53 " +                       // 3 push ebx
-            "56";                         // 4 push esi
+            "55 " +
+            "8B EC " +
+            "53 " +
+            "56";
         stolenCodeOffset = [0, 5];
         continueOffset = 5;
         found = pe.match(code, offset);
@@ -57,9 +57,9 @@ function hooks_matchFunctionStart(storageKey, offset)
     if (found !== true)
     {
         code =
-            "55 " +                       // 0 push ebp
-            "8B EC " +                    // 1 mov ebp, esp
-            "6A FF ";                     // 3 push 0FFFFFFFFh
+            "55 " +
+            "8B EC " +
+            "6A FF ";
         stolenCodeOffset = [0, 5];
         continueOffset = 5;
         found = pe.match(code, offset);
@@ -67,9 +67,9 @@ function hooks_matchFunctionStart(storageKey, offset)
 
     if (found !== true)
     {
-        var code =
-            "6A FF " +                    // 0 push 0FFFFFFFFh
-            "68 ?? ?? ?? ??";             // 2 push offset loc_79D8EF
+        code =
+            "6A FF " +
+            "68 ?? ?? ?? ??";
         stolenCodeOffset = [0, 7];
         continueOffset = 7;
         found = pe.match(code, offset);
@@ -77,10 +77,10 @@ function hooks_matchFunctionStart(storageKey, offset)
 
     if (found !== true)
     {
-        var code =
-            "55 " +                       // 0 push ebp
-            "8B EC " +                    // 1 mov ebp, esp
-            "8B 55 ?? "                   // 3 mov edx, [ebp+fontType]
+        code =
+            "55 " +
+            "8B EC " +
+            "8B 55 ?? ";
 
         stolenCodeOffset = [0, 6];
         continueOffset = 6;
@@ -89,10 +89,10 @@ function hooks_matchFunctionStart(storageKey, offset)
 
     if (found !== true)
     {
-        var code =
-            "55 " +                       // 0 push ebp
-            "8B EC " +                    // 1 mov ebp, esp
-            "8B 45 ?? "                   // 3 mov eax, [ebp+fontType]
+        code =
+            "55 " +
+            "8B EC " +
+            "8B 45 ?? ";
 
         stolenCodeOffset = [0, 6];
         continueOffset = 6;
@@ -101,9 +101,9 @@ function hooks_matchFunctionStart(storageKey, offset)
 
     if (found !== true)
     {
-        var code =
-            "8B 44 24 ?? " +              // 0 mov eax, [esp+arg_0]
-            "56 "                         // 4 push esi
+        code =
+            "8B 44 24 ?? " +
+            "56 ";
 
         stolenCodeOffset = [0, 5];
         continueOffset = 5;
@@ -141,12 +141,11 @@ function hooks_matchFunctionEnd(storageKey, offset)
 {
     checkArgs("hooks.matchFunctionEnd", arguments, [["Number", "Number"]]);
 
-    consoleLog("match known second pattern");
     var code =
-        "5B " +                       // 0 pop ebx
-        "5D " +                       // 1 pop ebp
-        "C2 ?? ??";                   // 2 retn 8
-    var callOffset = 0
+        "5B " +
+        "5D " +
+        "C2 ?? ??";
+    var callOffset = 0;
     var stolenCodeOffset = [0, 5];
     var stolenCode1Offset = [0, 2];
     var retOffset = [2, 3];
@@ -155,10 +154,10 @@ function hooks_matchFunctionEnd(storageKey, offset)
     if (found !== true)
     {
         code =
-            "5E " +                       // 0 pop esi
-            "5B " +                       // 1 pop ebx
-            "C2 ?? ??";                   // 2 retn 8
-        callOffset = 0
+            "5E " +
+            "5B " +
+            "C2 ?? ??";
+        callOffset = 0;
         stolenCodeOffset = [0, 5];
         stolenCode1Offset = [0, 2];
         retOffset = [2, 3];
@@ -168,10 +167,10 @@ function hooks_matchFunctionEnd(storageKey, offset)
     if (found !== true)
     {
         code =
-            "8B E5 " +                    // 0 mov esp, ebp
-            "5D " +                       // 2 pop ebp
-            "C2 ?? ?? ";                  // 3 retn 4
-        callOffset = 0
+            "8B E5 " +
+            "5D " +
+            "C2 ?? ?? ";
+        callOffset = 0;
         stolenCodeOffset = [0, 6];
         stolenCode1Offset = [0, 3];
         retOffset = [3, 3];
@@ -181,9 +180,9 @@ function hooks_matchFunctionEnd(storageKey, offset)
     if (found !== true)
     {
         code =
-            "83 C4 ?? " +                 // 0 add esp, 20h
-            "C2 ?? ??";                   // 3 retn 4
-        callOffset = 0
+            "83 C4 ?? " +
+            "C2 ?? ??";
+        callOffset = 0;
         stolenCodeOffset = [0, 6];
         stolenCode1Offset = [0, 3];
         retOffset = [3, 3];
@@ -193,110 +192,107 @@ function hooks_matchFunctionEnd(storageKey, offset)
     if (found !== true)
     {
         code =
-            "81 C4 ?? 00 00 00 " +        // 0 add esp, 88h
-            "C2 ?? ?? ";                  // 6 retn 0Ch
-        callOffset = 0
+            "81 C4 ?? 00 00 00 " +
+            "C2 ?? ?? ";
+        callOffset = 0;
         stolenCodeOffset = [0, 9];
         stolenCode1Offset = [0, 6];
         retOffset = [6, 3];
-        var found = pe.match(code, offset);
+        found = pe.match(code, offset);
     }
 
     if (found !== true)
     {
         code =
-            "5E " +                       // 0 pop esi
-            "8B E5 " +                    // 1 mov esp, ebp
-            "5D " +                       // 3 pop ebp
-            "C3 ";                        // 4 ret retn
-        callOffset = 0
+            "5E " +
+            "8B E5 " +
+            "5D " +
+            "C3 ";
+        callOffset = 0;
         stolenCodeOffset = [0, 5];
         stolenCode1Offset = [0, 4];
         retOffset = [4, 1];
-        var found = pe.match(code, offset);
+        found = pe.match(code, offset);
     }
 
     if (found !== true)
     {
         code =
-            "5E " +                       // 0 pop esi
-            "83 C4 ?? " +                 // 1 add esp, 10h
-            "C3 ";                        // 4 ret retn
-        callOffset = 0
+            "5E " +
+            "83 C4 ?? " +
+            "C3 ";
+        callOffset = 0;
         stolenCodeOffset = [0, 5];
         stolenCode1Offset = [0, 4];
         retOffset = [4, 1];
-        var found = pe.match(code, offset);
+        found = pe.match(code, offset);
     }
 
     if (found !== true)
     {
         code =
-            "5B " +                       // 0 pop ebx
-            "83 C4 ?? " +                 // 1 add esp, 10h
-            "C3 ";                        // 4 ret retn
-        callOffset = 0
+            "5B " +
+            "83 C4 ?? " +
+            "C3 ";
+        callOffset = 0;
         stolenCodeOffset = [0, 5];
         stolenCode1Offset = [0, 4];
         retOffset = [4, 1];
-        var found = pe.match(code, offset);
+        found = pe.match(code, offset);
     }
 
     if (found !== true)
     {
         code =
-            "E8 ?? ?? ?? ?? " +           // 0 call ___security_check_cookie
-            "8B E5 " +                    // 5 mov esp, ebp
-            "5D " +                       // 7 pop ebp
-            "C3 "                         // 8 ret retn
-        callOffset = [1, 4]
+            "E8 ?? ?? ?? ?? " +
+            "8B E5 " +
+            "5D " +
+            "C3 ";
+        callOffset = [1, 4];
         stolenCodeOffset = [5, 4];
         stolenCode1Offset = [5, 3];
         retOffset = [8, 1];
-        var found = pe.match(code, offset);
+        found = pe.match(code, offset);
     }
 
     if (found !== true)
     {
         code =
-            "64 89 0D 00 00 00 00 " +     // 0 mov large fs:0, ecx
-            "8B E5 " +                    // 7 mov esp, ebp
-            "5D " +                       // 9 pop ebp
-            "C3 "                         // 10 ret retn
-        callOffset = 0
+            "64 89 0D 00 00 00 00 " +
+            "8B E5 " +
+            "5D " +
+            "C3 ";
+        callOffset = 0;
         stolenCodeOffset = [0, 11];
         stolenCode1Offset = [0, 10];
         retOffset = [10, 1];
-        var found = pe.match(code, offset);
+        found = pe.match(code, offset);
     }
 
     if (found !== true)
     {
         code =
-            "81 C4 ?? ?? ?? 00 " +        // 0 add esp, 0B0h
-            "C3 "                         // 6 ret retn
-        callOffset = 0
+            "81 C4 ?? ?? ?? 00 " +
+            "C3 ";
+        callOffset = 0;
         stolenCodeOffset = [0, 7];
         stolenCode1Offset = [0, 6];
         retOffset = [6, 1];
-        var found = pe.match(code, offset);
+        found = pe.match(code, offset);
     }
 
     if (found !== true)
     {
         throw "Pattern not found for address: 0x" + pe.rawToVa(offset).toString(16);
     }
+    var callBytes = "";
     if (callOffset !== 0)
     {
         var text = asm.load("include/AbsCall");
         var vars = {
-            "callOffset": pe.fetchRelativeValue(offset, callOffset)
+            "callOffset": pe.fetchRelativeValue(offset, callOffset),
         };
-        var callBytes = asm.textToHexVa(0, text, vars);
-    }
-    else
-    {
-        var callBytes = "";
+        callBytes = asm.textToHexVa(0, text, vars);
     }
     var obj = hooks.createHookObj();
     obj.patchAddr = offset;
@@ -314,14 +310,18 @@ function hooks_matchImportUsage_code(codes, offset, importOffset)
 
     for (var i = 0; i < codes.length; i ++)
     {
-        var found = pe.match(codes[i] + hexImportOffset, offset);  // XXX dword ptr [offset]
+        var found = pe.match(codes[i] + hexImportOffset, offset);
         var addrOffset = 2;
         if (found === true)
+        {
             break;
+        }
     }
 
     if (found !== true)
+    {
         throw "Import usage with address 0x" + importOffset.toString(16) + " not found.";
+    }
 
     var obj = hooks.createHookObj();
     obj.patchAddr = offset + addrOffset;
@@ -336,7 +336,7 @@ function hooks_matchImportCallUsage(offset, importOffset)
 {
     return hooks_matchImportUsage_code(
         [
-            "FF 15",  // call dword ptr [offset]
+            "FF 15",
         ],
         offset, importOffset
     );
@@ -346,7 +346,7 @@ function hooks_matchImportJmpUsage(offset, importOffset)
 {
     return hooks_matchImportUsage_code(
         [
-            "FF 25"  // jmp dword ptr [offset]
+            "FF 25",
         ],
         offset, importOffset
     );
@@ -356,8 +356,8 @@ function hooks_matchImportMovUsage(offset, importOffset)
 {
     return hooks_matchImportUsage_code(
         [
-            "8B 3D",  // mov edi, dword ptr [offset]
-            "8B 35"   // mov esi, dword ptr [offset]
+            "8B 3D",
+            "8B 35",
         ],
         offset, importOffset
     );
@@ -367,10 +367,10 @@ function hooks_matchImportUsage(offset, importOffset)
 {
     return hooks_matchImportUsage_code(
         [
-            "FF 15",  // call dword ptr [offset]
-            "FF 25",  // jmp dword ptr [offset]
-            "8B 3D",  // mov edi, dword ptr [offset]
-            "8B 35"   // mov esi, dword ptr [offset]
+            "FF 15",
+            "FF 25",
+            "8B 3D",
+            "8B 35",
         ],
         offset, importOffset
     );

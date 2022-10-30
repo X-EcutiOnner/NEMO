@@ -17,7 +17,6 @@
 
 function SendClientFlagsSearch(offsets2, code, clientOffset)
 {
-    consoleLog("search g_client_version usage");
     var offsets = pe.findAll(code);
     for (var i = 0; i < offsets.length; i ++)
     {
@@ -30,7 +29,6 @@ function SendClientFlags()
 {
     var flags = 0;
 
-    consoleLog("read table");
     if (table.get(table.g_client_version) === 0)
     {
         return "g_client_version not in table";
@@ -39,28 +37,35 @@ function SendClientFlags()
 
     var offsets = [];
 
-    offsets = SendClientFlagsSearch(offsets,
-        "A1 " + g_client_versionHex,  // 0 mov eax, g_client_version
-        1);
-    offsets = SendClientFlagsSearch(offsets,
-        "8B 0D " + g_client_versionHex,  // 0 mov ecx, g_client_version
-        2);
-    offsets = SendClientFlagsSearch(offsets,
-        "8B 15 " + g_client_versionHex,  // 0 mov edx, g_client_version
-        2);
+    offsets = SendClientFlagsSearch(
+        offsets,
+        "A1 " + g_client_versionHex,
+        1
+    );
+    offsets = SendClientFlagsSearch(
+        offsets,
+        "8B 0D " + g_client_versionHex,
+        2
+    );
+    offsets = SendClientFlagsSearch(
+        offsets,
+        "8B 15 " + g_client_versionHex,
+        2
+    );
 
     if (offsets.length !== 6)
     {
         return "Found wrong number of g_client_version usage";
     }
 
-    consoleLog("replace g_client_version usage");
     var free = alloc.find(4);
     if (free === -1)
+    {
         return "Not enough free space";
+    }
 
     pe.insertHexAt(free, 4, flags.packToHex(4));
-    var freeVaHex = (pe.rawToVa(free)).packToHex(4);
+    var freeVaHex = pe.rawToVa(free).packToHex(4);
 
     for (var i = 0; i < offsets.length; i ++)
     {
@@ -77,9 +82,13 @@ function SendClientFlags_apply()
     var flags = 0x80000000;
 
     if (storage.ExtendCashShop === true)
+    {
         flags |= 1;
+    }
     if (storage.ExtendOldCashShop === true)
+    {
         flags |= 2;
+    }
 
     patch.removePatchData(storage.g_client_version);
     pe.replaceDWord(storage.g_client_version, flags);

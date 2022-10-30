@@ -19,12 +19,12 @@ function pe_find(code, startRaw, endRaw)
 {
     checkArgs("pe.find", arguments, [["String"], ["String", "Number"], ["String", "Number", "Number"]]);
 
-    if (typeof(startRaw) === "undefined")
+    if (typeof startRaw === "undefined")
     {
         startRaw = 0;
         endRaw = 0x7fffffff;
     }
-    else if (typeof(endRaw) === "undefined")
+    else if (typeof endRaw === "undefined")
     {
         endRaw = 0x7fffffff;
     }
@@ -35,16 +35,16 @@ function pe_findAll(code, startRaw, endRaw)
 {
     checkArgs("pe.findAll", arguments, [["String"], ["String", "Number"], ["String", "Number", "Number"]]);
 
-    if (typeof(startRaw) === "undefined")
+    if (typeof startRaw === "undefined")
     {
         startRaw = 0;
         endRaw = 0x7fffffff;
     }
-    else if (typeof(endRaw) === "undefined")
+    else if (typeof endRaw === "undefined")
     {
         endRaw = 0x7fffffff;
     }
-    var offsets = []
+    var offsets = [];
     var offset = pe.findMaskInternal(code, startRaw, endRaw);
     var sz = code.hexlength();
     while (offset !== -1)
@@ -62,8 +62,7 @@ function pe_findCode(code)
 
     var sect = pe.sectionRaw(CODE);
     var startRaw = sect[0];
-//    var endRaw = sect[1];
-// emulating Nemo limit from exe.findCode
+
     var endRaw = pe.dataBaseRaw();
     return pe.findMaskInternal(code, startRaw, endRaw);
 }
@@ -74,10 +73,9 @@ function pe_findCodes(code)
 
     var sect = pe.sectionRaw(CODE);
     var startRaw = sect[0];
-//    var endRaw = sect[1];
-// emulating Nemo limit from exe.findCode
+
     var endRaw = pe.dataBaseRaw();
-    var offsets = []
+    var offsets = [];
     var offset = pe.findMaskInternal(code, startRaw, endRaw);
     var sz = code.hexlength();
     while (offset !== -1)
@@ -119,7 +117,7 @@ function pe_findAnyCode(codeObj)
         }
         ret.offset = foundOffset;
         ret.codeIndex = found;
-        ret.code = foundObj[0]
+        ret.code = foundObj[0];
         return ret;
     }
     return -1;
@@ -155,7 +153,7 @@ function pe_findAny(codeObj, start, finish)
         }
         ret.offset = foundOffset;
         ret.codeIndex = found;
-        ret.code = foundObj[0]
+        ret.code = foundObj[0];
         return ret;
     }
     return -1;
@@ -167,7 +165,9 @@ function pe_match(code, addrRaw)
 
     var offset = pe.findMaskInternal(code, addrRaw, addrRaw + 1);
     if (offset !== addrRaw)
+    {
         return false;
+    }
     return true;
 }
 
@@ -178,7 +178,6 @@ function pe_matchAny(matchObj, addrRaw)
     for (var i = 0; i < matchObj.length; i ++)
     {
         var obj = matchObj[i];
-        consoleLog("do match");
         var res = pe.match(obj[0], addrRaw);
         if (res !== false)
         {
@@ -200,7 +199,7 @@ function pe_matchAny(matchObj, addrRaw)
         }
         ret.offset = addrRaw;
         ret.codeIndex = found;
-        ret.code = foundObj[0]
+        ret.code = foundObj[0];
         return ret;
     }
     return false;
@@ -267,7 +266,9 @@ function pe_stringAnyVa(strings)
     {
         var res = pe_stringRaw(args[i]);
         if (res !== -1)
+        {
             return pe.rawToVa(res);
+        }
     }
     return -1;
 }
@@ -279,7 +280,9 @@ function pe_stringAnyRaw(strings)
     {
         var res = pe_stringRaw(args[i]);
         if (res !== -1)
+        {
             return res;
+        }
     }
     return -1;
 }
@@ -291,7 +294,9 @@ function pe_stringInfoVa(strings)
     {
         var res = pe_stringRaw(args[i]);
         if (res !== -1)
+        {
             return [args[i], pe.rawToVa(res)];
+        }
     }
     return -1;
 }
@@ -303,7 +308,9 @@ function pe_stringInfoRaw(strings)
     {
         var res = pe_stringRaw(args[i]);
         if (res !== -1)
+        {
             return [args[i], res];
+        }
     }
     return -1;
 }
@@ -314,7 +321,9 @@ function pe_stringHex4(str)
 
     var addr = pe_stringVa(str);
     if (addr === -1)
+    {
         throw "String " + str + " not found";
+    }
     return addr.packToHex(4);
 }
 
@@ -327,7 +336,9 @@ function pe_fetchUQWord(addrRaw)
 {
     var value = pe.fetchQWord(addrRaw);
     if (value === false)
+    {
         return false;
+    }
     return value >>> 0;
 }
 
@@ -335,7 +346,9 @@ function pe_fetchUDWord(addrRaw)
 {
     var value = pe.fetchDWord(addrRaw);
     if (value === false)
+    {
         return false;
+    }
     return value >>> 0;
 }
 
@@ -343,7 +356,9 @@ function pe_fetchUWord(addrRaw)
 {
     var value = pe.fetchWord(addrRaw);
     if (value === false)
+    {
         return false;
+    }
     return value & 0xffff;
 }
 
@@ -351,7 +366,9 @@ function pe_fetchUByte(addrRaw)
 {
     var value = pe.fetchByte(addrRaw);
     if (value === false)
+    {
         return false;
+    }
     return value & 0xff;
 }
 
@@ -359,19 +376,25 @@ function pe_fetchString(addrRaw)
 {
     var endOffset = pe.find("00", addrRaw);
     if (endOffset == -1)
+    {
         throw "String end not found";
+    }
     return pe.fetch(addrRaw, endOffset - addrRaw);
 }
 
 function pe_getImportTable()
 {
-    if (typeof(pe.importTable) !== "undefined")
+    if (typeof pe.importTable !== "undefined")
+    {
         return pe.importTable;
+    }
 
     var data = pe.getSubSection(1);
     pe.importTable = data;
     if (data === false)
+    {
         throw "Cant get import table address";
+    }
     return data;
 }
 
@@ -379,53 +402,67 @@ function pe_getSubSection(index)
 {
     var opt = pe.getOptHeader();
     if (opt.size <= 92)
+    {
         throw "Pe opt header too small for sub sections";
+    }
 
     var count = pe.fetchUDWord(opt.offset + 92);
     if (count <= index)
+    {
         return false;
+    }
 
     var offset = opt.offset + 96 + 8 * index;
     return {
-        "offset" : pe.rvaToRaw(pe.fetchUDWord(offset)),
-        "size" : pe.fetchUDWord(offset + 4)
+        "offset": pe.rvaToRaw(pe.fetchUDWord(offset)),
+        "size": pe.fetchUDWord(offset + 4),
     };
 }
 
 function pe_getImageBase()
 {
-    if (typeof(pe.imageBase) !== "undefined")
+    if (typeof pe.imageBase !== "undefined")
+    {
         return pe.imageBase;
+    }
 
     var opt = pe.getOptHeader();
     if (opt.size <= 28)
+    {
         throw "Pe opt header too small for image base";
+    }
     pe.imageBase = pe.fetchUDWord(opt.offset + 28);
     return pe.imageBase;
 }
 
 function pe_getPeHeader()
 {
-    if (typeof(pe.peHeader) !== "undefined")
+    if (typeof pe.peHeader !== "undefined")
+    {
         return pe.peHeader;
+    }
 
     var offset = pe.fetchUDWord(0x3c);
     if (pe.fetchUDWord(offset) !== 0x4550)
+    {
         throw "Wrong PE header found";
+    }
     pe.peHeader = offset;
     return offset;
 }
 
 function pe_getOptHeader()
 {
-    if (typeof(pe.optHeader) !== "undefined")
+    if (typeof pe.optHeader !== "undefined")
+    {
         return pe.optHeader;
+    }
 
     var offset = pe.getPeHeader() + 4 + 0x14;
     var size = pe.fetchUWord(offset - 4);
     pe.optHeader = {
-        "offset" : offset,
-        "size" : size
+        "offset": offset,
+        "size": size,
     };
     return pe.optHeader;
 }
@@ -460,10 +497,9 @@ function pe_fetchValue(offset, offset2)
     {
         return pe.fetchQWord(addr);
     }
-    else
-    {
-        fatalError("Unknown size in pe.fetchValue: " + size);
-    }
+
+    fatalError("Unknown size in pe.fetchValue: " + size);
+    return false;
 }
 
 function pe_fetchValueSimple(offset)
@@ -493,14 +529,16 @@ function pe_replace(addrRaw, data)
 
 function pe_resizeHexCode(code, codeLen)
 {
-    if (typeof(codeLen) !== "undefined")
+    if (typeof codeLen !== "undefined")
     {
         var sz = code.hexlength();
         if (sz > codeLen)
+        {
             fatalError("Existing code bigger than requested");
+        }
         for (var i = 0; i < codeLen - sz; i ++)
         {
-            code = code + " 90";
+            code += " 90";
         }
     }
     return code;
@@ -516,8 +554,10 @@ function pe_replaceAsmText(patchAddr, commands, vars, codeLen)
 
 function pe_replaceAsmFile(patchAddr, fileName, vars, codeLen)
 {
-    if (typeof(vars) === "undefined")
-        vars = {}
+    if (typeof vars === "undefined")
+    {
+        vars = {};
+    }
     var commands = asm.load(fileName);
     return pe_replaceAsmText(patchAddr, commands, vars, codeLen);
 }
@@ -536,17 +576,23 @@ function pe_setValueSimple(offset, value)
 
 function pe_setJmpVa(patchAddr, jmpAddrVa, cmd, codeLen)
 {
-    if (typeof(cmd) === "undefined")
+    if (typeof cmd === "undefined")
+    {
         cmd = "jmp";
+    }
     var vars = {
         "offset": jmpAddrVa,
     };
     var code = asm.textToHexRaw(patchAddr, cmd + " offset", vars);
     code = pe.resizeHexCode(code, codeLen);
-    if (patch.getState() !== 2)
-        pe.replaceHex(patchAddr, code);
-    else
+    if (patch.getState() === 2)
+    {
         pe.directReplace(patchAddr, code);
+    }
+    else
+    {
+        pe.replaceHex(patchAddr, code);
+    }
 }
 
 function pe_setJmpRaw(patchAddr, jmpAddrRaw, cmd, codeLen)
@@ -559,7 +605,7 @@ function pe_setNops(patchAddr, nopsCount)
     var code = "";
     for (var i = 0; i < nopsCount; i ++)
     {
-        code = code + "90 ";
+        code += "90 ";
     }
     pe.replaceHex(patchAddr, code);
 }
@@ -576,14 +622,18 @@ function pe_setNopsValueRange(offset, nopsValue)
 
 function pe_setShortJmpVa(patchAddr, jmpAddrVa, cmd)
 {
-    if (typeof(cmd) === "undefined")
+    if (typeof cmd === "undefined")
+    {
         cmd = "jmp";
+    }
     var vars = {
         "offset": jmpAddrVa,
     };
     var code = asm.textToHexRaw(patchAddr, cmd + " offset", vars);
     if (code.hexlength() !== 2)
+    {
         fatalError(cmd + " is not short");
+    }
 
     pe.replaceHex(patchAddr, code);
 }
@@ -598,9 +648,13 @@ function pe_insertHexAt(insertAddr, size, code)
     checkArgs("pe.insertHexAt", arguments, [["Number", "Number", "String"]]);
     var res = pe.replaceHex(insertAddr, code);
     if (res === false)
+    {
         return false;
+    }
     if (size < code.hexlength())
+    {
         fatalError("pe.insertHexAt: size smaller than code real size");
+    }
     return alloc.reserve(insertAddr, size);
 }
 
@@ -609,20 +663,28 @@ function pe_insertAt(insertAddr, size, code)
     checkArgs("pe.insertAt", arguments, [["Number", "Number", "String"]]);
     var res = pe.replace(insertAddr, code);
     if (res === false)
+    {
         return false;
+    }
     if (size < code.length)
+    {
         fatalError("pe.insertAt: size smaller than code real size");
+    }
     return alloc.reserve(insertAddr, size);
 }
 
 function pe_insertAsmText(commands, vars, freeSpace)
 {
-    if (typeof(freeSpace) === "undefined")
+    if (typeof freeSpace === "undefined")
+    {
         freeSpace = 0;
+    }
     var size = asm.textToHexLength(commands, vars) + freeSpace;
     var free = alloc.find(size);
     if (free === -1)
+    {
         fatalError("Failed in pe.insertAsmText - Not enough free space");
+    }
 
     var obj = asm.textToObjRaw(free, commands, vars);
     pe.insertHexAt(free, size, obj.code);
@@ -632,36 +694,45 @@ function pe_insertAsmText(commands, vars, freeSpace)
 
 function pe_insertAsmTextObj(commands, vars, freeSpace, dryRun)
 {
-    if (typeof(freeSpace) === "undefined")
-        freeSpace = 0;
-    if (typeof(dryRun) === "undefined")
-        dryRun = false;
-    var size = asm.textToHexLength(commands, vars) + freeSpace;
-    if (patch.getState() !== 2)
+    if (typeof freeSpace === "undefined")
     {
-        var free = alloc.find(size);
-        if (free === -1)
+        freeSpace = 0;
+    }
+    if (typeof dryRun === "undefined")
+    {
+        dryRun = false;
+    }
+    var size = asm.textToHexLength(commands, vars) + freeSpace;
+    var free;
+    if (patch.getState() === 2)
+    {
+        if (storage.getZero() == 0)
+        {
             fatalError("Failed in pe.insertAsmTextObj - Not enough free space");
+        }
+        free = storage.getZero();
     }
     else
     {
-        if (storage.getZero() == 0)
+        free = alloc.find(size);
+        if (free === -1)
+        {
             fatalError("Failed in pe.insertAsmTextObj - Not enough free space");
-        free = storage.getZero();
+        }
     }
 
     var obj = asm.textToObjRaw(free, commands, vars);
 
     if (dryRun !== true)
     {
-        if (patch.getState() !== 2)
-        {
-            pe.insertHexAt(free, size, obj.code);
-        }
-        else
+        if (patch.getState() === 2)
         {
             pe.directReplace(free, obj.code);
             storage.adjustZero(size);
+        }
+        else
+        {
+            pe.insertHexAt(free, size, obj.code);
         }
     }
     obj.free = free;
@@ -677,34 +748,41 @@ function pe_insertAsmFile(fileName, vars, freeSpace, dryRun)
 
 function pe_insertDWord(value, dryRun)
 {
-    if (typeof(dryRun) === "undefined")
+    if (typeof dryRun === "undefined")
+    {
         dryRun = false;
+    }
 
     var size = 4;
-    if (patch.getState() !== 2)
+    var free;
+    if (patch.getState() === 2)
     {
-        var free = alloc.find(size);
-        if (free === -1)
+        if (storage.getZero() == 0)
+        {
             fatalError("Failed in pe.insertDWord - Not enough free space");
+        }
+        free = storage.getZero();
     }
     else
     {
-        if (storage.getZero() == 0)
+        free = alloc.find(size);
+        if (free === -1)
+        {
             fatalError("Failed in pe.insertDWord - Not enough free space");
-        free = storage.getZero();
+        }
     }
     var obj = asm.textToObjRaw(free, "long " + value, {});
     if (dryRun !== true)
     {
-        if (patch.getState() !== 2)
-        {
-            alloc.reserve(free, size);
-            pe.replaceHex(free, obj.code);
-        }
-        else
+        if (patch.getState() === 2)
         {
             pe.directReplace(free, obj.code);
             storage.adjustZero(size);
+        }
+        else
+        {
+            alloc.reserve(free, size);
+            pe.replaceHex(free, obj.code);
         }
     }
     return free;
@@ -715,14 +793,20 @@ function pe_insertHex(value)
     var size = value.hexlength();
     var free = alloc.find(size);
     if (free === -1)
+    {
         fatalError("Failed in pe.insertHex - cant find");
+    }
 
     var res = alloc.reserve(free, size);
     if (res === false)
+    {
         fatalError("Failed in pe.insertHex - cant reserve");
+    }
     res = pe.replaceHex(free, value);
     if (res === false)
+    {
         fatalError("Failed in pe.insertHex - cant replace");
+    }
 
     return free;
 }

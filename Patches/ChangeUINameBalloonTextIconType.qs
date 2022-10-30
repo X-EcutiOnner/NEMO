@@ -22,20 +22,26 @@ function UINameBalloonTextIconType(addrId, name)
 
     var value = exe.getUserInput(paramStr, XTYPE_DWORD, _("Number Input"), _("Enter default icon type for @@").replace("@@", name), 0, 0, 2);
     if (value === 0)
+    {
         throw "New icon type is same";
+    }
 
     if (table.get(addrId) === 0)
+    {
         throw name + "::" + name + " ret not set";
+    }
     var addrRaw = table.getRaw(addrId);
 
     var field = table.get(fieldId);
     if (field === 0)
+    {
         throw "UIBalloonText::m_fontSize not set";
+    }
 
     var text = "mov dword ptr [eax + m_iconType], iconType";
     var vars = {
         "m_iconType": field,
-        "iconType": value
+        "iconType": value,
     };
 
     var hook = hooks.initEndHook(addrRaw);

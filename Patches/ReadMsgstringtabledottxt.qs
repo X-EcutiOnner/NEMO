@@ -20,8 +20,7 @@ function MsgStringTable_patch()
     var offset = table.getRawValidated(table.initMsgStrings_jmp);
 
     var code =
-        "75 ?? "                      // 0 jnz short addr
-    var cmdOffset = [0, 1];
+        "75 ?? ";
     var addrOffset = [1, 1];
 
     var found = pe.match(code, offset);
@@ -30,7 +29,6 @@ function MsgStringTable_patch()
         throw "Error: jmp not matched";
     }
 
-    var cmd = pe.fetchValue(offset, cmdOffset);
     var addr = pe.fetchRelativeValue(offset, addrOffset);
 
     var vars = {

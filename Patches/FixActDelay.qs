@@ -15,24 +15,23 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 // Patch idea and source bytes by Functor
-//#############################################################
-//# Purpose: Fix delay for act files with big number of frames#
-//#          CRenderObject_virt28                             #
-//#############################################################
+// #############################################################
+// # Purpose: Fix delay for act files with big number of frames#
+// #          CRenderObject_virt28                             #
+// #############################################################
 
 function FixActDelay()
 {
-    // step 1
     var code =
-        "D9 5D ?? " +                 // 0 fstp [ebp+actIndex]
-        "F3 0F 10 45 ?? " +           // 3 movss xmm0, [ebp+actIndex]
-        "0F 57 C9 " +                 // 8 xorps xmm1, xmm1
-        "0F 2F C8 " +                 // 11 comiss xmm1, xmm0
-        "F3 0F 11 45 ?? " +           // 14 movss [ebp+actIndex], xmm0
-        "72 ?? " +                    // 19 jb short loc_9A2388
-        "57 " +                       // 21 push edi
-        "8B CB " +                    // 22 mov ecx, ebx
-        "E8 ";                        // 24 call CActRes_GetDelay
+        "D9 5D ?? " +
+        "F3 0F 10 45 ?? " +
+        "0F 57 C9 " +
+        "0F 2F C8 " +
+        "F3 0F 11 45 ?? " +
+        "72 ?? " +
+        "57 " +
+        "8B CB " +
+        "E8 ";
     var actIndexOffset1 = 2;
     var actIndexOffset2 = 7;
     var actIndexOffset3 = 18;
@@ -40,7 +39,9 @@ function FixActDelay()
 
     var offset = pe.findCode(code);
     if (offset === -1)
+    {
         return "Failed in step 1 - pattern not found";
+    }
 
     var index1 = pe.fetchUByte(offset + actIndexOffset1);
     var index2 = pe.fetchUByte(offset + actIndexOffset2);

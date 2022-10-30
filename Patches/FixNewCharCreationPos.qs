@@ -23,110 +23,103 @@ function UINewMakeCharWndCreation_match()
 
     var code = [
         [
-            "E8 ?? ?? ?? ?? " +           // 0 call UIWindowMgr_AddWindow
-            "68 A6 01 00 00 " +           // 5 push 1A6h
-            "68 1A 03 00 00 " +           // 10 push 31Ah
-            "8B ?? " +                    // 15 mov ecx, ebx
-            "E8 ?? ?? ?? ?? " +           // 17 call UIWindow_Create
-            "8B 0D " + renderHex +        // 22 mov ecx, g_renderer
-            "?? ?? " +                    // 28 mov esi, [ebx]
-            "8B 41 " + heightHex +        // 30 mov eax, [ecx+CRenderer.m_height]
-            "2D A6 01 00 00 " +           // 33 sub eax, 1A6h
-            "99 " +                       // 38 cd cdq
-            "2B C2 " +                    // 39 sub eax, edx
-            "D1 F8 " +                    // 41 sar eax, 1
-            "83 E8 ?? " +                 // 43 sub eax, 46h
-            "50 " +                       // 46 push eax
-            "8B 41 " + widthHex +         // 47 mov eax, [ecx+CRenderer.m_width]
-            "2D 1A 03 00 00 " +           // 50 sub eax, 31Ah
-            "99 " +                       // 55 cd cdq
-            "2B C2 " +                    // 56 sub eax, edx
-            "D1 F8 " +                    // 58 sar eax, 1
-            "E9 ",                        // 60 jmp loc_704E8C
+            "E8 ?? ?? ?? ?? " +
+            "68 A6 01 00 00 " +
+            "68 1A 03 00 00 " +
+            "8B ?? " +
+            "E8 ?? ?? ?? ?? " +
+            "8B 0D " + renderHex +
+            "?? ?? " +
+            "8B 41 " + heightHex +
+            "2D A6 01 00 00 " +
+            "99 " +
+            "2B C2 " +
+            "D1 F8 " +
+            "83 E8 ?? " +
+            "50 " +
+            "8B 41 " + widthHex +
+            "2D 1A 03 00 00 " +
+            "99 " +
+            "2B C2 " +
+            "D1 F8 " +
+            "E9 ",
             {
                 "windowYOffset": [45, 1],
-                "addWindowOffset": 1,
-                "windowCreateOffset": 18,
-                "vtblMoveOffset": 0,
                 "widthOffsets": [[11, 4], [51, 4]],
-                "heightOffsets": [[6, 4], [34, 4]]
-            }
+                "heightOffsets": [[6, 4], [34, 4]],
+            },
         ],
         [
-            "E8 ?? ?? ?? ?? " +           // 0 call UIWindowMgr_AddWindow
-            "68 A6 01 00 00 " +           // 5 push 1A6h
-            "68 1A 03 00 00 " +           // 10 push 31Ah
-            "8B ?? " +                    // 15 mov ecx, ebx
-            "E8 ?? ?? ?? ?? " +           // 17 call UIWindow_Create
-            "8B 0D " + renderHex +        // 22 mov ecx, ds:g_renderer
-            "?? ?? " +                    // 28 mov esi, [ebx]
-            "8B 41 " + heightHex +        // 30 mov eax, [ecx+CRenderer.m_height]
-            "2D A6 01 00 00 " +           // 33 sub eax, 1A6h
-            "99 " +                       // 38 cd cdq
-            "2B C2 " +                    // 39 sub eax, edx
-            "D1 F8 " +                    // 41 sar eax, 1
-            "83 E8 ?? " +                 // 43 sub eax, 46h
-            "50 " +                       // 46 push eax
-            "8B 41 " + widthHex +         // 47 mov eax, [ecx+CRenderer.m_width]
-            "2D 1A 03 00 00 " +           // 50 sub eax, 31Ah
-            "99 " +                       // 55 cd cdq
-            "2B C2 " +                    // 56 sub eax, edx
-            "D1 F8 " +                    // 58 sar eax, 1
-            "50 " +                       // 60 push eax
-            "8B ?? ?? " +                 // 61 mov eax, [esi+UINewMakeCharWnd_vtable.UINewMakeCharWnd_Move]
-            "E9 ",                        // 64 jmp loc_62B789
+            "E8 ?? ?? ?? ?? " +
+            "68 A6 01 00 00 " +
+            "68 1A 03 00 00 " +
+            "8B ?? " +
+            "E8 ?? ?? ?? ?? " +
+            "8B 0D " + renderHex +
+            "?? ?? " +
+            "8B 41 " + heightHex +
+            "2D A6 01 00 00 " +
+            "99 " +
+            "2B C2 " +
+            "D1 F8 " +
+            "83 E8 ?? " +
+            "50 " +
+            "8B 41 " + widthHex +
+            "2D 1A 03 00 00 " +
+            "99 " +
+            "2B C2 " +
+            "D1 F8 " +
+            "50 " +
+            "8B ?? ?? " +
+            "E9 ",
             {
                 "windowYOffset": [45, 1],
-                "addWindowOffset": 1,
-                "windowCreateOffset": 18,
-                "vtblMoveOffset": [63, 1],
                 "widthOffsets": [[11, 4], [51, 4]],
-                "heightOffsets": [[6, 4], [34, 4]]
-            }
+                "heightOffsets": [[6, 4], [34, 4]],
+            },
         ],
         [
-            "E8 ?? ?? ?? ?? " +           // 0 call UIWindowMgr_AddWindow
-            "68 A6 01 00 00 " +           // 5 push 1A6h
-            "68 1A 03 00 00 " +           // 10 push 31Ah
-            "8B ?? " +                    // 15 mov ecx, ebx
-            "E8 ?? ?? ?? ?? " +           // 17 call UIWindow_Create
-            "8B 0D " + renderHex +        // 22 mov ecx, g_renderer
-            "?? ?? " +                    // 28 mov esi, [ebx]
-            "8B 41 " + heightHex +        // 30 mov eax, [ecx+CRenderer.m_height]
-            "2D A6 01 00 00 " +           // 33 sub eax, 1A6h
-            "99 " +                       // 38 cd cdq
-            "2B C2 " +                    // 39 sub eax, edx
-            "D1 F8 " +                    // 41 sar eax, 1
-            "83 E8 ?? " +                 // 43 sub eax, 46h
-            "50 " +                       // 46 push eax
-            "8B 41 " + widthHex +         // 47 mov eax, [ecx+CRenderer.m_width]
-            "8B CB " +                    // 50 mov ecx, ebx
-            "2D 1A 03 00 00 " +           // 52 sub eax, 31Ah
-            "99 " +                       // 57 cd cdq
-            "2B C2 " +                    // 58 sub eax, edx
-            "D1 F8 " +                    // 60 sar eax, 1
-            "50 " +                       // 62 push eax
-            "8B ?? ?? " +                 // 63 mov eax, [esi+UIWindow_vtable.UIWindow_Move]
-            "FF D0 " +                    // 66 call eax
-            "E9 ",                        // 68 jmp loc_71DBDF
+            "E8 ?? ?? ?? ?? " +
+            "68 A6 01 00 00 " +
+            "68 1A 03 00 00 " +
+            "8B ?? " +
+            "E8 ?? ?? ?? ?? " +
+            "8B 0D " + renderHex +
+            "?? ?? " +
+            "8B 41 " + heightHex +
+            "2D A6 01 00 00 " +
+            "99 " +
+            "2B C2 " +
+            "D1 F8 " +
+            "83 E8 ?? " +
+            "50 " +
+            "8B 41 " + widthHex +
+            "8B CB " +
+            "2D 1A 03 00 00 " +
+            "99 " +
+            "2B C2 " +
+            "D1 F8 " +
+            "50 " +
+            "8B ?? ?? " +
+            "FF D0 " +
+            "E9 ",
             {
                 "windowYOffset": [45, 1],
-                "addWindowOffset": 1,
-                "windowCreateOffset": 18,
-                "vtblMoveOffset": [65, 1],
                 "widthOffsets": [[11, 4], [53, 4]],
-                "heightOffsets": [[6, 4], [34, 4]]
-            }
-        ]
+                "heightOffsets": [[6, 4], [34, 4]],
+            },
+        ],
     ];
 
     var offsetObj = pe.findAnyCode(code);
 
     if (offsetObj === -1)
+    {
         throw "Pattern not found";
+    }
 
     var obj = hooks.createHookObj();
-//    obj.patchAddr = offsetObj.offset;
+
     obj.stolenCode = "";
     obj.stolenCode1 = "";
     obj.retCode = "";
@@ -134,32 +127,22 @@ function UINewMakeCharWndCreation_match()
 
     obj.offset = offsetObj.offset;
     obj.windowYOffset = offsetObj.windowYOffset;
-    obj.addWindowOffset = offsetObj.addWindowOffset;
-    obj.windowCreateOffset = offsetObj.windowCreateOffset;
-    obj.vtblMoveOffset = offsetObj.vtblMoveOffset;
     obj.widthOffsets = offsetObj.widthOffsets;
     obj.heightOffsets = offsetObj.heightOffsets;
 
-    var offset = obj.offset;
-    logRawFunc("UIWindowMgr_AddWindow", offset, obj.addWindowOffset);
-    logRawFunc("UIWindow_Create", offset, obj.windowCreateOffset);
-    if (obj.vtblMoveOffset != 0)
-    {
-        logField("UIWindow_vtable_Move", offset, obj.vtblMoveOffset)
-    }
-
     return obj;
 }
-
 
 function FixNewCharCreationPos()
 {
     var obj = UINewMakeCharWndCreation_match();
 
-    var yOffset = exe.getUserInput("$UINewMakeCharWndYOffset", XTYPE_BYTE,
+    var yOffset = exe.getUserInput(
+        "$UINewMakeCharWndYOffset", XTYPE_BYTE,
         _("Y offset for new char creation window"),
         _("Enter y offset for new char creation window (wrong default: 70)"),
-        0, -127, 127);
+        0, -127, 127
+    );
 
     pe.setValue(obj.offset, obj.windowYOffset, yOffset);
     return true;
@@ -167,5 +150,5 @@ function FixNewCharCreationPos()
 
 function FixNewCharCreationPos_()
 {
-    return (pe.stringRaw(".?AVUIRPImageWnd@@") !== -1);
+    return pe.stringRaw(".?AVUIRPImageWnd@@") !== -1;
 }

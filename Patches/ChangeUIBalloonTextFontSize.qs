@@ -22,20 +22,26 @@ function UIBalloonTextFontSize(addrId, name)
 
     var value = exe.getUserInput(colorStr, XTYPE_DWORD, _("Number Input"), _("Enter new default font size in @@").replace("@@", name), 12, 1, 1000);
     if (value === 12)
+    {
         throw "New font size is same";
+    }
 
     if (table.get(addrId) === 0)
+    {
         throw name + "::" + name + " ret not set";
+    }
     var addrRaw = table.getRaw(addrId);
 
     var field = table.get(fieldId);
     if (field === 0)
+    {
         throw "UIBalloonText::m_fontSize not set";
+    }
 
     var text = "mov dword ptr [eax + m_fontSize], fontSize";
     var vars = {
         "m_fontSize": field,
-        "fontSize": value
+        "fontSize": value,
     };
 
     var hook = hooks.initEndHook(addrRaw);
@@ -81,15 +87,17 @@ function ChangeUIVerticalNameBalloonTextFontSize()
 
 function ChangeNameBalloonFontSize()
 {
-    var value = exe.getUserInput("$ChangeNameBalloonFontSize",
+    var value = exe.getUserInput(
+        "$ChangeNameBalloonFontSize",
         XTYPE_DWORD,
         _("Number Input"),
         _("Enter new name balloons font height"),
         12,
-        1, 1000);
+        1, 1000
+    );
 
     var vars = {
-        "fontSize": value
+        "fontSize": value,
     };
 
     var hook = hooks.initTableEndHook(table.InitClientInfo_ret);

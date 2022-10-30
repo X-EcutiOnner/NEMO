@@ -17,10 +17,12 @@
 
 function ReplaceErrorMessageToSound()
 {
-    var value = exe.getUserInput("$ReplaceErrorMessageToSound", XTYPE_DWORD,
+    var value = exe.getUserInput(
+        "$ReplaceErrorMessageToSound", XTYPE_DWORD,
         _("Number Input"),
         _("Enter error messages sound type"),
-        0, 0, 4);
+        0, 0, 4
+    );
 
     var vars = {
         "value": value * 16,
@@ -28,7 +30,9 @@ function ReplaceErrorMessageToSound()
 
     var hooksList = hooks.initImportHooks("MessageBoxA", "user32.dll");
     if (hooksList.length === 0)
+    {
         throw "MessageBoxA usages not found";
+    }
     hooksList.addFilePre("", vars, 4000);
     hooksList.validate();
     return true;

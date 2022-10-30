@@ -15,21 +15,13 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-//############################################################
-//# Purpose: Modify the Serial Display function to reset EAX #
-//#          and thereby skip showing the serial number      #
-//############################################################
-
 function RemoveSerialDisplay()
 {
     pe.replaceAsmFile(table.getRawValidated(table.UIWindowMgr_TextOutSerial));
     return true;
 }
 
-//=================================//
-// Disable for Unsupported Clients //
-//=================================//
 function RemoveSerialDisplay_()
 {
-    return (pe.getDate() > 20101116);
+    return pe.getDate() > 20101116;
 }

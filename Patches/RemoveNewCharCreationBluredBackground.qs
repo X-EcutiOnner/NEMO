@@ -22,7 +22,9 @@ function RemoveNewCharCreationBluredBackground()
                               "\x61\x6B\x65\x5F\x63\x68\x61\x72\x61\x63\x74\x65\x72\x5F\x76\x65" +
                               "\x72\x32\x5C\x62\x67\x5F\x62\x61\x63\x6B\x32\x2E\x74\x67\x61");
     if (offset === -1)
+    {
         return "Error: background image not found";
+    }
 
     pe.replaceByte(offset, 0);
     return true;
@@ -30,5 +32,5 @@ function RemoveNewCharCreationBluredBackground()
 
 function RemoveNewCharCreationBluredBackground_()
 {
-    return (pe.stringRaw(".?AVUIRPImageWnd@@") !== -1);
+    return pe.stringRaw(".?AVUIRPImageWnd@@") !== -1;
 }

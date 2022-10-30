@@ -1,109 +1,30 @@
-//##############################################
-//# Purpose: Change the System\*.lub reference #
-//#          to custom file specified by user  #
-//##############################################
 
-function ChangeAchievementListPath()
-{
-    var iiName = ChangeLubPathGetIIName(1);
-    return ChangeLubPath(iiName, input.getString("$AchievementListPath",
-        _("String input - maximum 100 characters"),
-        _("Please enter new path for AchievementList*.lub file"), iiName, 100));
-}
-
-function ChangeMonsterSizeEffectPath()
-{
-    var iiName = ChangeLubPathGetIIName(2);
-    return ChangeLubPath(iiName, input.getString("$MonsterSizeEffectPath",
-        _("String input - maximum 100 characters"),
-        _("Please enter new path for MonsterSizeEffect*.lub file"), iiName, 100));
-}
-
-function ChangeTowninfoPath()
-{
-    var iiName = ChangeLubPathGetIIName(3);
-    return ChangeLubPath(iiName, input.getString("$TowninfoPath",
-        _("String input - maximum 100 characters"),
-        _("Please enter new path for Towninfo*.lub file"), iiName, 100));
-}
-
-function ChangePetEvolutionClnPath()
-{
-    var iiName = ChangeLubPathGetIIName(4);
-    return ChangeLubPath(iiName, input.getString("$PetEvolutionClnPath",
-        _("String input - maximum 100 characters"),
-        _("Please enter new path for PetEvolutionCln*.lub file"), iiName, 100));
-}
-
-function ChangeTipboxPath()
-{
-    var iiName = ChangeLubPathGetIIName(5);
-    return ChangeLubPath(iiName, input.getString("$TipboxPath",
-        _("String input - maximum 100 characters"),
-        _("Please enter new path for Tipbox*.lub file"), iiName, 100));
-}
-
-function ChangeCheckAttendancePath()
-{
-    var iiName = ChangeLubPathGetIIName(6);
-    return ChangeLubPath(iiName, input.getString("$CheckAttendancePath",
-        _("String input - maximum 100 characters"),
-        _("Please enter new path for CheckAttendance*.lub file"), iiName, 100));
-}
-
-function ChangeOngoingQuestInfoListPath()
-{
-    var iiName = ChangeLubPathGetIIName(7);
-    return ChangeLubPath(iiName, input.getString("$OngoingQuestInfoListPath",
-        _("String input - maximum 100 characters"),
-        _("Please enter new path for OngoingQuestInfoList* file"), iiName, 100));
-}
-
-function ChangeRecommendedQuestInfoListPath()
-{
-    var iiName = ChangeLubPathGetIIName(8);
-    return ChangeLubPath(iiName, input.getString("$RecommendedQuestInfoListPath",
-        _("String input - maximum 100 characters"),
-        _("Please enter new path for RecommendedQuestInfoList* file"), iiName, 100));
-}
-
-function ChangePrivateAirplanePath()
-{
-    var iiName = ChangeLubPathGetIIName(9);
-    return ChangeLubPath(iiName, input.getString("$PrivateAirplanePath",
-        _("String input - maximum 100 characters"),
-        _("Please enter new path for PrivateAirplane*.lub file"), iiName, 100));
-}
-
-function ChangeMapInfoPath()
-{
-    var iiName = ChangeLubPathGetIIName(10);
-    return ChangeLubPath(iiName, input.getString("$MapInfoPath",
-        _("String input - maximum 100 characters"),
-        _("Please enter new path for MapInfo*.lub file"), iiName, 100));
-}
 
 function ChangeLubPathGetIIName(type)
 {
     function findStrings(args)
     {
-        var args = Array.prototype.slice.call(arguments);
+        args = Array.prototype.slice.call(arguments);
         for (var i = 0; i < args.length; i ++)
         {
             var str = args[i];
             var res = pe.stringVa(str);
             if (res !== -1)
+            {
                 return str;
+            }
             str = str.replaceAll("/", "\\");
             res = pe.stringVa(str);
             if (res !== -1)
+            {
                 return str;
+            }
         }
         return "";
     }
 
     var iiName = "";
-    switch(type)
+    switch (type)
     {
         case 1:
         {
@@ -125,7 +46,7 @@ function ChangeLubPathGetIIName(type)
             return findStrings(
                 "System/monster_size_effect_new.lub",
                 "System/monster_size_effect.lub"
-            )
+            );
         }
         case 3:
         {
@@ -220,28 +141,37 @@ function ChangeLubPathGetIIName(type)
             return "";
         }
     }
-    return "";
 }
 
 function ChangeLubPath(old_path, new_path)
 {
     if (old_path === "")
+    {
         return "Old path not found";
+    }
 
     var offset = pe.stringVa(old_path);
     if (offset === -1)
+    {
         return "Failed in Step 1a - file name not found";
+    }
 
     offset = pe.findCode("68" + offset.packToHex(4));
     if (offset === -1)
+    {
         return "Failed in Step 1b - reference not found";
+    }
 
     if (old_path === new_path)
+    {
         return "Patch Cancelled - New value is same as old";
+    }
 
     var free = alloc.find(new_path.length);
     if (free === -1)
+    {
         return "Failed in Step 2 - Not enough free space";
+    }
 
     pe.insertAt(free, new_path.length, new_path);
     pe.replaceDWord(offset + 1, pe.rawToVa(free));
@@ -249,55 +179,152 @@ function ChangeLubPath(old_path, new_path)
     return true;
 }
 
-//=================================//
-// Disable for Unsupported clients //
-//=================================//
+function ChangeAchievementListPath()
+{
+    var iiName = ChangeLubPathGetIIName(1);
+    return ChangeLubPath(iiName, input.getString(
+        "$AchievementListPath",
+        _("String input - maximum 100 characters"),
+        _("Please enter new path for AchievementList*.lub file"), iiName, 100
+    ));
+}
+
+function ChangeMonsterSizeEffectPath()
+{
+    var iiName = ChangeLubPathGetIIName(2);
+    return ChangeLubPath(iiName, input.getString(
+        "$MonsterSizeEffectPath",
+        _("String input - maximum 100 characters"),
+        _("Please enter new path for MonsterSizeEffect*.lub file"), iiName, 100
+    ));
+}
+
+function ChangeTowninfoPath()
+{
+    var iiName = ChangeLubPathGetIIName(3);
+    return ChangeLubPath(iiName, input.getString(
+        "$TowninfoPath",
+        _("String input - maximum 100 characters"),
+        _("Please enter new path for Towninfo*.lub file"), iiName, 100
+    ));
+}
+
+function ChangePetEvolutionClnPath()
+{
+    var iiName = ChangeLubPathGetIIName(4);
+    return ChangeLubPath(iiName, input.getString(
+        "$PetEvolutionClnPath",
+        _("String input - maximum 100 characters"),
+        _("Please enter new path for PetEvolutionCln*.lub file"), iiName, 100
+    ));
+}
+
+function ChangeTipboxPath()
+{
+    var iiName = ChangeLubPathGetIIName(5);
+    return ChangeLubPath(iiName, input.getString(
+        "$TipboxPath",
+        _("String input - maximum 100 characters"),
+        _("Please enter new path for Tipbox*.lub file"), iiName, 100
+    ));
+}
+
+function ChangeCheckAttendancePath()
+{
+    var iiName = ChangeLubPathGetIIName(6);
+    return ChangeLubPath(iiName, input.getString(
+        "$CheckAttendancePath",
+        _("String input - maximum 100 characters"),
+        _("Please enter new path for CheckAttendance*.lub file"), iiName, 100
+    ));
+}
+
+function ChangeOngoingQuestInfoListPath()
+{
+    var iiName = ChangeLubPathGetIIName(7);
+    return ChangeLubPath(iiName, input.getString(
+        "$OngoingQuestInfoListPath",
+        _("String input - maximum 100 characters"),
+        _("Please enter new path for OngoingQuestInfoList* file"), iiName, 100
+    ));
+}
+
+function ChangeRecommendedQuestInfoListPath()
+{
+    var iiName = ChangeLubPathGetIIName(8);
+    return ChangeLubPath(iiName, input.getString(
+        "$RecommendedQuestInfoListPath",
+        _("String input - maximum 100 characters"),
+        _("Please enter new path for RecommendedQuestInfoList* file"), iiName, 100
+    ));
+}
+
+function ChangePrivateAirplanePath()
+{
+    var iiName = ChangeLubPathGetIIName(9);
+    return ChangeLubPath(iiName, input.getString(
+        "$PrivateAirplanePath",
+        _("String input - maximum 100 characters"),
+        _("Please enter new path for PrivateAirplane*.lub file"), iiName, 100
+    ));
+}
+
+function ChangeMapInfoPath()
+{
+    var iiName = ChangeLubPathGetIIName(10);
+    return ChangeLubPath(iiName, input.getString(
+        "$MapInfoPath",
+        _("String input - maximum 100 characters"),
+        _("Please enter new path for MapInfo*.lub file"), iiName, 100
+    ));
+}
+
 function ChangeAchievementListPath_()
 {
-    return (ChangeLubPathGetIIName(1) !== "");
+    return ChangeLubPathGetIIName(1) !== "";
 }
 
 function ChangeMonsterSizeEffectPath_()
 {
-    return (ChangeLubPathGetIIName(2) !== "");
+    return ChangeLubPathGetIIName(2) !== "";
 }
 
 function ChangeTowninfoPath_()
 {
-    return (ChangeLubPathGetIIName(3) !== "");
+    return ChangeLubPathGetIIName(3) !== "";
 }
 
 function ChangePetEvolutionClnPath_()
 {
-    return (ChangeLubPathGetIIName(4) !== "");
+    return ChangeLubPathGetIIName(4) !== "";
 }
 
 function ChangeTipboxPath_()
 {
-    return (ChangeLubPathGetIIName(5) !== "");
+    return ChangeLubPathGetIIName(5) !== "";
 }
 
 function ChangeCheckAttendancePath_()
 {
-    return (ChangeLubPathGetIIName(6) !== "");
+    return ChangeLubPathGetIIName(6) !== "";
 }
 
 function ChangeOngoingQuestInfoListPath_()
 {
-    return (ChangeLubPathGetIIName(7) !== "");
+    return ChangeLubPathGetIIName(7) !== "";
 }
 
 function ChangeRecommendedQuestInfoListPath_()
 {
-    return (ChangeLubPathGetIIName(8) !== "");
+    return ChangeLubPathGetIIName(8) !== "";
 }
 
 function ChangePrivateAirplanePath_()
 {
-    return (ChangeLubPathGetIIName(9) !== "");
+    return ChangeLubPathGetIIName(9) !== "";
 }
 
 function ChangeMapInfoPath_()
 {
-    return (ChangeLubPathGetIIName(10) !== "");
+    return ChangeLubPathGetIIName(10) !== "";
 }

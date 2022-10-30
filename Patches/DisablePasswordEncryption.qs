@@ -20,24 +20,26 @@ function DisablePasswordEncryption()
     var obj = LoginPacketSend_match();
     var offset = obj.offset;
 
-    //Disable password encrypt for lang type 7
     var code =
-        "83 F9 07 " +                 // 0 cmp ecx, 7
-        "75 ";                        // 3 jnz short loc_80905C
+        "83 F9 07 " +
+        "75 ";
     var jmpOffset = 3;
     var offset2 = pe.find(code, offset, offset + 0xFF);
     if (offset2 === -1)
+    {
         return "Failed in disable encryption for lang type 7";
+    }
     pe.replaceByte(offset2 + jmpOffset, 0xEB);
 
-    //Disable password encrypt for lang type 4
-    var code =
-        "83 F9 04 " +                 // 0 cmp ecx, 4
-        "75 ";                        // 3 jnz short loc_80905C
+    code =
+        "83 F9 04 " +
+        "75 ";
     jmpOffset = 3;
     offset2 = pe.find(code, offset, offset + 0xFF);
     if (offset2 === -1)
+    {
         return "Failed in disable encryption for lang type 4";
+    }
     pe.replaceByte(offset2 + jmpOffset, 0xEB);
 
     return true;

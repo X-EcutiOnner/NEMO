@@ -37,7 +37,7 @@ function storage_setZero(value)
 
 function storage_adjustZero(value)
 {
-    storage.zero = storage.zero + value;
+    storage.zero += value;
 }
 
 function storage_init()
@@ -45,7 +45,9 @@ function storage_init()
     for (var key in storage)
     {
         if (storage.hasOwnProperty(key))
+        {
             delete storage[key];
+        }
     }
 
     storage.hooks = {};

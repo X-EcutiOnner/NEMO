@@ -15,27 +15,24 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-
 function ShortcutAllItem()
 {
-    //Step 1 - Find the item type table fetchers
     var code =
-        " 0F B6 80 ?? ?? ?? 00"    //MOVZX EAX,BYTE PTR [EAX+offsetA]
-      + " FF 24 85 ?? ?? ?? 00"    //JMP DWORD PTR [EAX*4+offsetB]
-      + " 83 BD ?? ?? ?? ?? 00"    //CMP DWORD PTR [EBP-x],00
-      ;
+        " 0F B6 80 ?? ?? ?? 00" +
+        " FF 24 85 ?? ?? ?? 00" +
+        " 83 BD ?? ?? ?? ?? 00";
 
     var offsets = pe.findCodes(code);
     if (offsets.length === 0)
+    {
         return "Failed in Step 1 - Codes not found";
+    }
 
-    //Step 2 - Remove the EAX*4 from JMP instruction
     var offset = 0;
     for (var i = 0; i < offsets.length; i++)
     {
         offset = offsets[i] + 7;
-        code = "90 FF 25"        //NOP
-                                //JMP DWORD PTR [offsetB]
+        code = "90 FF 25";
 
         pe.replaceHex(offset, code);
     }

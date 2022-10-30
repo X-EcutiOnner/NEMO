@@ -18,29 +18,26 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
-//##########################################################################
-//# Purpose: Zero out the ViewPointTable.txt file strings used for locking #
-//#          camera viewpoint rotation.                                    #
-//##########################################################################
+// ##########################################################################
+// # Purpose: Zero out the ViewPointTable.txt file strings used for locking #
+// #          camera viewpoint rotation.                                    #
+// ##########################################################################
 
 function DisableCameraLock()
 {
-    consoleLog("Step 1 - Search string 'ViewPointTable.txt'");
     var offset = pe.stringRaw("ViewPointTable.txt");
 
     if (offset === -1)
+    {
         return "Failed in Step 1 - String not found";
+    }
 
-    consoleLog("Step 2 - Zero it out string 'ViewPointTable.txt'");
     pe.replaceByte(offset, 0);
 
     return true;
 }
 
-//=======================================================//
-// Disable for Unsupported Clients - Check for Reference //
-//=======================================================//
 function DisableCameraLock_()
 {
-    return (pe.stringRaw("ViewPointTable.txt") !== -1);
+    return pe.stringRaw("ViewPointTable.txt") !== -1;
 }

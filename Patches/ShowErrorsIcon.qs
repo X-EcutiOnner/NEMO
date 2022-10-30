@@ -17,10 +17,12 @@
 
 function ShowErrorsIcon()
 {
-    var value = exe.getUserInput("$ShowErrorsIcon", XTYPE_DWORD,
+    var value = exe.getUserInput(
+        "$ShowErrorsIcon", XTYPE_DWORD,
         _("Number Input"),
         _("Select error messages icon type"),
-        0, 0, 4);
+        0, 0, 4
+    );
 
     var vars = {
         "value": value * 16,
@@ -28,7 +30,9 @@ function ShowErrorsIcon()
 
     var hooksList = hooks.initImportHooks("MessageBoxA", "user32.dll");
     if (hooksList.length === 0)
+    {
         throw "MessageBoxA usages not found";
+    }
     hooksList.addFilePre("", vars, 10000);
     hooksList.validate();
     return true;

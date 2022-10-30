@@ -22,20 +22,26 @@ function UINameBalloonTextWidth(addrId, name)
 
     var value = exe.getUserInput(paramStr, XTYPE_DWORD, _("Number Input"), _("Enter default text width for @@").replace("@@", name), 0, 0, 1000);
     if (value === 0)
+    {
         throw "New text width is same";
+    }
 
     if (table.get(addrId) === 0)
+    {
         throw name + "::" + name + " ret not set";
+    }
     var addrRaw = table.getRaw(addrId);
 
     var field = table.get(fieldId);
     if (field === 0)
+    {
         throw "UIBalloonText::m_textWidth not set";
+    }
 
     var text = "mov dword ptr [eax + m_textWidth], textWidth";
     var vars = {
         "m_textWidth": field,
-        "textWidth": value
+        "textWidth": value,
     };
 
     var hook = hooks.initEndHook(addrRaw);
@@ -58,15 +64,17 @@ function ChangeUIVerticalNameBalloonTextWidth()
 function ChangeNameBalloonFontBold()
 {
     enablePatchAndCheck("DisableSetTextType");
-    var value = exe.getUserInput("$ChangeNameBalloonFontBold",
+    var value = exe.getUserInput(
+        "$ChangeNameBalloonFontBold",
         XTYPE_BYTE,
         _("Use bold font"),
         _("Use bold(1) or normal(0) for names"),
         0,
-        0, 1)
+        0, 1
+    );
 
     var vars = {
-        "bold": value
+        "bold": value,
     };
 
     var hook = hooks.initTableEndHook(table.InitClientInfo_ret);
@@ -79,6 +87,8 @@ function ChangeNameBalloonFontBold()
 function ChangeNameBalloonFontBold_apply()
 {
     if (isPatchActive("DisableSetTextType") === false)
+    {
         return "Need patch DisableSetTextType";
+    }
     return true;
 }

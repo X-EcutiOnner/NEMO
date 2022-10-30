@@ -17,22 +17,28 @@
 
 function LimitResolution_imp(name, text, error, weight, offset, compare)
 {
-    var value = exe.getUserInput(name, XTYPE_DWORD,
+    var value = exe.getUserInput(
+        name, XTYPE_DWORD,
         _("Number Input"),
         text,
-        0, 0, 10000);
+        0, 0, 10000
+    );
 
     if (value === 0)
+    {
         return error;
+    }
 
     var vars = {
         "value": value,
         "offset": offset,
-        "compare": compare
+        "compare": compare,
     };
     var hooksList = hooks.initImportCallHooks("CreateWindowExA", "user32.dll");
     if (hooksList.length === 0)
+    {
         throw "CreateWindowExA call usages not found";
+    }
     hooksList.addFilePre("LimitResolution", vars, weight);
     hooksList.validate();
     return true;
@@ -40,40 +46,48 @@ function LimitResolution_imp(name, text, error, weight, offset, compare)
 
 function LimitMinResolutionWidth()
 {
-    return LimitResolution_imp("$LimitMinResolutionWidth",
+    return LimitResolution_imp(
+        "$LimitMinResolutionWidth",
         _("Allow minimal width in pixels"),
         "Minimal width is not set",
         11000,
         "width",
-        "jge");
+        "jge"
+    );
 }
 
 function LimitMinResolutionHeight()
 {
-    return LimitResolution_imp("$LimitMinResolutionHeight",
+    return LimitResolution_imp(
+        "$LimitMinResolutionHeight",
         _("Allow minimal height in pixels"),
         "Minimal height is not set",
         11000,
         "height",
-        "jge");
+        "jge"
+    );
 }
 
 function LimitMaxResolutionWidth()
 {
-    return LimitResolution_imp("$LimitMaxResolutionWidth",
+    return LimitResolution_imp(
+        "$LimitMaxResolutionWidth",
         _("Allow maximum width in pixels"),
         "Maximum width is not set",
         12000,
         "width",
-        "jle");
+        "jle"
+    );
 }
 
 function LimitMaxResolutionHeight()
 {
-    return LimitResolution_imp("$LimitMaxResolutionHeight",
+    return LimitResolution_imp(
+        "$LimitMaxResolutionHeight",
         _("Allow maximum height in pixels"),
         "Maximum height is not set",
         12000,
         "height",
-        "jle");
+        "jle"
+    );
 }

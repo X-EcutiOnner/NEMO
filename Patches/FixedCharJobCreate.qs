@@ -14,32 +14,34 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-//##################################################################
-//# Purpose: Override job id in creation dialog / packet           #
-//##################################################################
+// ##################################################################
+// # Purpose: Override job id in creation dialog / packet           #
+// ##################################################################
 
 function FixedCharJobCreate()
 {
-    //Step 1 - find sending packet 0xA39
-    // 2018-05-30
     var code =
-        "B8 39 0A 00 00" +        // mov     eax, 0A39h
-        "66 89 85 ?? ?? ?? ??" +  // mov     [ebp+a39.packet_id], ax
-        "0F B7 05 ?? ?? ?? ??" +  // movzx   eax, word_FC7C44
-        "66 89 85 ?? ?? ?? ??" +  // mov     [ebp+a39.hair_color], ax
-        "0F B7 05 ?? ?? ?? ??" +  // movzx   eax, word_FC7C32
-        "66 89 85 ?? ?? ?? ??" +  // mov     [ebp+a39.hair_style], ax
-        "A0 ?? ?? ?? ??" +        // mov     al, byte_FC7C66
-        "88 85 ?? ?? ?? ??" +     // mov     [ebp+a39.slot], al
-        "0F BF 05 ?? ?? ?? ??" +  // movsx   eax, word_FC7C30  <-- patch here
-        "89 85 ?? ?? ?? ??"       // mov     dword ptr [ebp+a39.starting_job_id], eax
+        "B8 39 0A 00 00" +
+        "66 89 85 ?? ?? ?? ??" +
+        "0F B7 05 ?? ?? ?? ??" +
+        "66 89 85 ?? ?? ?? ??" +
+        "0F B7 05 ?? ?? ?? ??" +
+        "66 89 85 ?? ?? ?? ??" +
+        "A0 ?? ?? ?? ??" +
+        "88 85 ?? ?? ?? ??" +
+        "0F BF 05 ?? ?? ?? ??" +
+        "89 85 ?? ?? ?? ??";
     var patchOffset = 51;
     var offsets = pe.findCodes(code);
     if (offsets.length === 0)
+    {
         return "Search packet 0xA39 error";
+    }
     if (offsets.length != 1)
+    {
         return "Found too many 0xA39 packets";
-    var offset = offsets[0]
+    }
+    var offset = offsets[0];
     var newJob = exe.getUserInput("$newJobVal", XTYPE_DWORD, _("Number Input"), _("Enter fixe job id"), 1);
     pe.replaceHex(offset + patchOffset, "B8 " + newJob.packToHex(4) + " 90 90");
     return true;

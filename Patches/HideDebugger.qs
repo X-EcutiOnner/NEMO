@@ -19,7 +19,9 @@ function HideDebugger()
 {
     var hooksList = hooks.initImportCallHooks("IsDebuggerPresent", "kernel32.dll");
     if (hooksList.length === 0)
+    {
         throw "IsDebuggerPresent call usages not found";
+    }
     hooksList.addFilePre();
     hooksList.validate();
     return true;

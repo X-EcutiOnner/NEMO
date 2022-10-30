@@ -20,14 +20,18 @@ function ChangeMaxEmblemFileSize()
     var offset = table.getRawValidated(table.max_emblem_size_offset);
     var oldValue = pe.fetchUDWord(offset);
 
-    var value = exe.getUserInput("$maxEmblemSize",
+    var value = exe.getUserInput(
+        "$maxEmblemSize",
         XTYPE_DWORD,
         _("Number Input"),
         _("Enter new maximum guild emblem file size"),
-        oldValue, 1, 0x7fffffff);
+        oldValue, 1, 0x7fffffff
+    );
 
     if (value === oldValue)
+    {
         return _("New maximum guild emblem size is not changed");
+    }
 
     pe.replaceDWord(offset, value);
 

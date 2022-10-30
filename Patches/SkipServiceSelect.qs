@@ -1,54 +1,55 @@
-//##############################################
-//# Purpose: Set g_hideAccountList always to 1 #
-//#          assigned above passwordencrypt.   #
-//##############################################
+// ##############################################
+// # Purpose: Set g_hideAccountList always to 1 #
+// #          assigned above passwordencrypt.   #
+// ##############################################
 
 function SkipServiceSelect()
 {
-    // Step 1 - Find address of "passwordencrypt" (g_hideAccountList is assigned just above it)
     var offset = pe.stringVa("passwordencrypt");
 
     if (offset === -1)
+    {
         return "Failed in Step 1 - Reference not found";
+    }
 
-    var hideAccountListHex = table.getHex4(table.g_hideAccountList)
+    var hideAccountListHex = table.getHex4(table.g_hideAccountList);
 
-    // Step 2 - Find its reference
     var code =
-        "74 07 " +                    // jz      short loc_4D7E79
-        "C6 05 " + hideAccountListHex + " 01 " +  // mov     byte_6BA37C, 1
-        "68 " + offset.packToHex(4);  // push    offset aPasswordencryp ; "passwordencrypt"
+        "74 07 " +
+        "C6 05 " + hideAccountListHex + " 01 " +
+        "68 " + offset.packToHex(4);
 
-    var repl = "90 90 "; // NOP out JZ
+    var repl = "90 90 ";
     var offset2 = pe.findCode(code);
 
     if (offset2 === -1)
     {
         code =
-            "0F 45 ?? " +                 // cmovnz  ecx, esi
-            "88 ?? " + hideAccountListHex + // mov     byte_FEAAE8, cl
-            "68 " + offset.packToHex(4);  // push    offset aPasswordencryp ; "passwordencrypt"
+            "0F 45 ?? " +
+            "88 ?? " + hideAccountListHex +
+            "68 " + offset.packToHex(4);
 
-        repl = "90 8B "; // change CMOVNZ to MOV
+        repl = "90 8B ";
         offset2 = pe.findCode(code);
     }
 
     if (offset2 === -1)
     {
         code =
-            "0F 45 ?? " +                 // cmovnz  ecx, esi
-            "88 ?? " + hideAccountListHex + // mov     byte_FC3904, cl
-            "8B ?? " +                    // mov     ecx, edi
-            "68 " + offset.packToHex(4);  // push    offset aPasswordencryp ; "passwordencrypt"
+            "0F 45 ?? " +
+            "88 ?? " + hideAccountListHex +
+            "8B ?? " +
+            "68 " + offset.packToHex(4);
 
-        repl = "90 8B "; // change CMOVNZ to MOV
+        repl = "90 8B ";
         offset2 = pe.findCode(code);
     }
 
     if (offset2 === -1)
+    {
         return "Failed in Step 2 - Pattern not found";
+    }
 
-    // Step 3 - Change conditional instruction to permanent setting
     pe.replaceHex(offset2, repl);
 
     return true;

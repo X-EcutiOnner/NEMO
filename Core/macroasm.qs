@@ -17,21 +17,16 @@
 
 function macroAsm_create(addrVa, commands, vars)
 {
-    var obj = new Object();
+    var obj = {};
     obj.addrVa = addrVa;
     obj.text = commands;
     obj.vars = vars;
     obj.defines = {};
-    obj.condition = undefined
+    obj.condition = undefined;
     obj.line = "";
     obj.update = false;
     obj.reparse = false;
     return obj;
-}
-
-function macroAsm_convert(obj)
-{
-    macroAsm_replaceCmds(obj);
 }
 
 function macroAsm_invokeMacros(obj, index, macroses)
@@ -39,23 +34,25 @@ function macroAsm_invokeMacros(obj, index, macroses)
     var macro = macroses[index];
     var cmd = macro[1];
     var getArgFunc = macro[2];
-    if (typeof(getArgFunc) !== "undefined")
+    if (typeof getArgFunc === "undefined")
     {
-        var arg = getArgFunc(cmd, obj.line);
-        if (arg === false)
-            return;
         obj.macro = macro;
-        var checkArgFunc = macro[3];
-        if (typeof(checkArgFunc) !== "undefined")
-            checkArgFunc(obj, arg);
-        var macroFunc = macro[0];
-        macroFunc(obj, cmd, arg);
+        macro[0](obj, cmd);
     }
     else
     {
+        var arg = getArgFunc(cmd, obj.line);
+        if (arg === false)
+        {
+            return;
+        }
         obj.macro = macro;
-        var macroFunc = macro[0];
-        macroFunc(obj, cmd);
+        var checkArgFunc = macro[3];
+        if (typeof checkArgFunc !== "undefined")
+        {
+            checkArgFunc(obj, arg);
+        }
+        macro[0](obj, cmd, arg);
     }
 }
 
@@ -83,10 +80,26 @@ function macroAsm_invokeMacroses(obj, i, macroses)
     }
 }
 
+function macroAsm_addNewLine(text)
+{
+    var sz = text.length;
+    if (sz < 1)
+    {
+        return text;
+    }
+    if (text[sz - 1] === "\n")
+    {
+        return text;
+    }
+    return text + "\n";
+}
+
 function macroAsm_replaceCmds(obj)
 {
     if (obj.text.length === 0)
+    {
         return;
+    }
 
     obj.parts = obj.text.split("\n");
     var text = "";
@@ -110,104 +123,37 @@ function macroAsm_replaceCmds(obj)
         }
 
         if (obj.reparse === false && (obj.line[0] === "%" || obj.line[0] === "#"))
+        {
             macroAsm_invokeMacroses(obj, i, macroAsm.macroses2);
+        }
         if (obj.reparse === false)
+        {
             macroAsm_invokeMacroses(obj, i, macroAsm.macroses3);
+        }
         if (obj.line !== "")
+        {
             text += macroAsm_addNewLine(obj.line);
+        }
         if (obj.reparse)
+        {
             obj.reparse = false;
+        }
         else
+        {
             i ++;
+        }
     }
     obj.line = "";
     obj.text = text;
 }
 
-function macroAsm_addNewLine(text)
+function macroAsm_convert(obj)
 {
-    var sz = text.length;
-    if (sz < 1)
-        return text;
-    if (text[sz - 1] == "\n")
-        return text;
-    return text + "\n";
+    macroAsm_replaceCmds(obj);
 }
 
 function macroAsm_addMacroses()
 {
-    function parse_cmd_arg(cmd, line)
-    {
-        cmd = cmd + " ";
-        var idx = line.indexOf(cmd);
-        if (idx !== 0 && idx !== 1)
-            return false;
-        return line.substring(cmd.length).trim();
-    }
-
-    function parse_cmd_arg0(cmd, line)
-    {
-        var idx = line.indexOf(cmd);
-        if (idx !== 0 && idx !== 1)
-            return false;
-        return line.substring(cmd.length).trim();
-    }
-
-    function parse_cmd_argEq(cmd, line)
-    {
-        cmd = cmd + " ";
-        var idx = line.indexOf(cmd);
-        if (idx !== 0 && idx !== 1)
-            return false;
-        line = line.substring(cmd.length).trim();
-        return splitArgEq(line);
-    }
-
-    function parse_cmd_argEq2(cmd, line)
-    {
-        cmd = cmd + " ";
-        var idx = line.indexOf(cmd);
-        if (idx !== 0 && idx !== 1)
-            return false;
-        line = line.substring(cmd.length).trim();
-        return splitArgEq2(line);
-    }
-
-    function parse_cmd_args(cmd, line)
-    {
-        cmd = cmd + " ";
-        var idx = line.indexOf(cmd);
-        if (idx !== 0 && idx !== 1)
-            return false;
-        line = line.substring(cmd.length);
-        var args = line.match(/(?:[^,"]+|"[^"]*")+/g);
-        var args2 = [];
-        for (var i = 0; i < args.length; i ++)
-        {
-            args2.push(args[i].trim());
-        }
-        return args2;
-    }
-
-    function parse_cmd_eqArgs(cmd, line)
-    {
-        cmd = cmd + " ";
-        var idx = line.indexOf(cmd);
-        if (idx !== 0 && idx !== 1)
-            return false;
-        line = line.substring(cmd.length);
-        line = splitArgEq(line);
-        if (line[0] === line[1])
-            line[0] = undefined;
-        var args = line[1].match(/(?:[^,"]+|"[^"]*")+/g);
-        var args2 = [];
-        for (var i = 0; i < args.length; i ++)
-        {
-            args2.push(args[i].trim());
-        }
-        return [line[0], args2];
-    }
-
     function splitArgEq(arg)
     {
         var idx = arg.indexOf("=");
@@ -235,15 +181,103 @@ function macroAsm_addMacroses()
         return false;
     }
 
+    function parse_cmd_arg(cmd, line)
+    {
+        cmd += " ";
+        var idx = line.indexOf(cmd);
+        if (idx !== 0 && idx !== 1)
+        {
+            return false;
+        }
+        return line.substring(cmd.length).trim();
+    }
+
+    function parse_cmd_arg0(cmd, line)
+    {
+        var idx = line.indexOf(cmd);
+        if (idx !== 0 && idx !== 1)
+        {
+            return false;
+        }
+        return line.substring(cmd.length).trim();
+    }
+
+    function parse_cmd_argEq(cmd, line)
+    {
+        cmd += " ";
+        var idx = line.indexOf(cmd);
+        if (idx !== 0 && idx !== 1)
+        {
+            return false;
+        }
+        line = line.substring(cmd.length).trim();
+        return splitArgEq(line);
+    }
+
+    function parse_cmd_argEq2(cmd, line)
+    {
+        cmd += " ";
+        var idx = line.indexOf(cmd);
+        if (idx !== 0 && idx !== 1)
+        {
+            return false;
+        }
+        line = line.substring(cmd.length).trim();
+        return splitArgEq2(line);
+    }
+
+    function parse_cmd_args(cmd, line)
+    {
+        cmd += " ";
+        var idx = line.indexOf(cmd);
+        if (idx !== 0 && idx !== 1)
+        {
+            return false;
+        }
+        line = line.substring(cmd.length);
+        var args = line.match(/(?:[^,"]+|"[^"]*")+/g);
+        var args2 = [];
+        for (var i = 0; i < args.length; i ++)
+        {
+            args2.push(args[i].trim());
+        }
+        return args2;
+    }
+
+    function parse_cmd_eqArgs(cmd, line)
+    {
+        cmd += " ";
+        var idx = line.indexOf(cmd);
+        if (idx !== 0 && idx !== 1)
+        {
+            return false;
+        }
+        line = line.substring(cmd.length);
+        line = splitArgEq(line);
+        if (line[0] === line[1])
+        {
+            line[0] = undefined;
+        }
+        var args = line[1].match(/(?:[^,"]+|"[^"]*")+/g);
+        var args2 = [];
+        for (var i = 0; i < args.length; i ++)
+        {
+            args2.push(args[i].trim());
+        }
+        return [line[0], args2];
+    }
+
     function check_arg_var(obj, arg)
     {
         if (!(arg in obj.vars))
+        {
             fatalError("Variable " + arg + " not in vars: " + obj.line);
+        }
     }
 
-    function check_arg_table2(obj, arg)
+    function check_arg_table2(obj, args)
     {
-        var arg = arg[1];
+        var arg = args[1];
         if (!(arg in table))
         {
             fatalError("Variable " + arg + " not in table: " + obj.line);
@@ -253,7 +287,21 @@ function macroAsm_addMacroses()
     function check_exists_args(obj, args)
     {
         if (args.length < 1)
+        {
             fatalError("No args in macro asm command: " + obj.line);
+        }
+    }
+
+    function assign_var(obj, varName, value)
+    {
+        if (varName in obj.vars)
+        {
+            if (obj.vars[varName] !== value)
+            {
+                fatalError("Asm variable " + arg + " already exists: " + obj.vars[varName] + " vs " + value);
+            }
+        }
+        obj.vars[varName] = value;
     }
 
     function macro_instAsm(obj, cmd, arg)
@@ -280,10 +328,10 @@ function macroAsm_addMacroses()
         obj.update = true;
     }
 
-    function macro_tableVarInternal(obj, cmd, arg, tableFunc)
+    function macro_tableVarInternal(obj, cmd, args, tableFunc)
     {
-        var varName = arg[0];
-        var arg = arg[1];
+        var varName = args[0];
+        var arg = args[1];
         var value = tableFunc(table[arg]);
         assign_var(obj, varName, value);
         obj.line = "";
@@ -299,15 +347,19 @@ function macroAsm_addMacroses()
         macro_tableVarInternal(obj, cmd, arg, table.get);
     }
 
-    function macro_setVar(obj, cmd, arg)
+    function macro_setVar(obj, cmd, args)
     {
-        var varName = arg[0];
-        var arg = arg[1];
+        var varName = args[0];
+        var arg = args[1];
         var value = parseInt(arg);
         if (isNaN(value))
+        {
             obj.vars[varName] = arg;
+        }
         else
+        {
             obj.vars[varName] = value;
+        }
         obj.line = "";
     }
 
@@ -315,9 +367,10 @@ function macroAsm_addMacroses()
     {
         if (args.length == 1)
         {
-            // if one arg and not string, then skip parsing
             if (args[0][0] != "\"")
+            {
                 return;
+            }
         }
 
         var line = "";
@@ -326,18 +379,24 @@ function macroAsm_addMacroses()
             var arg = args[i];
             var sz = arg.length;
             if (sz < 1)
+            {
                 fatalError("Wrong macro asm line1: " + obj.line);
+            }
             if (arg[0] === "\"")
             {
                 if (sz < 3)
+                {
                     fatalError("Wrong macro asm line2: " + obj.line);
+                }
                 if (arg[sz - 1] !== "\"")
+                {
                     fatalError("Wrong macro asm line3: " + obj.line);
+                }
                 arg = arg.substring(1, sz - 1);
                 line += macroAsm_addNewLine(asm.stringToAsm(arg));
                 continue;
             }
-            var arg = parseInt(arg).packToHex(1);
+            arg = parseInt(arg).packToHex(1);
             line += asm.hexToAsm(arg);
         }
         obj.line = line;
@@ -347,12 +406,18 @@ function macroAsm_addMacroses()
     function macro_asciz(obj, cmd, arg)
     {
         if (arg[0] != "\"")
+        {
             fatalError("Not string in asm command: " + cmd + "line: " + obj.line);
+        }
         var sz = arg.length;
         if (sz < 3)
+        {
             fatalError("Wrong macro asm line2: " + obj.line);
+        }
         if (arg[sz - 1] !== "\"")
+        {
             fatalError("Wrong macro asm line3: " + obj.line);
+        }
         arg = arg.substring(1, sz - 1);
         obj.line = macroAsm_addNewLine(asm.stringToAsm(arg) + "db 0");
         obj.update = true;
@@ -367,15 +432,22 @@ function macroAsm_addMacroses()
     function macro_removeComments(obj, cmd)
     {
         var oldLine = obj.line;
-        obj.line = obj.line.replaceAll(/[ ][ ][//][//][ ].+$/g, "\n");
+        obj.line = obj.line.replaceAll(
+            new RegExp("[ ][ ][//][//][ ].+$", "g"),
+            "\n"
+        );
         if (obj.line !== oldLine)
+        {
             obj.update = true;
+        }
     }
 
     function macro_replaceVars(obj, cmd)
     {
         if (obj.line.indexOf("{") < 0)
+        {
             return;
+        }
 
         var vars = obj.vars;
         for (var name in vars)
@@ -410,8 +482,10 @@ function macroAsm_addMacroses()
     {
         var varName = args[0];
         args = args[1];
-        if (typeof(varName) === "undefined")
+        if (typeof varName === "undefined")
+        {
             varName = args[0];
+        }
         var value = imports.ptrValidated(args[0], args[1], args[2]);
         assign_var(obj, varName, value);
         obj.line = "";
@@ -421,33 +495,18 @@ function macroAsm_addMacroses()
     {
         obj.condition = arg;
         obj.line = "";
-        consoleLog("set obj.condition: " + arg);
     }
 
     function macro_if(obj, cmd, arg)
     {
         obj.condition = arg;
         obj.line = "";
-        consoleLog("set obj.condition: " + arg);
     }
 
     function macro_endif(obj, cmd)
     {
         obj.condition = undefined;
         obj.line = "";
-        consoleLog("reset obj.condition: " + cmd);
-    }
-
-    function assign_var(obj, varName, value)
-    {
-        if (varName in obj.vars)
-        {
-            if (obj.vars[varName] !== value)
-            {
-                fatalError("Asm variable " + arg + " already exists: " + obj.vars[varName] + " vs " + value);
-            }
-        }
-        obj.vars[varName] = value;
     }
 
     macroAsm.macroses1 = [
@@ -479,19 +538,23 @@ function macroAsm_addMacroses()
 
 function macroAsm_checkCondition(obj)
 {
-    if (typeof(obj.condition) !== "undefined")
+    if (typeof obj.condition !== "undefined")
     {
         var cond = obj.condition;
-        if (typeof(obj.condition) === "object" && cond.length == 2)
+        if (typeof obj.condition === "object" && cond.length == 2)
         {
             var name1 = cond[0];
             var name2 = cond[1];
             if (name1 in obj.vars || name2 in obj.vars)
             {
                 if (name1 in obj.vars)
+                {
                     name1 = obj.vars[name1];
+                }
                 if (name2 in obj.vars)
+                {
                     name2 = obj.vars[name2];
+                }
                 if (name1 != name2)
                 {
                     return true;
@@ -512,7 +575,7 @@ function macroAsm_checkCondition(obj)
 
 function registerMacroAsm()
 {
-    macroAsm = new Object();
+    macroAsm = {};
     macroAsm.create = macroAsm_create;
     macroAsm.convert = macroAsm_convert;
     macroAsm.addMacroses = macroAsm_addMacroses;

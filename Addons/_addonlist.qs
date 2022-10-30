@@ -1,10 +1,10 @@
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-//Register all your Addons in this file. All addons need to be registered to appear in NEMO
+// Register all your Addons in this file. All addons need to be registered to appear in NEMO
 //
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-//FORMAT for registering Addon : registerAddon(functionName, description, Tooltip text);
+// FORMAT for registering Addon : registerAddon(functionName, description, Tooltip text);
 //
 //    functionName is the function called when an addon is clicked. All your logic goes inside it.
 //    You can define your function in any .qs file in the Addons folder.
@@ -13,7 +13,7 @@
 //  description is what shows up in the Addon menu of NEMO.
 //  tooltip - text which shows detail about what a particular tool/addon does - need to check if its actually visible.
 //
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 registerAddon("ExtractMsgTable", "Extract msgstringtable", "Extracts embedded msgstringtable from the loaded client");
 
@@ -27,4 +27,4 @@ registerAddon("GenPktExtractDLL", "Generate Packet Extract DLL", "Generates Pack
 
 registerAddon("GetPacketKeys", "Get Packet Keys", "Retrieves the packet keys used in the loaded client for Obfuscation");
 
-registerAddon("DumpImportTable", "Dump Import Table", "Dumps the Full Import table (dll names and imported functions) for the loaded client")
+registerAddon("DumpImportTable", "Dump Import Table", "Dumps the Full Import table (dll names and imported functions) for the loaded client");

@@ -15,23 +15,25 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-String.prototype.toHex1 = function()
+String.prototype.toHex1 = function toHex1()
 {
-  var result = '';
-  for (var i = 0; i < this.length; i++)
-  {
-    var h = this.charCodeAt(i).toString(16);
-    if (h.length === 1)
-      h = '0' + h;
-    result += h;
-  }
-  return result;
-}
+    var result = "";
+    for (var i = 0; i < this.length; i++)
+    {
+        var h = this.charCodeAt(i).toString(16);
+        if (h.length === 1)
+        {
+            h = "0" + h;
+        }
+        result += h;
+    }
+    return result;
+};
 
 function getClientName()
 {
-    var name = CLIENT_FILE.split('/').pop();
-    var idx = name.lastIndexOf('.');
+    var name = CLIENT_FILE.split("/").pop();
+    var idx = name.lastIndexOf(".");
     if (idx >= 0)
     {
         return name.substring(0, idx);
@@ -39,102 +41,24 @@ function getClientName()
     return name;
 }
 
-function GlobalInit()
-{
-    registerRandom();
-    registerTables();
-    registerAsm();
-    registerMacroAsm();
-    registerExe();
-    registerControls();
-    registerInput();
-    registerPe();
-    registerStorage();
-    registerImports();
-    registerHooks();
-    registerLua();
-    registerTextFile();
-    registerBinFile();
-    registerResource();
-}
-
 function GlobalPostInit()
 {
 }
 
-function consoleLog(message)
-{
-    if (typeof(console2) === "undefined")
-        return;
-    console2.log(message);
-}
-
 function fatalError(text)
 {
-    if (typeof(console2) !== "undefined")
+    if (typeof console2 !== "undefined")
+    {
         console2.fatalError(text);
-    throw text;
-}
-
-function logVaVar(name, offset, offset2)
-{
-    if (typeof(console2) === "undefined")
-        return;
-    console2.logVaVar(name, offset, offset2);
-}
-
-function logVaFunc(name, offset, offset2)
-{
-    if (typeof(console2) === "undefined")
-        return;
-    console2.logVaFunc(name, offset, offset2);
-}
-
-function logRawFunc(name, offset, offset2)
-{
-    if (typeof(console2) === "undefined")
-        return;
-    console2.logRawFunc(name, offset, offset2);
-}
-
-function logRawFuncDirect(name, offset, offset2)
-{
-    if (typeof(console2) === "undefined")
-        return;
-    console2.logRawFuncDirect(name, offset);
-}
-
-function logField(name, offset, offset2)
-{
-    if (typeof(console2) === "undefined")
-        return;
-    console2.logField(name, offset, offset2[0], offset2[1]);
-}
-
-function logVal(name, offset, offset2)
-{
-    if (typeof(console2) === "undefined")
-        return;
-    console2.logVal(name, offset, offset2);
-}
-
-function logFieldAbs(name, offset, offset2)
-{
-    if (typeof(console2) === "undefined")
-        return;
-    console2.logFieldAbs(name, offset, offset2[0], offset2[1]);
-}
-
-function logError(text)
-{
-    if (typeof(console2) === "undefined")
-        return;
+    }
     throw text;
 }
 
 function logArgsError(text)
 {
-    if (typeof(console2) === "undefined")
+    if (typeof console2 === "undefined")
+    {
         throw text;
+    }
     console2.logArgsError(text);
 }

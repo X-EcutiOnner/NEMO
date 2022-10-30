@@ -14,23 +14,20 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-//#########################################################################
-//# Purpose: Extend cash shop packet with location and view sprite fields #
-//#########################################################################
+// #########################################################################
+// # Purpose: Extend cash shop packet with location and view sprite fields #
+// #########################################################################
 
 function ExtendCashShopPreview()
 {
-    consoleLog("get patch addresses");
     var offset1 = table.getRawValidated(table.cashShopPreviewPatch1);
     var offset2 = table.getRawValidated(table.cashShopPreviewPatch2);
     var offset3 = table.getRaw(table.cashShopPreviewPatch3);
 
     var flag = table.get(table.cashShopPreviewFlag);
 
-    consoleLog("search first pattern");
-
     var code =
-        "8D 8D ?? ?? ?? FF ";         // 0 lea ecx, [ebp+itemInfo]
+        "8D 8D ?? ?? ?? FF ";
     var itemInfoOffset = [2, 4];
     var stolenCodeSize = 6;
 
@@ -40,30 +37,28 @@ function ExtendCashShopPreview()
         return "Error: first pattern not found";
     }
 
-    consoleLog("search second pattern");
-
     code =
-        "83 C6 ?? ";                  // 0 add esi, size struct_packet_8CA_next
+        "83 C6 ?? ";
     var blockSizeOffset = [2, 1];
     var register = "esi";
-    var found = pe.match(code, offset2);
+    found = pe.match(code, offset2);
 
     if (found !== true)
     {
         code =
-            "83 C7 ?? ";                  // 0 add edi, size struct_packet_8CA_next
-        var blockSizeOffset = [2, 1];
-        var register = "edi";
-        var found = pe.match(code, offset2);
+            "83 C7 ?? ";
+        blockSizeOffset = [2, 1];
+        register = "edi";
+        found = pe.match(code, offset2);
     }
 
     if (found !== true)
     {
         code =
-            "83 C1 ?? ";                  // 0 add ecx, size struct_packet_8CA_next
-        var blockSizeOffset = [2, 1];
-        var register = "ecx";
-        var found = pe.match(code, offset2);
+            "83 C1 ?? ";
+        blockSizeOffset = [2, 1];
+        register = "ecx";
+        found = pe.match(code, offset2);
     }
 
     if (found !== true)
@@ -73,48 +68,48 @@ function ExtendCashShopPreview()
 
     var blockSize = pe.fetchValue(offset2, blockSizeOffset);
 
+    var next;
     if (flag == 0)
     {
-        consoleLog("search third pattern");
-
-        code = "89 8D";         // 0 mov [ebp+next], ecx
+        code = "89 8D";
         var nextOffset = [2, 4];
-        var found = pe.match(code, offset3);
+        found = pe.match(code, offset3);
 
         if (found !== true)
         {
             return "Error: third pattern not found";
         }
-        var next = pe.fetchValue(offset3, nextOffset);
+        next = pe.fetchValue(offset3, nextOffset);
     }
     else
     {
-        var next = 0;
+        next = 0;
     }
 
-    consoleLog("add new code");
-
     var stolenCode = pe.fetchHex(offset1, stolenCodeSize);
+    var name;
 
     if (flag === 1)
-        var name = "1";
+    {
+        name = "1";
+    }
     else
-        var name = "0";
+    {
+        name = "0";
+    }
     var vars = {
         "continueItemAddr": pe.rawToVa(offset1 + stolenCodeSize),
         "itemInfo": pe.fetchValue(offset1, itemInfoOffset),
         "next": next,
         "block_size": blockSize,
         "register": register,
-        "stolenCode": stolenCode
+        "stolenCode": stolenCode,
     };
 
     var data = pe.insertAsmFile("ExtendCashShopPreview_" + name, vars);
 
-    consoleLog("add jump to own code");
     pe.setJmpRaw(offset1, data.free);
 
-    consoleLog("update block size");
     pe.setValue(offset2, blockSizeOffset, blockSize + 4 + 2);
 
     storage.ExtendCashShop = true;
@@ -130,5 +125,5 @@ function ExtendCashShopPreview_cancel()
 
 function ExtendCashShopPreview_()
 {
-    return (pe.stringRaw(".?AVUIPreviewEquipWnd@@") !== -1);
+    return pe.stringRaw(".?AVUIPreviewEquipWnd@@") !== -1;
 }

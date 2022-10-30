@@ -1,56 +1,54 @@
-//###############################################################
-//# Purpose: Change JNZ to JMP after LangType comparison inside #
-//#          DataTxtDecode function                             #
-//###############################################################
+// ###############################################################
+// # Purpose: Change JNZ to JMP after LangType comparison inside #
+// #          DataTxtDecode function                             #
+// ###############################################################
 
 function UsePlainTextDescriptions()
 {
+    var LANGTYPE = GetLangType();
+    if (LANGTYPE.length === 1)
+    {
+        return "Failed in Step 1 - " + LANGTYPE[0];
+    }
 
-  //Step 1a - Get the Langtype
-  var LANGTYPE = GetLangType();//Langtype value overrides Service settings hence they use the same variable - g_serviceType
-  if (LANGTYPE.length === 1)
-    return "Failed in Step 1 - " + LANGTYPE[0];
+    var code =
+        " 83 3D" + LANGTYPE + " 00" +
+        " 75 ??" +
+        " 56" +
+        " 57";
+    var repLoc = 7;
+    var offset = pe.findCode(code);
 
- //Step 1b - Find the LangType comparison in the DataTxtDecode function
-  var code =
-    " 83 3D" + LANGTYPE + " 00" //CMP DWORD PTR DS:[g_serviceType], 0
-  + " 75 ??" //JNZ SHORT addr
-  + " 56"    //PUSH ESI
-  + " 57"    //PUSH EDI
-  ;
-  var repLoc = 7;//Position of JNZ relative to offset
-  var offset = pe.findCode(code);//VC9+ Clients
+    if (offset === -1)
+    {
+        code = code.replace(" 75 ?? 56 57", " 75 ?? 57");
+        offset = pe.findCode(code);
+    }
 
-  if (offset === -1)
-  {
-    code = code.replace(" 75 ?? 56 57", " 75 ?? 57");//remove PUSH ESI
-    offset = pe.findCode(code);//Latest Clients
-  }
+    if (offset === -1)
+    {
+        code = code.replace(" 75 ?? 57", " 75 ?? 8B 4D 08 56");
+        offset = pe.findCode(code);
+    }
 
-   if (offset === -1)
-   {
-    code = code.replace(" 75 ?? 57", " 75 ?? 8B 4D 08 56");
-    offset = pe.findCode(code);//Latest Clients
-  }
+    if (offset === -1)
+    {
+        code =
+            " A1" + LANGTYPE +
+            " 56" +
+            " 85 C0" +
+            " 57" +
+            " 75";
+        repLoc = code.hexlength() - 1;
+        offset = pe.findCode(code);
+    }
 
-  if (offset === -1)
-  {
-    code =
-      " A1" + LANGTYPE //MOV EAX, DWORD PTR DS:[g_serviceType]
-    + " 56"            //PUSH ESI
-    + " 85 C0"         //TEST EAX, EAX
-    + " 57"            //PUSH EDI
-    + " 75"            //JNZ SHORT addr
-    ;
-    repLoc = code.hexlength() - 1;
-    offset = pe.findCode(code);//Older Clients
-  }
+    if (offset === -1)
+    {
+        return "Failed in Step 1 - LangType Comparison missing";
+    }
 
-  if (offset === -1)
-    return "Failed in Step 1 - LangType Comparison missing";
+    pe.replaceByte(offset + repLoc, 0xEB);
 
-  //Step 2 - Change JNE/JNZ to JMP
-  pe.replaceByte(offset + repLoc, 0xEB);
-
-  return true;
+    return true;
 }

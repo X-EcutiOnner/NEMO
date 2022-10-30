@@ -17,15 +17,17 @@
 
 function SetFontName()
 {
-    var value = exe.getUserInput("$SetFontName", XTYPE_FONT, _('Font input'), _('Select the new font family'), "Arial");
+    var value = exe.getUserInput("$SetFontName", XTYPE_FONT, _("Font input"), _("Select the new font family"), "Arial");
 
     var vars = {
-        "value": value
-    }
+        "value": value,
+    };
 
     var hooksList = hooks.initImportHooks("CreateFontA", "GDI32.dll");
     if (hooksList.length === 0)
+    {
         throw "CreateFontA call usages not found";
+    }
     hooksList.addFilePre("", vars);
     hooksList.validate();
     return true;

@@ -15,25 +15,24 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-//########################################################################
-//# Purpose: Hijack CreateFontA function calls to change the pushed Font #
-//#          height before Jumping to actual CreateFontA                 #
-//########################################################################
-
 function CreateFontAHook_imp(name, text, def, min, max)
 {
-    var value = exe.getUserInput(name, XTYPE_DWORD,
+    var value = exe.getUserInput(
+        name, XTYPE_DWORD,
         _("Number Input"),
         text,
-        def, min, max);
+        def, min, max
+    );
 
     var vars = {
-        "value": value
-    }
+        "value": value,
+    };
 
     var hooksList = hooks.initImportHooks("CreateFontA", "GDI32.dll");
     if (hooksList.length === 0)
+    {
         throw "CreateFontA call usages not found";
+    }
     hooksList.addFilePre("", vars);
     hooksList.validate();
 

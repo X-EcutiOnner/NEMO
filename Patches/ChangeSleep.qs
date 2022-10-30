@@ -17,19 +17,23 @@
 
 function ChangeSleepN(n, weight)
 {
-    var newValue = exe.getUserInput("$ChangeSleep" + n, XTYPE_DWORD,
+    var newValue = exe.getUserInput(
+        "$ChangeSleep" + n, XTYPE_DWORD,
         _("Number Input"),
         _("New sleep value (ms)"),
-        n, 0, 1000);
+        n, 0, 1000
+    );
 
     var vars = {
         "oldValue": n,
-        "newValue": newValue
-    }
+        "newValue": newValue,
+    };
 
     var hooksList = hooks.initImportHooks("Sleep", "kernel32.dll");
     if (hooksList.length === 0)
+    {
         throw "Sleep call usages not found";
+    }
     hooksList.addFilePre("ChangeSleep", vars, weight);
     hooksList.validate();
 

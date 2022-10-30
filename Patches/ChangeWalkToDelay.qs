@@ -1,254 +1,169 @@
-//============================================================//
-// Patch Functions wrapping over ChangeWalkToDelay function   //
-//============================================================//
 
-function DisableWalkToDelay()
-{
-    return ChangeWalkToDelay(0, 0);
-}
-
-function SetWalkToDelay()
-{
-    var value1 = exe.getUserInput("$walkDelay", XTYPE_WORD, _("Number Input"), _("Enter the new walk delay (0-1000) - snaps to closest valid value"), 150, 0, 1000);
-    if (pe.getDate() > 20170329)
-    {
-        var value2 = exe.getUserInput("$walkDelay2", XTYPE_WORD, _("Number Input"), _("Enter the new walk delay 2 (0-1000) - snaps to closest valid value"), 150, 0, 1000);
-    }
-    else
-    {
-        var value2 = 0;
-    }
-    return ChangeWalkToDelay(value1, value2);
-}
-
-//########################################################################
-//# Purpose: Find the walk delay and replace it with the value specified #
-//########################################################################
 
 function ChangeWalkToDelay_Match()
 {
-    consoleLog("Search the first delay addition");
     var timeGetTimeHex = imports.ptrHexValidated("timeGetTime", "winmm.dll");
 
     var code = [
         [
-            "FF 15 " + timeGetTimeHex +   // 0 call timeGetTime
-            "8B 8B ?? ?? ?? 00 " +        // 6 mov ecx, [ebx+CGameMode.m_leftBtnClickTick]
-            "81 C1 58 02 00 00 " +        // 12 add ecx, 258h
-            "3B C1 " +                    // 18 cmp eax, ecx
-            "8B 83 ?? ?? ?? 00 " +        // 20 mov eax, [ebx+CGameMode.m_world]
-            "0F 97 C1 " +                 // 26 setnbe cl
-            "8B 40 ?? " +                 // 29 mov eax, [eax+CWorld.m_player]
-            "83 8B ?? ?? ?? 00 00 ",      // 32 cmp [eax+CPlayer.m_proceedType], 0
+            "FF 15 " + timeGetTimeHex +
+            "8B 8B ?? ?? ?? 00 " +
+            "81 C1 58 02 00 00 " +
+            "3B C1 " +
+            "8B 83 ?? ?? ?? 00 " +
+            "0F 97 C1 " +
+            "8B 40 ?? " +
+            "83 8B ?? ?? ?? 00 00 ",
             {
                 "delayOffset": [14, 4],
                 "delayCmdOffset": [12, 6],
-                "leftBtnClickTickOffset": [8, 4],
-                "worldOffset": [22, 4],
-                "playerOffset": [31, 1],
-                "proceedTypeOffset": [34, 4],
-            }
+            },
         ],
         [
-            "8B 2D " + timeGetTimeHex +   // 0 mov ebp, ds:timeGetTime
-            "FF D5 " +                    // 6 call ebp
-            "8B 8E ?? ?? ?? 00 " +        // 8 mov ecx, [esi+CGameMode.m_leftBtnClickTick]
-            "8B 96 ?? ?? ?? 00 " +        // 14 mov edx, [esi+CGameMode.m_world]
-            "81 C1 58 02 00 00 " +        // 20 add ecx, 258h
-            "3B C1 " +                    // 26 cmp eax, ecx
-            "8B 42 ?? " +                 // 28 mov eax, [edx+CWorld.m_player]
-            "0F 97 C1 " +                 // 31 setnbe cl
-            "83 B8 ?? ?? ?? 00 00 ",      // 34 cmp [eax+CPlayer.m_proceedType], 0
+            "8B 2D " + timeGetTimeHex +
+            "FF D5 " +
+            "8B 8E ?? ?? ?? 00 " +
+            "8B 96 ?? ?? ?? 00 " +
+            "81 C1 58 02 00 00 " +
+            "3B C1 " +
+            "8B 42 ?? " +
+            "0F 97 C1 " +
+            "83 B8 ?? ?? ?? 00 00 ",
             {
                 "delayOffset": [22, 4],
                 "delayCmdOffset": [20, 6],
-                "leftBtnClickTickOffset": [10, 4],
-                "worldOffset": [16, 4],
-                "playerOffset": [30, 1],
-                "proceedTypeOffset": [36, 4],
-            }
+            },
         ],
         [
-            "FF 15 " + timeGetTimeHex +   // 0 call ds:timeGetTime
-            "8B 93 ?? ?? ?? 00 " +        // 6 mov edx, [ebx+CGameMode.m_leftBtnClickTick]
-            "81 C2 58 02 00 00 " +        // 12 add edx, 258h
-            "3B C2 " +                    // 18 cmp eax, edx
-            "8B 83 ?? ?? ?? 00 " +        // 20 mov eax, [ebx+CGameMode.m_world]
-            "0F 97 C1 " +                 // 26 setnbe cl
-            "8B 50 ?? " +                 // 29 mov edx, [eax+CWorld.m_player]
-            "8B 82 ?? ?? ?? 00 " +        // 32 mov eax, [edx+CPlayer.m_proceedType]
-            "85 C0 ",                     // 38 test eax, eax
+            "FF 15 " + timeGetTimeHex +
+            "8B 93 ?? ?? ?? 00 " +
+            "81 C2 58 02 00 00 " +
+            "3B C2 " +
+            "8B 83 ?? ?? ?? 00 " +
+            "0F 97 C1 " +
+            "8B 50 ?? " +
+            "8B 82 ?? ?? ?? 00 " +
+            "85 C0 ",
             {
                 "delayOffset": [14, 4],
                 "delayCmdOffset": [12, 6],
-                "leftBtnClickTickOffset": [8, 4],
-                "worldOffset": [22, 4],
-                "playerOffset": [31, 1],
-                "proceedTypeOffset": [34, 4],
-            }
+            },
         ],
         [
-            "8B 2D " + timeGetTimeHex +   // 0 mov ebp, ds:timeGetTime
-            "FF D5 " +                    // 6 call ebp
-            "8B 8E ?? ?? ?? 00 " +        // 8 mov ecx, [esi+CGameMode.m_leftBtnClickTick]
-            "8B 96 ?? ?? ?? 00 " +        // 14 mov edx, [esi+CGameMode.m_world]
-            "81 C1 58 02 00 00 " +        // 20 add ecx, 258h
-            "3B C1 " +                    // 26 cmp eax, ecx
-            "8B 42 ?? " +                 // 28 mov eax, [edx+CWorld.m_player]
-            "0F 97 C1 " +                 // 31 setnbe cl
-            "39 B8 ?? ?? ?? 00 ",         // 34 cmp [eax+CPlayer.m_proceedType], edi
+            "8B 2D " + timeGetTimeHex +
+            "FF D5 " +
+            "8B 8E ?? ?? ?? 00 " +
+            "8B 96 ?? ?? ?? 00 " +
+            "81 C1 58 02 00 00 " +
+            "3B C1 " +
+            "8B 42 ?? " +
+            "0F 97 C1 " +
+            "39 B8 ?? ?? ?? 00 ",
             {
                 "delayOffset": [22, 4],
                 "delayCmdOffset": [20, 6],
-                "leftBtnClickTickOffset": [10, 4],
-                "worldOffset": [16, 4],
-                "playerOffset": [30, 1],
-                "proceedTypeOffset": [36, 4],
-            }
+            },
         ],
         [
-            "FF 15 " + timeGetTimeHex +   // 0 call timeGetTime
-            "8B 8E ?? ?? ?? 00 " +        // 6 mov ecx, [esi+CGameMode.m_leftBtnClickTick]
-            "8B 96 ?? ?? ?? 00 " +        // 12 mov edx, [esi+CGameMode.m_world]
-            "81 C1 58 02 00 00 " +        // 18 add ecx, 258h
-            "3B C1 " +                    // 24 cmp eax, ecx
-            "8B 42 ?? " +                 // 26 mov eax, [edx+CWorld.m_player]
-            "0F 97 C1 " +                 // 29 setnbe cl
-            "83 B8 ?? ?? ?? 00 00 ",      // 32 cmp [eax+CPlayer.m_proceedType], 0
+            "FF 15 " + timeGetTimeHex +
+            "8B 8E ?? ?? ?? 00 " +
+            "8B 96 ?? ?? ?? 00 " +
+            "81 C1 58 02 00 00 " +
+            "3B C1 " +
+            "8B 42 ?? " +
+            "0F 97 C1 " +
+            "83 B8 ?? ?? ?? 00 00 ",
             {
                 "delayOffset": [20, 4],
                 "delayCmdOffset": [18, 6],
-                "leftBtnClickTickOffset": [8, 4],
-                "worldOffset": [14, 4],
-                "playerOffset": [28, 1],
-                "proceedTypeOffset": [34, 4],
-            }
+            },
         ],
         [
-            "FF 15 " + timeGetTimeHex +   // 0 call timeGetTime
-            "8B 8E ?? ?? ?? 00 " +        // 6 mov ecx, [esi+CGameMode.m_leftBtnClickTick]
-            "81 C1 58 02 00 00 " +        // 12 add ecx, 258h
-            "3B C1 " +                    // 18 cmp eax, ecx
-            "8B 86 ?? ?? ?? 00 " +        // 20 mov eax, [esi+CGameMode.m_world]
-            "0F 97 C1 " +                 // 26 setnbe cl
-            "8B 40 ?? " +                 // 29 mov eax, [eax+CWorld.m_player]
-            "83 B8 ?? ?? ?? 00 00 ",      // 32 cmp [eax+CPlayer.m_proceedType], 0
+            "FF 15 " + timeGetTimeHex +
+            "8B 8E ?? ?? ?? 00 " +
+            "81 C1 58 02 00 00 " +
+            "3B C1 " +
+            "8B 86 ?? ?? ?? 00 " +
+            "0F 97 C1 " +
+            "8B 40 ?? " +
+            "83 B8 ?? ?? ?? 00 00 ",
             {
                 "delayOffset": [14, 4],
                 "delayCmdOffset": [12, 6],
-                "leftBtnClickTickOffset": [8, 4],
-                "worldOffset": [22, 4],
-                "playerOffset": [31, 1],
-                "proceedTypeOffset": [34, 4],
-            }
+            },
         ],
         [
-            "FF 15 " + timeGetTimeHex +   // 0 call timeGetTime
-            "8B 8B ?? ?? ?? 00 " +        // 6 mov ecx, [ebx+CGameMode.m_leftBtnClickTick]
-            "81 C1 58 02 00 00 " +        // 12 add ecx, 258h
-            "3B C1 " +                    // 18 cmp eax, ecx
-            "8B 83 ?? ?? ?? 00 " +        // 20 mov eax, [ebx+CGameMode.m_world]
-            "0F 97 C1 " +                 // 26 setnbe cl
-            "8B 40 ?? " +                 // 29 mov eax, [eax+CWorld.m_player]
-            "83 B8 ?? ?? ?? 00 00 ",      // 32 cmp [eax+CPlayer.m_proceedType], 0
+            "FF 15 " + timeGetTimeHex +
+            "8B 8B ?? ?? ?? 00 " +
+            "81 C1 58 02 00 00 " +
+            "3B C1 " +
+            "8B 83 ?? ?? ?? 00 " +
+            "0F 97 C1 " +
+            "8B 40 ?? " +
+            "83 B8 ?? ?? ?? 00 00 ",
             {
                 "delayOffset": [14, 4],
                 "delayCmdOffset": [12, 6],
-                "leftBtnClickTickOffset": [8, 4],
-                "worldOffset": [22, 4],
-                "playerOffset": [31, 1],
-                "proceedTypeOffset": [34, 4],
-            }
+            },
         ],
         [
-            "FF 15 " + timeGetTimeHex +   // 0 call timeGetTime
-            "8B 8B ?? ?? ?? 00 " +        // 6 mov ecx, [ebx+CGameMode.m_leftBtnClickTick]
-            "8B 15 ?? ?? ?? ?? " +        // 12 mov edx, _dword_D566CC
-            "81 C1 58 02 00 00 " +        // 18 add ecx, 258h
-            "3B C1 " +                    // 24 cmp eax, ecx
-            "8B 83 ?? ?? ?? 00 " +        // 26 mov eax, [ebx+CGameMode.m_world]
-            "8B 0D ?? ?? ?? ?? " +        // 32 mov ecx, g_mouse.field_28
-            "8B 40 ?? " +                 // 38 mov eax, [eax+CWorld.m_player]
-            "0F 97 45 ?? " +              // 41 setnbe [ebp+var_35]
-            "83 B8 ?? ?? ?? 00 00 ",      // 45 cmp [eax+CPlayer.m_proceedType], 0
+            "FF 15 " + timeGetTimeHex +
+            "8B 8B ?? ?? ?? 00 " +
+            "8B 15 ?? ?? ?? ?? " +
+            "81 C1 58 02 00 00 " +
+            "3B C1 " +
+            "8B 83 ?? ?? ?? 00 " +
+            "8B 0D ?? ?? ?? ?? " +
+            "8B 40 ?? " +
+            "0F 97 45 ?? " +
+            "83 B8 ?? ?? ?? 00 00 ",
             {
                 "delayOffset": [20, 4],
                 "delayCmdOffset": [18, 6],
-                "leftBtnClickTickOffset": [8, 4],
-                "worldOffset": [28, 4],
-                "playerOffset": [40, 1],
-                "proceedTypeOffset": [47, 4],
-                "unknownOffsets": [
-                    [14, 4],
-                    [34, 4]
-                ],
-            }
+            },
         ],
         [
-            "FF 15 " + timeGetTimeHex +   // 0 call timeGetTime
-            "8B 8E ?? ?? ?? 00 " +        // 6 mov ecx, [esi+CGameMode.m_leftBtnClickTick]
-            "8B 15 ?? ?? ?? ?? " +        // 12 mov edx, dword ptr unk_D7351C
-            "81 C1 58 02 00 00 " +        // 18 add ecx, 258h
-            "3B C1 " +                    // 24 cmp eax, ecx
-            "8B 86 ?? ?? ?? 00 " +        // 26 mov eax, [esi+CGameMode.m_world]
-            "8B 0D ?? ?? ?? ?? " +        // 32 mov ecx, dword ptr unk_D73508
-            "8B 40 ?? " +                 // 38 mov eax, [eax+CWorld.m_player]
-            "0F 97 45 ?? " +              // 41 setnbe [ebp+var_35]
-            "83 B8 ?? ?? ?? 00 00 ",      // 45 cmp [eax+CPlayer.m_proceedType], 0
+            "FF 15 " + timeGetTimeHex +
+            "8B 8E ?? ?? ?? 00 " +
+            "8B 15 ?? ?? ?? ?? " +
+            "81 C1 58 02 00 00 " +
+            "3B C1 " +
+            "8B 86 ?? ?? ?? 00 " +
+            "8B 0D ?? ?? ?? ?? " +
+            "8B 40 ?? " +
+            "0F 97 45 ?? " +
+            "83 B8 ?? ?? ?? 00 00 ",
             {
                 "delayOffset": [20, 4],
                 "delayCmdOffset": [18, 6],
-                "leftBtnClickTickOffset": [8, 4],
-                "worldOffset": [28, 4],
-                "playerOffset": [40, 1],
-                "proceedTypeOffset": [47, 4],
-                "unknownOffsets": [
-                    [14, 4],
-                    [34, 4]
-                ],
-            }
+            },
         ],
         [
-            "FF 15 " + timeGetTimeHex +   // 0 call ds:timeGetTime
-            "8B 8F ?? ?? ?? 00 " +        // 6 mov ecx, [edi+CGameMode.m_leftBtnClickTick]
-            "81 C1 58 02 00 00 " +        // 12 add ecx, 258h
-            "3B C1 " +                    // 18 cmp eax, ecx
-            "8B 87 ?? ?? ?? 00 " +        // 20 mov eax, [edi+CGameMode.m_world]
-            "0F 97 C1 " +                 // 26 setnbe cl
-            "8B 40 ?? " +                 // 29 mov eax, [eax+CWorld.m_player]
-            "83 B8 ?? ?? ?? 00 00 ",      // 32 cmp [eax+CPlayer.m_proceedType], 0
+            "FF 15 " + timeGetTimeHex +
+            "8B 8F ?? ?? ?? 00 " +
+            "81 C1 58 02 00 00 " +
+            "3B C1 " +
+            "8B 87 ?? ?? ?? 00 " +
+            "0F 97 C1 " +
+            "8B 40 ?? " +
+            "83 B8 ?? ?? ?? 00 00 ",
             {
                 "delayOffset": [14, 4],
                 "delayCmdOffset": [12, 6],
-                "leftBtnClickTickOffset": [8, 4],
-                "worldOffset": [22, 4],
-                "playerOffset": [31, 1],
-                "proceedTypeOffset": [34, 4],
-            }
+            },
         ],
     ];
     var offsetObj = pe.findAnyCode(code);
 
     if (offsetObj === -1)
-        throw "Failed in Step 1a - Pattern not found";
-
-    var offset = offsetObj.offset;
-    logField("CGameMode::m_leftBtnClickTick", offset, offsetObj.leftBtnClickTickOffset);
-    logField("CGameMode::m_world", offset, offsetObj.worldOffset);
-    logField("CWorld::m_player", offset, offsetObj.playerOffset);
-    logField("CPlayer::m_proceedType", offset, offsetObj.proceedTypeOffset);
-
-    if (typeof(offsetObj.unknownOffsets) !== "undefined")
     {
-        var offsets = offsetObj.unknownOffsets;
-        for (var i = 0; i < offsets.length; i ++)
-        {
-            logVaVar("Unknown", offset, offsets[i]);
-        }
+        throw "Failed in Step 1a - Pattern not found";
     }
 
+    var offset = offsetObj.offset;
+
     var obj = hooks.createHookObj();
-//    obj.patchAddr = offset;
+
     obj.stolenCode = "";
     obj.stolenCode1 = "";
     obj.retCode = "";
@@ -262,20 +177,21 @@ function ChangeWalkToDelay_Match()
 
 function ChangeWalkToDelay_Match2()
 {
-    consoleLog("Search the second delay addition");
     var code =
-        "81 C1 5E 01 00 00 " +  // 00 add ecx, 15Eh ; 350ms
-        "3B C1 " ;              // 06 cmp eax, ecx
+        "81 C1 5E 01 00 00 " +
+        "3B C1 ";
     var delayOffset = [2, 4];
     var delayCmdOffset = [0, 6];
     var reg = "ecx";
     var offset = pe.findCode(code);
 
     if (offset === -1)
+    {
         throw "Failed in second delay search: Pattern not found";
+    }
 
     var obj = hooks.createHookObj();
-//    obj.patchAddr = offset;
+
     obj.stolenCode = "";
     obj.stolenCode1 = "";
     obj.retCode = "";
@@ -293,7 +209,6 @@ function ChangeWalkToDelay(value1, value2)
     var offsetObj = ChangeWalkToDelay_Match();
     var offset = offsetObj.offset;
 
-    consoleLog("Replace the first offset value");
     pe.setValue(offset, offsetObj.delayOffset, value1);
 
     if (pe.getDate() > 20170329)
@@ -301,17 +216,43 @@ function ChangeWalkToDelay(value1, value2)
         offsetObj = ChangeWalkToDelay_Match2();
         offset = offsetObj.offset;
 
-        consoleLog("Replace the second offset value");
         pe.setValue(offset, offsetObj.delayOffset, value2);
     }
 
     return true;
 }
 
-//=======================================================//
-// Disable for Unsupported Clients - Check for Reference //
-//=======================================================//
+function DisableWalkToDelay()
+{
+    return ChangeWalkToDelay(0, 0);
+}
+
+function SetWalkToDelay()
+{
+    var value1 = exe.getUserInput(
+        "$walkDelay", XTYPE_WORD,
+        _("Number Input"),
+        _("Enter the new walk delay (0-1000) - snaps to closest valid value"),
+        150, 0, 1000
+    );
+    var value2;
+    if (pe.getDate() > 20170329)
+    {
+        value2 = exe.getUserInput(
+            "$walkDelay2", XTYPE_WORD,
+            _("Number Input"),
+            _("Enter the new walk delay 2 (0-1000) - snaps to closest valid value"),
+            150, 0, 1000
+        );
+    }
+    else
+    {
+        value2 = 0;
+    }
+    return ChangeWalkToDelay(value1, value2);
+}
+
 function ChangeWalkToDelay_()
 {
-    return (pe.getDate() > 20020729);
+    return pe.getDate() > 20020729;
 }

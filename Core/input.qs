@@ -19,7 +19,7 @@ function input_getString(varName, title, label, def, max)
 {
     checkArgs("input.getString", arguments, [
         ["String", "String", "String", "String"],
-        ["String", "String", "String", "String", "Number"]
+        ["String", "String", "String", "String", "Number"],
     ]);
 
     var dialog = input.createDialog();
@@ -28,7 +28,9 @@ function input_getString(varName, title, label, def, max)
     dialog.addOkCancel();
     dialog.setMinimumSize(200, 100);
     if (dialog.show() === 0)
+    {
         throw _("Cancel button pressed");
+    }
 
     return input.getVarValue(varName);
 }
@@ -36,18 +38,22 @@ function input_getString(varName, title, label, def, max)
 function input_getIntHex(varName, title, label, def, max)
 {
     checkArgs("input.getIntHex", arguments, [
-        ["String", "String", "String", "Number"]
+        ["String", "String", "String", "Number"],
     ]);
 
     var dialog = input.createDialog();
     dialog.setTitle(title);
-    if (typeof(max) === "undefined")
+    if (typeof max === "undefined")
+    {
         max = 8;
+    }
     dialog.addLabelText(varName, label, def.toBE(), max, "hhhhhhhh");
     dialog.addOkCancel();
     dialog.setMinimumSize(200, 100);
     if (dialog.show() === 0)
+    {
         throw _("Cancel button pressed");
+    }
 
     return parseInt(input.getVarValue(varName), 16);
 }
@@ -55,7 +61,7 @@ function input_getIntHex(varName, title, label, def, max)
 function input_getEncryptionKeys(count, defs)
 {
     checkArgs("input.getEncryptionKeys", arguments, [
-        ["Number", "Object"]
+        ["Number", "Object"],
     ]);
 
     var title = _("Enter packet id encryption keys");
@@ -63,33 +69,38 @@ function input_getEncryptionKeys(count, defs)
     var labels = [
         _("First key"),
         _("Second key"),
-        _("Third key")
+        _("Third key"),
     ];
     var varNames = [
         "$firstkey",
         "$secondkey",
-        "$thirdkey"
+        "$thirdkey",
     ];
 
     var dialog = input.createDialog();
     dialog.setTitle(title);
     dialog.addLabel(title);
-    for (var i = 0; i < count; i++)
+    var i;
+    for (i = 0; i < count; i++)
     {
-        dialog.addLabelText(varNames[i],
+        dialog.addLabelText(
+            varNames[i],
             labels[i],
             defs[i].toBE(),
             max,
-            "hhhhhhhh");
+            "hhhhhhhh"
+        );
     }
 
     dialog.addOkCancel();
     dialog.setMinimumSize(200, 100);
     if (dialog.show() === 0)
+    {
         throw _("Cancel button pressed");
+    }
 
     var rets = [];
-    for (var i = 0; i < count; i++)
+    for (i = 0; i < count; i++)
     {
         rets.push(parseInt(input.getVarValue(varNames[i]), 16));
     }

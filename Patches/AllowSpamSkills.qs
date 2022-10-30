@@ -14,26 +14,27 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-//#############################################################
-//# Purpose: Allow spam skill by hotkey                       #
-//#############################################################
+// #############################################################
+// # Purpose: Allow spam skill by hotkey                       #
+// #############################################################
 // search in CGameMode_virt24 near useskilltoid packet
 
 function AllowSpamSkills()
 {
-    consoleLog("step 1");
     var code =
-        "A1 ?? ?? ?? ?? " +           // 0 mov eax, g_session.virtual_key_code
-        "81 FB F4 07 00 00 " +        // 5 cmp ebx, 7F4h
-        "0F 44 05 ?? ?? ?? ?? " +     // 11 cmovz eax, g_session.field_5ADC
-        "A3 ";                        // 18 mov g_session.virtual_key_code, eax
+        "A1 ?? ?? ?? ?? " +
+        "81 FB F4 07 00 00 " +
+        "0F 44 05 ?? ?? ?? ?? " +
+        "A3 ";
     var patchOffset = 5;
     var key1Offset1 = 1;
     var key1Offset2 = 19;
     var key2Offset = 14;
     var offset = pe.findCode(code);
     if (offset === -1)
+    {
         return "Failed in step 1 - pattern not found";
+    }
 
     var key1 = pe.fetchDWord(offset + key1Offset1);
     if (key1 !== pe.fetchDWord(offset + key1Offset2))
@@ -46,13 +47,12 @@ function AllowSpamSkills()
         return "Failed in step 1 - found wrong virtual key offset";
     }
 
-    consoleLog("step 2");
     code =
-        "3B DB" +  // cmp ebx, ebx
-        "90 " +    // nop
-        "90 " +    // nop
-        "90 " +    // nop
-        "90 ";     // nop
+        "3B DB" +
+        "90 " +
+        "90 " +
+        "90 " +
+        "90 ";
 
     pe.replaceHex(offset + patchOffset, code);
     return true;

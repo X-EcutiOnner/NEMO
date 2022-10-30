@@ -15,33 +15,33 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+function BinFile_init()
+{
+    BinFile.prototype.writeAll = function writeAll(str)
+    {
+        return this.writeHex(0, str.toHex());
+    };
+
+    BinFile.prototype.append = function append(str)
+    {
+        return this.appendHex(str.toHex());
+    };
+
+    BinFile.prototype.appendLine = function appendLine(str)
+    {
+        return this.appendHex((str + "\n").toHex());
+    };
+
+    if (typeof BinFile.prototype.appendHex === "undefined")
+    {
+        BinFile.prototype.appendHex = function appendHex(str)
+        {
+            return BinFile_Append(this, str);
+        };
+    }
+}
+
 function registerBinFile()
 {
     BinFile_init();
-}
-
-function BinFile_init()
-{
-    BinFile.prototype.writeAll = function(str)
-    {
-        return this.writeHex(0, str.toHex());
-    }
-
-    BinFile.prototype.append = function(str)
-    {
-        return this.appendHex(str.toHex());
-    }
-
-    BinFile.prototype.appendLine = function(str)
-    {
-        return this.appendHex((str + "\n").toHex());
-    }
-
-    if (typeof(BinFile.prototype.appendHex) === "undefined")
-    {
-        BinFile.prototype.appendHex = function(str)
-        {
-            return BinFile_Append(this, str);
-        }
-    }
 }

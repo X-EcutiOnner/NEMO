@@ -28,6 +28,6 @@ function eraseString(offset, val)
 
 function ipStrToNum(ipStr)
 {
-    var parts = ipStr.split('.');
-    return ((((((+parts[3]) * 256) + (+parts[2])) * 256) + (+parts[1])) * 256) + (+parts[0]);
+    var parts = ipStr.split(".");
+    return (((((+parts[3] * 256) + +parts[2]) * 256) + +parts[1]) * 256) + +parts[0];
 }

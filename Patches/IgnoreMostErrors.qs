@@ -19,7 +19,9 @@ function IgnoreMostErrors()
 {
     var hooksList = hooks.initImportHooks("MessageBoxA", "user32.dll");
     if (hooksList.length === 0)
+    {
         throw "MessageBoxA usages not found";
+    }
     hooksList.addFilePre("", {}, 3000);
     hooksList.validate();
     return true;

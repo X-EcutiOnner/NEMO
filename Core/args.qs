@@ -17,7 +17,7 @@
 
 function checkArgs(name, args, types2)
 {
-    var args = Array.prototype.slice.call(args);
+    args = Array.prototype.slice.call(args);
     var valid = false;
     var err = "";
 
@@ -25,21 +25,22 @@ function checkArgs(name, args, types2)
     {
         var types = types2[typesIdx];
         if (args.length != types.length)
+        {
             continue;
+        }
 
-        var idx = 0;
         var found = true;
         for (var idx = 0; idx < types.length; idx ++)
         {
             var type = types[idx];
-            var obj = Object.prototype.toString.call(args[idx]).replace(/^\[object |\]$/g, '');
+            var obj = Object.prototype.toString.call(args[idx]).replace(/^\[object |\]$/g, "");
             if (obj == type)
             {
                 idx ++;
                 continue;
             }
 
-            if (typeof(args[idx]) == "undefined" && type == "Undefined")
+            if (typeof args[idx] == "undefined" && type == "Undefined")
             {
                 idx ++;
                 continue;

@@ -1,114 +1,112 @@
-//######################################################################
-//# Purpose: Modify the constant used in Comparison inside the vending #
-//#          related function (dont have name for it atm)              #
-//######################################################################
+// ######################################################################
+// # Purpose: Modify the constant used in Comparison inside the vending #
+// #          related function (dont have name for it atm)              #
+// ######################################################################
 
 function ChangeVendingLimit()
 {
-
-  //Step 1a - Find the address of 1,000,000,000
-  var offset = pe.stringVa("1,000,000,000");
-  if (offset === -1)
-    return "Failed in Step 1 - OneB string missing";
-
-  var oneb = pe.vaToRaw(offset);//Needed later to change the string
-
-  //Step 1b - Find its reference
-  var offset = pe.findCode("68" + offset.packToHex(4));
-  if (offset === -1)
-    return "Failed in Step 1 - OneB reference missing";
-
-  //Step 1c - Find the comparison with 1B or 1B+1 before it
-  var code =
-    " 00 CA 9A 3B" //CMP reg32_A, 3B9ACA00 (1B in hex)
-  + " 7E"          //JLE SHORT addr
-  ;
-  var newstyle = true;
-  var offset2 = pe.find(code, offset - 0x10, offset);
-  if (offset2 === -1)
-  {
-    code =
-      " 01 CA 9A 3B" //CMP reg32_A, 3B9ACA01 (1B+1 in hex)
-    + " 7C"          //JL SHORT addr
-    ;
-    newstyle = false;
-    offset2 = pe.find(code, offset - 0x10, offset);
-  }
-
-  if (offset2 === -1)
-    return "Failed in Step 1 - Comparison missing";
-
-  //Step 2a - Find the MsgString call to 0 zeny message
-  code =
-    " 6A 01"          //PUSH 1
-  + " 6A 02"          //PUSH 2
-  + " 68 5C 02 00 00" //PUSH 25C ;Line no. 605
-  ;
-  offset = pe.findCode(code);
-  if (offset === -1)
-    return "Failed in Step 2 - MsgBox call missing";
-
-  //Step 2b - Find the comparison before it
-  if (newstyle)
-  {
-    code =
-      " 00 CA 9A 3B" //CMP reg32_A, 3B9ACA00 (1B in hex)
-    + " 7E"          //JLE SHORT addr
-    ;
-  }
-  else
-  {
-    code =
-      " 01 CA 9A 3B" //CMP reg32_A, 3B9ACA01 (1B+1 in hex)
-    + " 7D"          //JGE SHORT addr
-    ;
-  }
-  var offset1 = pe.find(code, offset - 0x80, offset);
-
-  if (offset1 === -1 && newstyle)
-{
-    code = code.replace("7E", "76");//Recent clients use JBE instead of JLE
-    offset1 = pe.find(code, offset - 0x80, offset);
-  }
-
-  if (offset1 === -1)
-    return "Failed in Step 2 - Comparison missing";
-
-  //Step 2c - Find the Extra comparison for oldstyle clients
-  if (!newstyle)
-  {
-    code = code.replace("7D", "75");//JNE instead of JGE
-    offset = pe.find(code, offset - 0x60, offset);
+    var offset = pe.stringVa("1,000,000,000");
     if (offset === -1)
-      return "Failed in Step 2 - Extra Comparison missing";
+    {
+        return "Failed in Step 1 - OneB string missing";
+    }
 
-    //Step 2d - Change the JNE to JMP
-    pe.replaceHex(offset + 4, "EB");
-  }
+    var oneb = pe.vaToRaw(offset);
 
-  //Step 3a - Get the new value from user
-  var newValue = exe.getUserInput("$vendingLimit", XTYPE_DWORD, _("Number Input"), _("Enter new Vending Limit (0 - 2,147,483,647):"), 1000000000);
-  if (newValue === 1000000000)
-    return "Patch Cancelled - Vending Limit not changed";
+    offset = pe.findCode("68" + offset.packToHex(4));
+    if (offset === -1)
+    {
+        return "Failed in Step 1 - OneB reference missing";
+    }
 
-  //Step 3b - Replace the 1B string
-  var str = newValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '\0';
-  pe.replace(oneb, str);
+    var code =
+        " 00 CA 9A 3B" +
+        " 7E";
 
-  //Step 3c - Replace the compared value
-  if (!newstyle)
-    newValue++;
+    var newstyle = true;
+    var offset2 = pe.find(code, offset - 0x10, offset);
+    if (offset2 === -1)
+    {
+        code =
+            " 01 CA 9A 3B" +
+            " 7C";
+        newstyle = false;
+        offset2 = pe.find(code, offset - 0x10, offset);
+    }
 
-  pe.replaceDWord(offset1, newValue);
-  pe.replaceDWord(offset2, newValue);
+    if (offset2 === -1)
+    {
+        return "Failed in Step 1 - Comparison missing";
+    }
 
-  return true;
+    code =
+        " 6A 01" +
+        " 6A 02" +
+        " 68 5C 02 00 00";
+    offset = pe.findCode(code);
+    if (offset === -1)
+    {
+        return "Failed in Step 2 - MsgBox call missing";
+    }
+
+    if (newstyle)
+    {
+        code =
+            " 00 CA 9A 3B" +
+            " 7E";
+    }
+    else
+    {
+        code =
+            " 01 CA 9A 3B" +
+            " 7D";
+    }
+    var offset1 = pe.find(code, offset - 0x80, offset);
+
+    if (offset1 === -1 && newstyle)
+    {
+        code = code.replace("7E", "76");
+        offset1 = pe.find(code, offset - 0x80, offset);
+    }
+
+    if (offset1 === -1)
+    {
+        return "Failed in Step 2 - Comparison missing";
+    }
+
+    if (!newstyle)
+    {
+        code = code.replace("7D", "75");
+        offset = pe.find(code, offset - 0x60, offset);
+        if (offset === -1)
+        {
+            return "Failed in Step 2 - Extra Comparison missing";
+        }
+
+        pe.replaceHex(offset + 4, "EB");
+    }
+
+    var newValue = exe.getUserInput("$vendingLimit", XTYPE_DWORD, _("Number Input"), _("Enter new Vending Limit (0 - 2,147,483,647):"), 1000000000);
+    if (newValue === 1000000000)
+    {
+        return "Patch Cancelled - Vending Limit not changed";
+    }
+
+    var str = newValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "\0";
+    pe.replace(oneb, str);
+
+    if (!newstyle)
+    {
+        newValue++;
+    }
+
+    pe.replaceDWord(offset1, newValue);
+    pe.replaceDWord(offset2, newValue);
+
+    return true;
 }
 
-//===================================================================//
-// Disable for Unneeded Clients - Only 2013+ Clients have this check //
-//===================================================================//
 function ChangeVendingLimit_()
 {
-  return (pe.stringRaw("1,000,000,000") !== -1);
+    return pe.stringRaw("1,000,000,000") !== -1;
 }

@@ -14,89 +14,81 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-//####################################################
-//# Purpose: Use correct charset for Official Custom #
-//#          Fonts on all LangType                   #
-//####################################################
+// ####################################################
+// # Purpose: Use correct charset for Official Custom #
+// #          Fonts on all LangType                   #
+// ####################################################
 
 function FixCharsetForFonts()
 {
-    //Find the code inside DrawDC::SetFont function
     var code =
-        "89 56 ?? " +                 // 0 mov [esi+DrawDC.m_fontType], edx
-        "89 4E ?? " +                 // 3 mov [esi+DrawDC.m_fontHeight], ecx
-        "85 FF " +                    // 6 test edi, edi
-        "75 0A " +                    // 8 jnz short loc_479E75
-        "A1 ?? ?? ?? ?? " +           // 10 mov eax, g_fontCharSet
-        "83 FA 14 " +                 // 15 cmp edx, 14h
-        "7D 07 ";                     // 18 jge short loc_479E7C
+        "89 56 ?? " +
+        "89 4E ?? " +
+        "85 FF " +
+        "75 0A " +
+        "A1 ?? ?? ?? ?? " +
+        "83 FA 14 " +
+        "7D 07 ";
     var gfontCharSetOfsset = 11;
-    var fontTypeOffset = [2, 1];
-    var fontHeightOffset = [5, 1];
 
     var offset = pe.findCode(code);
 
-    if (offset === -1) //Old Clients
+    if (offset === -1)
     {
         code =
-            "85 FF " +                    // 0 test edi, edi
-            "0F 85 ?? 00 00 00 " +        // 2 jnz loc_42CBF0
-            "83 FA 14 " +                 // 8 cmp edx, 14h
-            "0F 8C ?? 00 00 00 " +        // 11 jl loc_42CBF0
-            "89 56 ?? " +                 // 17 mov [esi+DrawDC.m_fontType], edx
-            "89 4E ?? " +                 // 20 mov [esi+DrawDC.m_fontHeight], ecx
-            "A1 ?? ?? ?? ?? ";            // 23 mov eax, g_fontCharSet
-        var gfontCharSetOfsset = 24;
-        var fontTypeOffset = [19, 1];
-        var fontHeightOffset = [22, 1];
+            "85 FF " +
+            "0F 85 ?? 00 00 00 " +
+            "83 FA 14 " +
+            "0F 8C ?? 00 00 00 " +
+            "89 56 ?? " +
+            "89 4E ?? " +
+            "A1 ?? ?? ?? ?? ";
+        gfontCharSetOfsset = 24;
 
         offset = pe.findCode(code);
     }
     if (offset === -1)
+    {
         return "Failed in Step 1";
+    }
 
-    logField("DrawDC::m_fontType", offset, fontTypeOffset);
-    logField("DrawDC::m_fontHeight", offset, fontHeightOffset);
-    logVaVar("g_fontCharSet", offset, gfontCharSetOfsset);
-
-    // fetch address of g_fontCharSet
     var cTable = pe.fetchHex(offset + gfontCharSetOfsset, 4);
 
-    // Find the patch point, should be MOV EAX,[EDX*4+g_fontCharSet]
     offset = pe.findCode(" 8B 04 95" + cTable);
 
     if (offset === -1)
+    {
         return "Failed in Step 1b";
+    }
 
-    var retAdd = offset+ 7;
+    var retAdd = offset + 7;
 
-    // Get ServiceType (LangType)
     var LANGTYPE = GetLangType();
     if (LANGTYPE.length === 1)
+    {
         return "Failed in Step 2 - " + LANGTYPE[0];
+    }
 
-    // Prepare newCharSetTable for each serviceType
     var ins = " 81 00 80 86 88 DE 00 00 00 00 00 00 00 00 CC A3 00 00 00 B2 00";
 
-    // Prepare code to inject
     code =
-      " 83 FA 14"                               //CMP EDX,14
-    + " 7C 0F"                                  //JL short
-    + " 8B 3D" + LANGTYPE                       //MOV edi,g_serviceType
-    + " 0F B6 87" + GenVarHex(1)                //MOVZX EAX,BYTE PTR [EDI + newCharSetTable]
-    + " EB 07"                                  //JMP short
-    + " 8B 04 95" + cTable                      //MOV EAX,[EDX*4+cTable]
-    + " 68" + pe.rawToVa(retAdd).packToHex(4)  //PUSH retAdd
-    + " C3"                                     //RET
-    ;
+        " 83 FA 14" +
+        " 7C 0F" +
+        " 8B 3D" + LANGTYPE +
+        " 0F B6 87" + GenVarHex(1) +
+        " EB 07" +
+        " 8B 04 95" + cTable +
+        " 68" + pe.rawToVa(retAdd).packToHex(4) +
+        " C3";
 
     ins += code;
 
-    // Allocate space for newCharSetTable and codes
     var size = ins.hexlength();
     var free = alloc.find(size + 4);
     if (free === -1)
+    {
         return "Failed in Step 3 - No enough free space";
+    }
 
     var freeRva = pe.rawToVa(free);
 

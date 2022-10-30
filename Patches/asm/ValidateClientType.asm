@@ -19,5 +19,11 @@ push 0
 %endif
 push error
 call ErrorMsg
+%if ErrorMsg_type == 1
+add esp, 4
+%endif
+%if ErrorMsg_type == 2
+add esp, 8
+%endif
 
 ret:

@@ -14,33 +14,34 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-//###################################################################
-//# Purpose: Dont remove edit focus if click outside of input field #
-//###################################################################
+// ###################################################################
+// # Purpose: Dont remove edit focus if click outside of input field #
+// ###################################################################
 
 function RestoreChatFocus()
 {
-    // search UIWindowMgr::SetFocusEdit call in CGameMode static member
     var code =
-        "83 3D ?? ?? ?? ?? 01 " +  // cmp g_CMouse.button, 1
-        "75 ?? " +                 // jnz addr1
-        "6A 00 " +                 // push 0
-        getEcxWindowMgrHex() +     // mov ecx, offset g_windowMgr
-        "E8 ?? ?? ?? ?? " +        // call UIWindowMgr::SetFocusEdit
-        "EB ";                     // jmp addr2
+        "83 3D ?? ?? ?? ?? 01 " +
+        "75 ?? " +
+        "6A 00 " +
+        getEcxWindowMgrHex() +
+        "E8 ?? ?? ?? ?? " +
+        "EB ";
 
     var patchOffset = 9;
 
     var offset = pe.findCode(code);
 
     if (offset === -1)
+    {
         return "Failed in step 1 - pattern not found";
+    }
 
     code =
         "90 90 " +
         "90 90 90 90 90" +
         "90 90 90 90 90";
-    pe.replaceHex(offset + patchOffset, code);  // replace edit lost focus call to nops
+    pe.replaceHex(offset + patchOffset, code);
 
     return true;
 }

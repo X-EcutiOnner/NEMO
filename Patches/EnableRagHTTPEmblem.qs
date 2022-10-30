@@ -14,40 +14,33 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-//##################################################################
-//# Purpose: Use normal buffer instead of CDClient buffer for      #
-//#          HTTP Packet.                                          #
-//##################################################################
+// ##################################################################
+// # Purpose: Use normal buffer instead of CDClient buffer for      #
+// #          HTTP Packet.                                          #
+// ##################################################################
 
 function EnableRagHTTPEmblem()
 {
-  //Step 1 - Find the code
-  var code =
-      " 55"        //0 push ebp
-    + " 8B EC"     //1 mov ebp, esp
-    + " 83 C1 6C"  //3 add ecx, 6Ch
-    + " 5D"        //6 pop ebp
-    + " E9"        //7 jmp
-    ;
+    var code =
+        " 55" +
+        " 8B EC" +
+        " 83 C1 6C" +
+        " 5D" +
+        " E9";
 
-  var modPos = 5;
-  var InsertFrontDataOffset = 8;
-  var recvQueue2Offset = [5, 1];
-  var offset = pe.findCode(code);
-  if (offset === -1)
-    return "Failed in Step 1"
+    var modPos = 5;
+    var offset = pe.findCode(code);
+    if (offset === -1)
+    {
+        return "Failed in Step 1";
+    }
 
-  //Step 2 - Change buffer offset
-  pe.replaceByte(offset + modPos, 0x3C);
+    pe.replaceByte(offset + modPos, 0x3C);
 
-  logRawFunc("CPacketQueue_InsertFrontData", offset, InsertFrontDataOffset);
-  logField("CRagConnection::m_recvQueue2", offset, recvQueue2Offset);
-
-  return true;
+    return true;
 }
 
-//Hide patch for unsupported clients
 function EnableRagHTTPEmblem_()
 {
-  return ((pe.halfStringVa(".?AVCEmblemDataDownloadAsyncWork@@") | pe.halfStringVa("CDClient.dll")) !== -1);
+    return (pe.halfStringVa(".?AVCEmblemDataDownloadAsyncWork@@") | pe.halfStringVa("CDClient.dll")) !== -1;
 }

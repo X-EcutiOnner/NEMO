@@ -20,7 +20,9 @@ function simpleReplace(str1, type1, str2, type2, useMask)
     useMask = useMask || false;
     var offset = exe.find(str1, type1, useMask, "\xAB");
     if (offset === -1)
+    {
         return false;
+    }
     exe.replace(offset, str2, type2);
     return offset;
 }
@@ -30,14 +32,15 @@ function simpleReplaceAll(str1, type1, str2, type2, useMask)
     useMask = useMask || false;
     var offsets = exe.findAll(str1, type1, useMask, "\xAB");
     if (offsets.length === 0)
+    {
         return offsets;
+    }
     for (var i = 0; i < offsets.length; i++)
     {
         exe.replace(offsets[i], str2, type2);
     }
     return offsets;
 }
-
 
 function simpleReplaceHex(str1, str2, useMask)
 {
@@ -48,7 +51,6 @@ function simpleReplaceAllHex(str1, str2, useMask)
 {
     return simpleReplaceAll(str1, PTYPE_HEX, str2, PTYPE_HEX, useMask);
 }
-
 
 function simpleReplaceStr(str1, str2, useMask)
 {

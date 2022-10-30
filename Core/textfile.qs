@@ -15,18 +15,18 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+function TextFile_init()
+{
+    if (typeof TextFile.prototype.setEncoding === "undefined")
+    {
+        TextFile.prototype.setEncoding = function setEncoding(encoding)
+        {
+            return TextFile_SetEncoding(this, encoding);
+        };
+    }
+}
+
 function registerTextFile()
 {
     TextFile_init();
-}
-
-function TextFile_init()
-{
-    if (typeof(TextFile.prototype.setEncoding) === "undefined")
-    {
-        TextFile.prototype.setEncoding = function(encoding)
-        {
-            return TextFile_SetEncoding(this, encoding);
-        }
-    }
 }

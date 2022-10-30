@@ -14,10 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-//####################################################
-//# Purpose: Change height for UIEditCtrl2 in        #
-//#          UINewMakeCharWnd_virt56                 #
-//####################################################
+// ####################################################
+// # Purpose: Change height for UIEditCtrl2 in        #
+// #          UINewMakeCharWnd_virt56                 #
+// ####################################################
 
 function ChangeNewCharName_match()
 {
@@ -26,91 +26,78 @@ function ChangeNewCharName_match()
 
     var code = [
         [
-            "C7 45 ?? FF FF FF FF" +  // 0 mov [ebp+var], 0FFFFFFFFh
-            "6A 0D" +                 // 7 push 0Dh
-            "68 82 00 00 00" +        // 9 push 82h
-            "8B C8" +                 // 14 mov ecx, eax
-            "89 83 ?? ?? 00 00" +     // 16 mov  [ebx+28Ch], eax
-            "E8 ?? ?? ?? ??" +        // 22 call UIWindow_Create
-            "8B 8B ?? ?? 00 00",      // 27 mov ecx, [ebx+28Ch]
+            "C7 45 ?? FF FF FF FF" +
+            "6A 0D" +
+            "68 82 00 00 00" +
+            "8B C8" +
+            "89 83 ?? ?? 00 00" +
+            "E8 ?? ?? ?? ??" +
+            "8B 8B ?? ?? 00 00",
             {
                 "heightOffset": [8, 1],
-                "charNameOffsets": [[18, 4], [29, 4]],
-                "createOffset": 23,
-            }
+            },
         ],
         [
-            "C7 45 ?? FF FF FF FF" +  // 0 mov [ebp+var], 0FFFFFFFFh
-            "8B C8" +                 // 7 mov ecx, eax
-            "6A 0D" +                 // 9 push 0Dh
-            "68 82 00 00 00" +        // 11 push 82h
-            "89 83 ?? ?? 00 00" +     // 16 mov  [ebx+28Ch], eax
-            "E8 ?? ?? ?? ??" +        // 22 call UIWindow_Create
-            "8B 8B ?? ?? 00 00",      // 27 mov ecx, [ebx+28Ch]
+            "C7 45 ?? FF FF FF FF" +
+            "8B C8" +
+            "6A 0D" +
+            "68 82 00 00 00" +
+            "89 83 ?? ?? 00 00" +
+            "E8 ?? ?? ?? ??" +
+            "8B 8B ?? ?? 00 00",
             {
                 "heightOffset": [10, 1],
-                "charNameOffsets": [[18, 4], [29, 4]],
-                "createOffset": 23,
-            }
+            },
         ],
         [
-            "C7 45 ?? FF FF FF FF " +     // 0 mov [ebp+var_4], 0FFFFFFFFh
-            "8B C8 " +                    // 7 mov ecx, eax
-            "6A 14 " +                    // 9 push 14h
-            "68 82 00 00 00 " +           // 11 push 82h
-            "89 83 ?? ?? 00 00 " +        // 16 mov [ebx+UINewMakeCharWnd.m_charName], eax
-            "E8 ?? ?? ?? ?? " +           // 22 call UIWindow_Create
-            "8B 8B ?? ?? 00 00",          // 27 mov ecx, [ebx+UINewMakeCharWnd.m_charName]
+            "C7 45 ?? FF FF FF FF " +
+            "8B C8 " +
+            "6A 14 " +
+            "68 82 00 00 00 " +
+            "89 83 ?? ?? 00 00 " +
+            "E8 ?? ?? ?? ?? " +
+            "8B 8B ?? ?? 00 00",
             {
                 "heightOffset": [10, 1],
-                "charNameOffsets": [[18, 4], [29, 4]],
-                "createOffset": 23,
-            }
+            },
         ],
         [
-            "C7 45 ?? FF FF FF FF " +     // 0 mov [ebp+var_4], 0FFFFFFFFh
-            "6A 10 " +                    // 7 push 10h
-            "6A 6E " +                    // 9 push 6Eh
-            "8B C8 " +                    // 11 mov ecx, eax
-            "89 86 ?? ?? 00 00 " +        // 13 mov [esi+UINewMakeCharWnd.m_charName], eax
-            "E8 ?? ?? ?? ?? " +           // 19 call UIWindow_Create
-            "8B 8E ?? ?? 00 00",          // 24 mov ecx, [esi+UINewMakeCharWnd.m_charName]
+            "C7 45 ?? FF FF FF FF " +
+            "6A 10 " +
+            "6A 6E " +
+            "8B C8 " +
+            "89 86 ?? ?? 00 00 " +
+            "E8 ?? ?? ?? ?? " +
+            "8B 8E ?? ?? 00 00",
             {
                 "heightOffset": [8, 1],
-                "charNameOffsets": [[15, 4], [26, 4]],
-                "createOffset": 20,
-            }
+            },
         ],
         [
-            "C7 45 ?? FF FF FF FF " +     // 0 mov [ebp+var_4], 0FFFFFFFFh
-            "6A 14 " +                    // 7 push 14h
-            "68 82 00 00 00 " +           // 9 push 82h
-            "8B C8 " +                    // 14 mov ecx, eax
-            "89 83 ?? ?? 00 00 " +        // 16 mov [ebx+28Ch], eax
-            "E8 ?? ?? ?? ?? " +           // 22 call UIWindow_Create
-            "8B 8B ?? ?? 00 00",          // 27 mov ecx, [ebx+28Ch]
+            "C7 45 ?? FF FF FF FF " +
+            "6A 14 " +
+            "68 82 00 00 00 " +
+            "8B C8 " +
+            "89 83 ?? ?? 00 00 " +
+            "E8 ?? ?? ?? ?? " +
+            "8B 8B ?? ?? 00 00",
             {
                 "heightOffset": [8, 1],
-                "charNameOffsets": [[18, 4], [29, 4]],
-                "createOffset": 23,
-            }
+            },
         ],
     ];
 
     var offsetObj = pe.findAny(code, addr1, addr2);
 
     if (offsetObj === -1)
+    {
         throw "Failed in step 1 - pattern not found";
+    }
 
     var offset = offsetObj.offset;
-    for (var i = 0; i < offsetObj.charNameOffsets.length; i ++)
-    {
-        logField("UINewMakeCharWnd::m_charName", offset, offsetObj.charNameOffsets[i]);
-    }
-    logRawFunc("UIWindow_Create", offset, offsetObj.createOffset);
 
     var obj = hooks.createHookObj();
-//    obj.patchAddr = offset;
+
     obj.stolenCode = "";
     obj.stolenCode1 = "";
     obj.retCode = "";
@@ -125,12 +112,14 @@ function ChangeNewCharNameHeight()
 {
     var obj = ChangeNewCharName_match();
 
-    var height = exe.getUserInput("$newCharNameHeight",
+    var height = exe.getUserInput(
+        "$newCharNameHeight",
         XTYPE_BYTE,
         _("Number Input"),
         _("Enter new char name height (0-255, default is 13):"),
         13,
-        0, 255);
+        0, 255
+    );
     if (height === 13)
     {
         return "Patch Cancelled - New value is same as old";
@@ -143,5 +132,5 @@ function ChangeNewCharNameHeight()
 
 function ChangeNewCharNameHeight_()
 {
-    return (pe.stringRaw(".?AVUINewMakeCharWnd@@") !== -1);
+    return pe.stringRaw(".?AVUINewMakeCharWnd@@") !== -1;
 }

@@ -19,7 +19,9 @@ function SetPriorityClassNormal()
 {
     var hooksList = hooks.initImportCallHooks("SetPriorityClass", "kernel32.dll");
     if (hooksList.length === 0)
+    {
         throw "SetPriorityClass call usages not found";
+    }
     hooksList.addFilePre();
     hooksList.validate();
     return true;

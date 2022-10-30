@@ -1,85 +1,85 @@
-//#####################################################################
-//# Purpose: Modify the comparisons in C3dGrannyBoneRes::GetAnimation #
-//#       to always use gr2 from 3dmob_bone folder                    #
-//#####################################################################
+// #####################################################################
+// # Purpose: Modify the comparisons in C3dGrannyBoneRes::GetAnimation #
+// #       to always use gr2 from 3dmob_bone folder                    #
+// #####################################################################
 
 function EnableCustom3DBones()
 {
+    var offset = pe.stringVa("model\\3dmob_bone\\%d_%s.gr2");
+    if (offset === -1)
+    {
+        return "Failed in Step 1 - String not found";
+    }
 
-  //Step 1a - Find location of the sprintf control string for 3d mob bones
-  var offset = pe.stringVa("model\\3dmob_bone\\%d_%s.gr2");
-  if (offset === -1)
-    return "Failed in Step 1 - String not found";
+    var offset2 = pe.findCode("68" + offset.packToHex(4));
+    if (offset2 === -1)
+    {
+        return "Failed in Step 1 - String reference missing";
+    }
 
-  //Step 1b - Find its reference which is inside C3dGrannyBoneRes::GetAnimation
-  var offset2 = pe.findCode("68" + offset.packToHex(4));
-  if (offset2 === -1)
-    return "Failed in Step 1 - String reference missing";
-
-  //Step 2a - Find Limiting CMP instruction within this function before the reference (should be within 0x80 bytes)
-  var code =
-    " C6 05 ?? ?? ?? 00 00" //MOV BYTE PTR DS:[addr], 0
-  + " 83 FE 09"             //CMP ESI, 9
-  ;
-  offset = pe.find(code, offset2 - 0x80, offset2);
-
-  if (offset === -1)
-  {
-    code = code.replace("09", "0A"); //Change the 09h to 0Ah for VC6 clients
+    var code =
+        " C6 05 ?? ?? ?? 00 00" +
+        " 83 FE 09";
     offset = pe.find(code, offset2 - 0x80, offset2);
-  }
 
-  if (offset === -1)
-    return "Failed in Step 2 - Comparison missing";
+    if (offset === -1)
+    {
+        code = code.replace("09", "0A");
+        offset = pe.find(code, offset2 - 0x80, offset2);
+    }
 
-  offset += code.hexlength();
+    if (offset === -1)
+    {
+        return "Failed in Step 2 - Comparison missing";
+    }
 
-  //Step 2b - Find the Index test after ID Comparison (should be within 0x20 bytes)
-  code =
-    " 85 FF" //TEST EDI, EDI
-  + " 75 27" //JNE SHORT addr
-  ;
-  offset2 = pe.find(code, offset, offset + 0x20);
+    offset += code.hexlength();
 
-  if (offset2 === -1)
-  {
-    code = code.replace("27", "28"); //VC10 and older has 28 instead of 27
+    code =
+        " 85 FF" +
+        " 75 27";
     offset2 = pe.find(code, offset, offset + 0x20);
-  }
 
-  if (offset2 === -1)
-    return "Failed in Step 2 - Index Test missing";
-
-  //Step 3a - NOP out the TEST & Modify the short JNE to JMP at offset2
-  pe.replaceHex(offset2, " 90 90 EB");
-
-  //Step 3b - Modify the JA/JGE instruction at offset to just skip the Jump.
-  switch(pe.fetchUByte(offset))
-  {
-    case 0x77:
-    case 0x7D: {// Short JA/JGE
-      pe.replaceHex(offset, " 90 90");
-      break;
+    if (offset2 === -1)
+    {
+        code = code.replace("27", "28");
+        offset2 = pe.find(code, offset, offset + 0x20);
     }
-    case 0x0F: {// Long JA/JGE
-      pe.replaceHex(offset, " EB 04");
-      break;
+
+    if (offset2 === -1)
+    {
+        return "Failed in Step 2 - Index Test missing";
     }
-    default: {
-      return "Failed in Step 3";
+
+    pe.replaceHex(offset2, " 90 90 EB");
+
+    switch (pe.fetchUByte(offset))
+    {
+        case 0x77:
+        case 0x7D: {
+            pe.replaceHex(offset, " 90 90");
+            break;
+        }
+        case 0x0F: {
+            pe.replaceHex(offset, " EB 04");
+            break;
+        }
+        default: {
+            return "Failed in Step 3";
+        }
     }
-  }
 
-  //Step 4a - Find the annoying warning - 'too many vertex granny model!'
-  offset = pe.stringVa("too many vertex granny model!");
+    offset = pe.stringVa("too many vertex granny model!");
 
-  //Step 4b - Find its reference + the function call after
-  if (offset !== -1)
-    offset = pe.findCode(" 68" + offset.packToHex(4) + " E8");
+    if (offset !== -1)
+    {
+        offset = pe.findCode(" 68" + offset.packToHex(4) + " E8");
+    }
 
-  //Step 4c - NOP out the call
-  if (offset !== -1)
-    pe.replaceHex(offset + 5, " 90 90 90 90 90");
+    if (offset !== -1)
+    {
+        pe.replaceHex(offset + 5, " 90 90 90 90 90");
+    }
 
-  return true;
+    return true;
 }

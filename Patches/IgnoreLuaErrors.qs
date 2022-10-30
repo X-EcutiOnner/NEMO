@@ -18,110 +18,96 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
-//##################################################
-//# Purpose: Modify LuaErrorMsg function to return #
-//#          without showing the MessageBox.       #
-//##################################################
+// ##################################################
+// # Purpose: Modify LuaErrorMsg function to return #
+// #          without showing the MessageBox.       #
+// ##################################################
 
 function IgnoreLuaErrors()
 {
-    consoleLog("Step 1 - Prep code for finding the LuaErrorMsg");
     var code =
-        "FF ?? ?? ?? ?? 00 " +  // 00 call vsprintf
-        "83 ?? ?? " +           // 06 add esp, 0Ch
-        "8D ?? ?? ?? FF FF " +  // 09 lea eax, [ebp+Text]
-        "6A 00 " +              // 15 push 0
-        "?? " +                 // 17 push esi
-        "?? " +                 // 18 push eax
-        "6A 00 " +              // 19 push 0
-        "FF 15 ?? ?? ?? 00 ";   // 21 call MessageBoxA
+        "FF ?? ?? ?? ?? 00 " +
+        "83 ?? ?? " +
+        "8D ?? ?? ?? FF FF " +
+        "6A 00 " +
+        "?? " +
+        "?? " +
+        "6A 00 " +
+        "FF 15 ?? ?? ?? 00 ";
 
     var repLoc = 9;
     var hCode = "33 C0 90 90 90 90 90 90 90 ";
-    var vsprintfOffset = 2;
-    var messageBoxAOffset = 23;
     var offset = pe.findCode(code);
 
     if (offset === -1)
     {
         code =
-            "FF ?? ?? ?? ?? 00 " +  // 00 call vsprintf
-            "83 ?? ?? " +           // 06 add esp, 0Ch
-            "6A 00 " +              // 09 push 0
-            "?? " +                 // 11 push esi
-            "8D ?? ?? ?? FF FF " +  // 12 lea eax, [ebp+Text]
-            "?? " +                 // 18 push eax
-            "6A 00 " +              // 19 push 0
-            "FF 15 ?? ?? ?? 00 ";   // 21 call MessageBoxA
+            "FF ?? ?? ?? ?? 00 " +
+            "83 ?? ?? " +
+            "6A 00 " +
+            "?? " +
+            "8D ?? ?? ?? FF FF " +
+            "?? " +
+            "6A 00 " +
+            "FF 15 ?? ?? ?? 00 ";
 
         repLoc = 9;
         hCode = "90 90 90 33 C0 90 90 90 90 ";
-        vsprintfOffset = 2;
-        messageBoxAOffset = 23;
         offset = pe.findCode(code);
     }
 
     if (offset === -1)
     {
         code =
-            "FF ?? ?? ?? ?? 00 " +  // 00 call ds:vsprintf
-            "83 ?? ?? " +           // 06 add esp, 0Ch
-            "6A 00 " +              // 09 push 0
-            "?? " +                 // 11 push esi
-            "8D ?? ?? ?? " +        // 12 lea eax, [esp+204h+Dest]
-            "?? " +                 // 16 push eax
-            "6A 00 " +              // 17 push 0
-            "FF 15 ?? ?? ?? 00 ";   // 19 call ds:MessageBoxA
+            "FF ?? ?? ?? ?? 00 " +
+            "83 ?? ?? " +
+            "6A 00 " +
+            "?? " +
+            "8D ?? ?? ?? " +
+            "?? " +
+            "6A 00 " +
+            "FF 15 ?? ?? ?? 00 ";
 
         repLoc = 9;
         hCode = "90 90 90 33 C0 90 90 ";
-        vsprintfOffset = 2;
-        messageBoxAOffset = 21;
         offset = pe.findCode(code);
     }
 
     if (offset === -1)
     {
         code =
-            "E8 ?? ?? ?? 00 " +     // 00 call _vsprintf
-            "8B ?? ?? " +           // 05 mov eax, [ebp+lpCaption]
-            "83 ?? ?? " +           // 08 add esp, 0Ch
-            "8D ?? ?? ?? FF FF " +  // 11 lea ecx, [ebp+Text]
-            "6A 00 " +              // 17 push 0
-            "?? " +                 // 19 push eax
-            "?? " +                 // 20 push ecx
-            "6A 00 " +              // 21 push 0
-            "FF 15 ?? ?? ?? 00 ";   // 23 call ds:MessageBoxA
+            "E8 ?? ?? ?? 00 " +
+            "8B ?? ?? " +
+            "83 ?? ?? " +
+            "8D ?? ?? ?? FF FF " +
+            "6A 00 " +
+            "?? " +
+            "?? " +
+            "6A 00 " +
+            "FF 15 ?? ?? ?? 00 ";
 
         repLoc = 11;
         hCode = "90 90 90 90 90 90 33 C0 90 ";
-        vsprintfOffset = 1;
-        messageBoxAOffset = 25;
         offset = pe.findCode(code);
     }
 
     if (offset === -1)
+    {
         return "Failed in Step 1 - Pattern not found";
+    }
 
-    logVaFunc("vsprintf", offset, vsprintfOffset);
-    logVaFunc("MessageBoxA", offset, messageBoxAOffset);
-
-    consoleLog("Step 2 - Replace with xor eax, eax followed by nops");
     var newCode =
-        hCode +                // 00 xor eax, eax + nops
-        "90 " +                // 09 nops
-        "90 90 " +             // 10 nops
-        "90 90 90 90 90 90 ";  // 12 nops
+        hCode +
+        "90 " +
+        "90 90 " +
+        "90 90 90 90 90 90 ";
 
     pe.replaceHex(offset + repLoc, newCode);
 
     return true;
 }
 
-//=======================================================//
-// Disable for Unsupported Clients - Check for Reference //
-//=======================================================//
 function IgnoreLuaErrors_()
 {
-    return (pe.getDate() >= 20100000);
+    return pe.getDate() >= 20100000;
 }

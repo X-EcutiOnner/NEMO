@@ -14,38 +14,40 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-//###########################################################################
-//# Purpose: Restore login packet 0x64                                      #
-//###########################################################################
+// ###########################################################################
+// # Purpose: Restore login packet 0x64                                      #
+// ###########################################################################
 
 function LoginPacketSend_match()
 {
     var LANGTYPE = GetLangType();
     if (LANGTYPE.length === 1)
+    {
         throw "Failed in Step 1a - " + LANGTYPE[0];
+    }
 
-    var passwordEncryptHex = table.getHex4(table.g_passwordEncrypt)
+    var passwordEncryptHex = table.getHex4(table.g_passwordEncrypt);
 
-    consoleLog("Search pattern");
-    // search in CLoginMode_OnChangeState
     var code =
-        "80 3D " + passwordEncryptHex + " 00 " + // 0 cmp ds:g_passwordEncrypt, 0
-        "0F 85 ?? ?? ?? 00 " +        // 7 jnz loc_80923F
-        "8B ?? " + LANGTYPE +         // 13 mov ecx, ds:g_serviceType
-        "?? ?? " +                    // 19 test ecx, ecx
-        "0F 84 ?? ?? 00 00 " +        // 21 jz loc_8090C2
-        "83 ?? 12 " +                 // 27 cmp ecx, 12h
-        "0F 84 ?? ?? 00 00 " +        // 30 jz loc_8090C2
-        "83 ?? 0C " +                 // 36 cmp ecx, 0Ch
-        "0F 84 ?? ?? 00 00 ";         // 39 jz loc_8090C2
+        "80 3D " + passwordEncryptHex + " 00 " +
+        "0F 85 ?? ?? ?? 00 " +
+        "8B ?? " + LANGTYPE +
+        "?? ?? " +
+        "0F 84 ?? ?? 00 00 " +
+        "83 ?? 12 " +
+        "0F 84 ?? ?? 00 00 " +
+        "83 ?? 0C " +
+        "0F 84 ?? ?? 00 00 ";
     var nopRangeOffset = [19, 45];
     var offset = pe.findCode(code);
 
     if (offset === -1)
+    {
         throw "Pattern not found";
+    }
 
     var obj = hooks.createHookObj();
-//    obj.patchAddr = ;
+
     obj.stolenCode = "";
     obj.stolenCode1 = "";
     obj.retCode = "";
@@ -57,7 +59,6 @@ function LoginPacketSend_match()
     return obj;
 }
 
-
 function RestoreOldLoginPacket()
 {
     var obj = LoginPacketSend_match();
@@ -66,9 +67,6 @@ function RestoreOldLoginPacket()
     return true;
 }
 
-//====================================================================//
-// Disable for Unneeded Clients. Start from first zero client version //
-//====================================================================//
 function RestoreOldLoginPacket_()
 {
     return (pe.getDate() > 20171019 && IsZero()) || pe.getDate() >= 20181114;

@@ -18,26 +18,27 @@
 function imports_load()
 {
     if (imports.init === true)
+    {
         return;
+    }
 
     var descriptor = pe.getImportTable();
     var vaOffset = pe.rawToVa(descriptor.offset);
     if (vaOffset <= 0)
     {
-        consoleLog("Import table corrupted");
         imports.init = true;
         return;
     }
-    consoleLog("Import table 0x" + vaOffset.toString(16) + " size: 0x" +  descriptor.size.toString(16));
-    for (var i = 0; i < descriptor.size; i += 4*5)
+    for (var i = 0; i < descriptor.size; i += 4 * 5)
     {
         var data = imports.loadDescriptor(descriptor.offset + i);
         if (data === false)
+        {
             break;
+        }
         imports.parseDescriptor(data);
     }
     imports.init = true;
-    return;
 }
 
 function imports_add(dllName, funcName, funcPtr)
@@ -45,11 +46,11 @@ function imports_add(dllName, funcName, funcPtr)
     dllName = dllName.toLowerCase();
     imports.allImports.push(dllName, funcName, funcPtr);
 
-    var value = {
+    var values = {
         "dll": dllName,
         "name": funcName,
-        "ptr": funcPtr
-    }
+        "ptr": funcPtr,
+    };
 
     function addEntry(key, value)
     {
@@ -60,8 +61,8 @@ function imports_add(dllName, funcName, funcPtr)
         imports.nameToPtr[key].push(value);
     }
 
-    addEntry([undefined, funcName], value);
-    addEntry([dllName, funcName], value);
+    addEntry([undefined, funcName], values);
+    addEntry([dllName, funcName], values);
 }
 
 function imports_parseDescriptor(descriptor)
@@ -69,17 +70,20 @@ function imports_parseDescriptor(descriptor)
     var nameOffset = descriptor.names;
     var funcOffset = descriptor.funcs;
     var dllName = descriptor.dll;
+
     while (true)
     {
         var offset = pe.fetchUDWord(nameOffset);
         if (offset == 0)
+        {
             return;
+        }
 
+        var funcPtr;
         if ((offset & 0x80000000) != 0)
         {
-            var ordinal = (offset & 0x7fffffff);
-            var funcPtr = pe.rawToVa(funcOffset);
-            consoleLog("Found import ordinal: " + dllName + ", " + ordinal + ", " + funcPtr.toString(16));
+            var ordinal = offset & 0x7fffffff;
+            funcPtr = pe.rawToVa(funcOffset);
             imports.add(dllName, ordinal, funcPtr);
         }
         else
@@ -87,12 +91,10 @@ function imports_parseDescriptor(descriptor)
             offset = pe.rvaToRaw(offset);
             if (offset < 0)
             {
-                consoleLog("Possible import table corruption");
                 return;
             }
             var funcName = pe.fetchString(offset + 2);
-            var funcPtr = pe.rawToVa(funcOffset);
-            consoleLog("Found import name: " + dllName + ", " + funcName + ", " + funcPtr.toString(16));
+            funcPtr = pe.rawToVa(funcOffset);
             imports.add(dllName, funcName, funcPtr);
         }
         nameOffset += 4;
@@ -102,102 +104,115 @@ function imports_parseDescriptor(descriptor)
 
 function imports_loadDescriptor(offset)
 {
-    consoleLog("Import table descriptor 0x" + pe.rawToVa(offset).toString(16));
     var nameList = pe.fetchUDWord(offset);
     if (nameList === 0)
     {
-        consoleLog("Import descriptor name list zero");
         return false;
     }
     nameList = pe.rvaToRaw(nameList);
     var forwarded = pe.fetchUDWord(offset + 8);
     if (forwarded != 0)
+    {
         throw "Unsupported import table flag";
+    }
     var dllName = pe.fetchUDWord(offset + 12);
     if (dllName === 0)
     {
-        consoleLog("Import descriptor dll name zero");
         return false;
     }
     dllName = pe.fetchString(pe.rvaToRaw(dllName));
     if (dllName.length < 4 || dllName.toLowerCase().indexOf(".dll") < 1)
     {
-        consoleLog("Import descriptor wrong dll name");
         return false;
     }
     var funcList = pe.fetchUDWord(offset + 16);
     if (funcList === 0)
     {
-        consoleLog("Import descriptor functions list zero");
         return false;
     }
     funcList = pe.rvaToRaw(funcList);
     return {
         "names": nameList,
         "dll": dllName,
-        "funcs": funcList
-    }
+        "funcs": funcList,
+    };
 }
 
 function imports_importByName(funcName, dllName)
 {
-    if (typeof(testGetImport) !== "undefined")
+    if (typeof testGetImport !== "undefined")
     {
         var offset = testGetImport(funcName, dllName);
         if (offset === -1)
+        {
             return false;
+        }
         if (offset !== false)
+        {
             return offset;
+        }
     }
 
     imports.load();
-    if (typeof(dllName) !== "undefined")
+    if (typeof dllName !== "undefined")
+    {
         dllName = dllName.toLowerCase();
+    }
     var key = [dllName, funcName];
     if (key in imports.nameToPtr)
     {
         var arr = imports.nameToPtr[key];
-        if (typeof(testSetImport) !== "undefined")
+        if (typeof testSetImport !== "undefined")
+        {
             testSetImport(funcName, dllName, arr[0]);
+        }
         return arr[0];
     }
-    else
+
+    if (typeof testSetImport !== "undefined")
     {
-        if (typeof(testSetImport) !== "undefined")
-            testSetImport(funcName, dllName, false);
-        return false;
+        testSetImport(funcName, dllName, false);
     }
+    return false;
 }
 
 function imports_ptr(funcName, dllName, ordinal)
 {
     var entry = imports.importByName(funcName, dllName);
-    if (entry === false && typeof(ordinal) !== "undefined")
+    if (entry === false && typeof ordinal !== "undefined")
+    {
         entry = imports.importByName(ordinal, dllName);
+    }
     if (entry === false)
+    {
         return -1;
+    }
     return entry.ptr;
 }
 
 function imports_ptrValidated(funcName, dllName, ordinal)
 {
-    var entry = imports_ptr(funcName, dllName, ordinal)
+    var entry = imports_ptr(funcName, dllName, ordinal);
     if (entry === -1)
+    {
         throw "Import function " + dllName + ":" + funcName + " not found";
+    }
     return entry;
 }
 
 function imports_ptrHexValidated(funcName, dllName, ordinal)
 {
-    var entry = imports_ptr(funcName, dllName, ordinal)
+    var entry = imports_ptr(funcName, dllName, ordinal);
     if (entry === -1)
+    {
         throw "Import function " + dllName + ":" + funcName + " not found";
+    }
     return entry.packToHex(4);
 }
 
 function registerImports()
 {
-    imports = new Object();
+    imports = {};
     imports.init = false;
     imports.allImports = [];
     imports.nameToPtr = {};

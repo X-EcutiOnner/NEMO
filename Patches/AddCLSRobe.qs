@@ -19,12 +19,16 @@ function AddCLSRobe()
 {
     lua.replace("Lua Files\\DataInfo\\SpriteRobeName_F", ["lua files\\cls\\spriterobename_f"]);
     if (pe.stringRaw("Lua Files\\transparentItem\\transparentItem_f") !== -1 || table.get(table.packetVersion) > 20171000)
+    {
         lua.replace("Lua Files\\transparentItem\\transparentItem_f", ["lua files\\cls\\transparentitem_f"]);
+    }
 
     lua.loadBefore("Lua Files\\DataInfo\\SpriteRobeId", ["lua files\\cls\\spriterobeid"]);
     lua.loadBefore("Lua Files\\DataInfo\\SpriteRobeName", ["lua files\\cls\\spriterobename"]);
     if (pe.stringRaw("Lua Files\\transparentItem\\transparentItem") !== -1 || table.get(table.packetVersion) > 20171000)
+    {
         lua.loadBefore("Lua Files\\transparentItem\\transparentItem", ["lua files\\cls\\transparentitem"]);
+    }
 
     return true;
 }
