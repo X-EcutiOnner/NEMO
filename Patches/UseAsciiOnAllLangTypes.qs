@@ -1,7 +1,4 @@
-// ############################################################
-// # Purpose: Change the JNZ after Langtype comparison inside #
-// #          CSession::IsOnlyEnglish to NOP                  #
-// ############################################################
+
 
 function UseAsciiOnAllLangTypes()
 {

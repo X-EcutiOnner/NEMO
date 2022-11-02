@@ -1,7 +1,4 @@
-// ##################################################################
-// # Purpose: Skip the call to ProcessFindHack function and the     #
-// #          Conditional Jump after it. Also ignore nProtect tests #
-// ##################################################################
+
 
 function DisableGameGuard()
 {

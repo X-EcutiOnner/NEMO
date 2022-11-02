@@ -1,7 +1,4 @@
-// ################################################################
-// # Purpose: Change the JNZ to JMP after CFile::Open result TEST #
-// #         in CPaletteRes::Load function                        #
-// ################################################################
+
 
 function IgnoreMissingPaletteError()
 {

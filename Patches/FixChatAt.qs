@@ -1,8 +1,4 @@
-// #############################################################################
-// # Purpose: Change the failure return value in the function looking for '@'  #
-// #          in Chat text to 1 (i.e. no @ found). For old clients, we need to #
-// #          hijack a call inside UIWindowMgr::ProcessPushButton.             #
-// #############################################################################
+
 
 function FixChatAt()
 {

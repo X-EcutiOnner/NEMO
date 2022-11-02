@@ -1,6 +1,4 @@
-// ###########################################################################################
-// # Purpose: Change the Style parameter used for CreateWindowExA call to include WS_SYSMENU #
-// ###########################################################################################
+
 
 function EnableTitleBarMenu()
 {

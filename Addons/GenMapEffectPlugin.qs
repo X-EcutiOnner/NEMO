@@ -1,7 +1,4 @@
-// ######################################################################
-// # Purpose: Generate Curiosity's Map Effect Plugin for loaded client  #
-// #          using the template DLL (rdll2.asi) along with header file #
-// ######################################################################
+
 
 function GenMapEffectPlugin()
 {

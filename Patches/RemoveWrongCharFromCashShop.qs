@@ -14,10 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// ####################################################
-// # Purpose: Dont draw field with random number in   #
-// #          cash shop in UICashShopWnd_virt68       #
-// ####################################################
 
 function RemoveWrongCharFromCashShop()
 {

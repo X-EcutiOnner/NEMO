@@ -1,6 +1,4 @@
-// #################################################################
-// # Purpose: Extract all .txt filenames used in the loaded client #
-// #################################################################
+
 
 function ExtractTxtNames()
 {

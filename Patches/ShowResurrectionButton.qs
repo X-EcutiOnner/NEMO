@@ -1,7 +1,4 @@
-// #############################################################
-// # Purpose: Modify the CGameMode::HaveSiegfriedItem function #
-// #          to ignore map type comparisons                   #
-// #############################################################
+
 
 function ShowResurrectionButton()
 {

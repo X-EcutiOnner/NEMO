@@ -1,8 +1,4 @@
-// ########################################################################
-// # Purpose: Hijack the MsgStr function call inside the Booking OnCreate #
-// #          function which loads comboboxes for testing the ID against  #
-// #          our list and skip iteration if present.                     #
-// ########################################################################
+
 
 function RemoveJobsFromBooking()
 {

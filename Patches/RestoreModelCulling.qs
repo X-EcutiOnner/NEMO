@@ -1,6 +1,4 @@
-// #####################################################################
-// # Purpose: Make models in front of player turn transparent          #
-// #####################################################################
+
 
 function RestoreModelCulling()
 {

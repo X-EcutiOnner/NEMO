@@ -14,10 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// ##############################################################
-// # Purpose: Change exp guild limit from 50 to custom value in #
-// # UIGuildPositionManageWnd_virt136                           #
-// ##############################################################
 
 function ChangeGuildExpLimit()
 {

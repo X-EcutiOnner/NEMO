@@ -1,6 +1,4 @@
-// ########################################
-// # Purpose: Zero out Gravity Logo Image #
-// ########################################
+
 
 function RemoveGravityLogo()
 {

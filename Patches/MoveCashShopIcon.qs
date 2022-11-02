@@ -1,7 +1,4 @@
-// ##########################################################################
-// # Purpose: Modify the coordinates send as argument to UIWindow::UIWindow #
-// #          for Cash Shop Button to the user specified ones               #
-// ##########################################################################
+
 
 function MoveCashShopIcon()
 {

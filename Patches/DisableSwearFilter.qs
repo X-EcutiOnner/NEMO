@@ -1,7 +1,4 @@
-// #####################################################################
-// # Purpose: Zero out 'manner.txt' to prevent any reference bad words #
-// #          from loading to compare against                          #
-// #####################################################################
+
 
 function DisableSwearFilter()
 {

@@ -1,7 +1,4 @@
-// ###################################################################
-// # Purpose: Change the JNE and JLE to JMP after Hourly Comparisons #
-// #          inside CRenderer::DrawAgeRate & PlayTime functions     #
-// ###################################################################
+
 
 function RemoveHourlyAnnounce()
 {

@@ -1,7 +1,4 @@
-// #############################################################
-// # Purpose: Change the Limit used for allocating and loading #
-//           Headgear Prefix table.
-// #############################################################
+
 
 function IncreaseViewID()
 {

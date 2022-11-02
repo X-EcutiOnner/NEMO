@@ -14,9 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// ############################################################################
-// # Purpose: Allow select custom job in char create window (replacing doram) #
-// ############################################################################
 
 function ChangeSecondCharCreateJob()
 {

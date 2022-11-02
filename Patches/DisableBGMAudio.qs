@@ -18,10 +18,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
-// ############################################################################################
-// # Purpose: Zero out the mp3NameTable.txt file strings use for listing all .mp3 audio files #
-// #          in BGM folder for playing background music where used in map.                   #
-// ############################################################################################
 
 function DisableBGMAudio()
 {

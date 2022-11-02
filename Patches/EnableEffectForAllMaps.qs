@@ -1,7 +1,4 @@
-// ###################################################################
-// # Purpose: Make the function which loads the EffectTool lua files #
-// #          skip the Jump for specific maps                        #
-// ###################################################################
+
 
 function EnableEffectForAllMaps()
 {

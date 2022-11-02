@@ -1,7 +1,4 @@
-// ###############################################################
-// # Purpose: Modify the Coordinates of Login and Cancel buttons #
-// #          to show both of them in Login Screen.              #
-// ###############################################################
+
 
 function ShowCancelToServiceSelect()
 {

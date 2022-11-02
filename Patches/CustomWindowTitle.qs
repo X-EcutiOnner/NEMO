@@ -1,7 +1,4 @@
-// ##############################################################################
-// # Purpose: Switch "Ragnarok" reference with address of User specified Window #
-// #          Title which will be that of unused URL string that is overwritten #
-// ##############################################################################
+
 
 function CustomWindowTitle()
 {

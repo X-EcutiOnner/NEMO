@@ -1,7 +1,4 @@
-// ###############################################################################
-// # Purpose: Override data.grf loading with a custom function which loads a set #
-// #          of grfs directly. The list of files is read by the patch from INI  #
-// ###############################################################################
+
 
 function EnableMultipleGRFsV2()
 {

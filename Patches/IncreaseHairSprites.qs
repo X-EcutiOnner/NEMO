@@ -14,10 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// ####################################################
-// # Purpose: Extend hard-coded hair style table and  #
-// #          change limit to hair styles             #
-// ####################################################
 
 function str2Hex(val, sz)
 {

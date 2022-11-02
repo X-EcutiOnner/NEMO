@@ -1,7 +1,4 @@
-// ###########################################################################
-// # Purpose: Translate Korean strings to user specified strings both loaded #
-// #          from TranslateClient.txt . Also fixes Taekwon branch Job names #
-// ###########################################################################
+
 
 function TranslateClient()
 {

@@ -1,7 +1,4 @@
-// ######################################################################
-// # Purpose: Fix up all HackShield related functions or function calls #
-// #          by HackShield and remove aossdk.dll from import.          #
-// ######################################################################
+
 
 delete Import_Info;
 

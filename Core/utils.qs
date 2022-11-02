@@ -1,7 +1,4 @@
-// ###########################################################################
-// # Purpose: Generate Hex Filler for use in Insert Codes. Pattern generated #
-// #          will be a sequence of CC followed by (C0 + num)                #
-// ###########################################################################
+
 
 function GenVarHex(num)
 {

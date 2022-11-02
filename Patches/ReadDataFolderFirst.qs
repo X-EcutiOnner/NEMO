@@ -1,7 +1,4 @@
-// #######################################################################################
-// # Purpose: Change all JZ/JNZ/CMOVNZ after g_readFolderFirst comparison to NOP/JMP/MOV #
-// #          (Also sets g_readFolderFirst to 1 in the process as failsafe).             #
-// #######################################################################################
+
 
 function ReadDataFolderFirst()
 {

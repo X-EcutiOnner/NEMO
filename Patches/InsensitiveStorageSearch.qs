@@ -14,10 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// ##################################################################
-// # Purpose: Use api StrStrIA instead of _mbsstr to enable         #
-// #          case-insensitive search in storage.                   #
-// ##################################################################
 
 function InsensitiveStorageSearch()
 {

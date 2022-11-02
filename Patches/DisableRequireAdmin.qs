@@ -18,10 +18,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
-// #########################################################################################
-// # Purpose: Change the manifest string "requireAdministrator" to "asInvoker" + 11 Spaces #
-// #          to disable OS Privileges execution level for run client by user account.     #
-// #########################################################################################
 
 function DisableRequireAdmin()
 {

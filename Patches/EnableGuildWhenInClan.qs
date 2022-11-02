@@ -1,7 +1,4 @@
-// #########################################################################
-// # Purpose: Skips the check that requires the player to not be in a clan #
-// # Author : Functor                                                      #
-// #########################################################################
+
 
 function EnableGuildWhenInClan()
 {

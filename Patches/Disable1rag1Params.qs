@@ -1,6 +1,4 @@
-// #########################################################################
-// # Purpose: Find the 1rag1 comparison and change the JNZ after it to JMP #
-// #########################################################################
+
 
 function Disable1rag1Params()
 {

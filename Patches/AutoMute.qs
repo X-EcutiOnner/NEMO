@@ -14,10 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// ##################################################################
-// # Purpose: Insert custom code to auto mute audio when game       #
-// #          window not actived.                                   #
-// ##################################################################
 
 function AutoMute()
 {

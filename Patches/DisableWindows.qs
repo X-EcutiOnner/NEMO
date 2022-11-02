@@ -14,10 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// #####################################################################
-// # Purpose: Modify indirect switch table in UIWindowMgr::MakeWindow, #
-// #          make specified windows go to default case.               #
-// #####################################################################
 
 function DisableWindows()
 {

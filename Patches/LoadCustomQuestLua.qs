@@ -1,7 +1,4 @@
-// ###############################################################################
-// # Purpose: Hijack Quest_function lua file loading to load lua files specified #
-// #          in the input file first before loading Quest_function              #
-// ###############################################################################
+
 
 function LoadCustomQuestLua()
 {

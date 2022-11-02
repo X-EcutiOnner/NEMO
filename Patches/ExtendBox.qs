@@ -1,6 +1,4 @@
-// ==================================================//
-// Patch Functions wrapping over ExtendBox function //
-// ==================================================//
+
 
 function ExtendBox(index)
 {

@@ -18,10 +18,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
-// #############################################################################
-// # Purpose: Zero out the system\mapInfo*.lub file strings use for displaying #
-// #          map sign inside CMapInfoMgr function when players entering map.  #
-// #############################################################################
 
 function DisableMapInfo()
 {

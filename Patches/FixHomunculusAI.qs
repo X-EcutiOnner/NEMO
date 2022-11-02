@@ -1,6 +1,4 @@
-// #######################################################
-// # Purpose: Bypass Homunculus's target select checking #
-// #######################################################
+
 
 function FixHomunculusAI()
 {

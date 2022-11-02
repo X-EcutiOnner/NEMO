@@ -1,6 +1,4 @@
-// #######################################################################################
-// # Purpose: Dump the Entire Import Table Hierarchy in the loaded client to a text file #
-// #######################################################################################
+
 
 function DumpImportTable()
 {

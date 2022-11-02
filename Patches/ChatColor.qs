@@ -1,7 +1,4 @@
-// ############################################
-// # Purpose: Replace guild chat color inside #
-// #          CGameMode::Zc_guild_chat        #
-// ############################################
+
 
 function ChatColorGuild()
 {

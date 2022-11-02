@@ -1,7 +1,4 @@
-// ####################################################################
-// # Purpose: Modify the stack allocation in CGameMode::Zc_Say_Dialog #
-// #          from 2052 to the user specified value                   #
-// ####################################################################
+
 
 function ExtendNpcBox()
 {

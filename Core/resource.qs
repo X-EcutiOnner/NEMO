@@ -1,7 +1,4 @@
-// ######################################################################
-// # Purpose: Extracts the Resource Entry from rTree object - Currently #
-// #          used in Custom Icon Function only.                        #
-// ######################################################################
+
 
 function resource_getEntry(rTree, hierList)
 {

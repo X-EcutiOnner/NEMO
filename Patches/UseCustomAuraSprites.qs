@@ -1,7 +1,4 @@
-// ###########################################################################
-// # Purpose: Change the filename references used for Level99 Aura effect    #
-// #          ring_blue.tga -> aurafloat.tga , pikapika2.bmp -> auraring.bmp #
-// ###########################################################################
+
 
 function UseCustomAuraSprites()
 {

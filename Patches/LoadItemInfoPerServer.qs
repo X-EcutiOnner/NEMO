@@ -1,9 +1,4 @@
-// #####################################################################
-// # Purpose: JMP over the original iteminfo loader Function call      #
-// #          and instead add the call after char servername is stored #
-// #          Also modify the "main" Lua Func call routine inside the  #
-// #          loader function to include 1 argument - server name      #
-// #####################################################################
+
 
 function LoadItemInfoPerServer()
 {

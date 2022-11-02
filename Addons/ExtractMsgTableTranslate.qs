@@ -1,7 +1,4 @@
-// ######################################################################
-// # Purpose: Extract the Hardcoded msgStringTable in the loaded Client #
-// #          to translated using the reference tables.                 #
-// ######################################################################
+
 
 function ExtractMsgTableTranslate()
 {

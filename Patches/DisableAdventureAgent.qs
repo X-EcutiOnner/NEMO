@@ -18,10 +18,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
-// ###############################################################################
-// # Purpose: Nops all offset after comparison to disable adventure agent button #
-// #          on the party window inside UIMessengerGroupWnd_virt68 function.    #
-// ###############################################################################
 
 function DisableAdventureAgent()
 {

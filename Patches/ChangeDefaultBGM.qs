@@ -1,7 +1,4 @@
-// ##############################################
-// # Purpose: Change the Default BGM            #
-// #          to custom file specified by user  #
-// ##############################################
+
 
 function ChangeDefaultBGM()
 {

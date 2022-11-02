@@ -1,7 +1,4 @@
-// #########################################################################################
-// # Purpose: Remove Doram race from character creation UI                                 #
-// #          special thanks to @Ai4Rei for the original hex sequences.                    #
-// #########################################################################################
+
 
 function DisableDoram()
 {

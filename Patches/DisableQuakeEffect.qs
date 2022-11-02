@@ -1,7 +1,4 @@
-// #############################################################
-// # Purpose: Modify CView::SetQuakeInfo and CView::SetQuake   #
-// #          functions to return without assigning any values #
-// #############################################################
+
 
 function DisableQuakeEffect()
 {

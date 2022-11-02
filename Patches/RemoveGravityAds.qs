@@ -1,6 +1,4 @@
-// ###########################################
-// # Purpose: Zero out all Gravity Ad Images #
-// ###########################################
+
 
 function RemoveGravityAds()
 {

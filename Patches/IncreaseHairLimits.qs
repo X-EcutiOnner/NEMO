@@ -1,7 +1,4 @@
-// ###############################################################################
-// # Purpose: Modify the comparisons in cases for Hair Style and Color arrows in #
-// #          UIMakeCharWnd::SendMsg and also update the scrollbar length        #
-// ###############################################################################
+
 
 function _IHL_InjectComparison(rcode, ptr, min, limit, opsize)
 {

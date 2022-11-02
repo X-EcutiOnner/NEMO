@@ -1,7 +1,4 @@
-// #############################################################
-// # Purpose: Make client Ignore the character check result of #
-// #          space in Guild names inside CGameMode::SendMsg   #
-// #############################################################
+
 
 function AllowSpaceInGuildName()
 {

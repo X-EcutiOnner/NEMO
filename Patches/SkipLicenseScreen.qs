@@ -1,7 +1,4 @@
-// ##################################################################
-// # Purpose: Modify the switch inside CLoginMode::OnChangeState to #
-// #          skip transfering to License Screen creation code      #
-// ##################################################################
+
 
 function SkipLicenseScreen()
 {

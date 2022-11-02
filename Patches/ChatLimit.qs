@@ -1,6 +1,4 @@
-// ==================================================//
-// Patch Functions wrapping over ChatLimit function //
-// ==================================================//
+
 
 function ChatLimit(option)
 {

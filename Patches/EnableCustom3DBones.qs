@@ -1,7 +1,4 @@
-// #####################################################################
-// # Purpose: Modify the comparisons in C3dGrannyBoneRes::GetAnimation #
-// #       to always use gr2 from 3dmob_bone folder                    #
-// #####################################################################
+
 
 function EnableCustom3DBones()
 {

@@ -1,8 +1,4 @@
-// ###############################################################
-// # Purpose: Change the JE/JNE after LangType comparison inside #
-// #          CGameMode::SendMsg function for /who command       #
-// #          and inside CGameMode::Zc_User_Count                #
-// ###############################################################
+
 
 function EnableWhoCommand()
 {

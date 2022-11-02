@@ -1,7 +1,4 @@
-// ###############################################################################
-// # Purpose: Change the JZ/JNE to JMP/NOP after LangType Comparison for sending #
-// #          Login Packet inside CLoginMode::OnChangeState function.            #
-// ###############################################################################
+
 
 function UseSSOLoginPacket()
 {

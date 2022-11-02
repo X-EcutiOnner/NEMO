@@ -1,7 +1,4 @@
-// ###############################################################
-// # Purpose: Change JNZ to JMP after LangType comparison inside #
-// #          DataTxtDecode function                             #
-// ###############################################################
+
 
 function UsePlainTextDescriptions()
 {

@@ -1,7 +1,4 @@
-// ##############################################################
-// # Purpose: Create a new import table containing the existing #
-// #          table and the specified DLL + functions.          #
-// ##############################################################
+
 
 delete Import_Info;
 var dllFile = false;

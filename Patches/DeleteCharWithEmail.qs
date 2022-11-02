@@ -1,7 +1,4 @@
-// ###################################################################
-// # Purpose: Change the JE/JNE to JMP after LangType Comparisons in #
-// #          Char Deletion function and the one which shows MsgBox  #
-// ###################################################################
+
 
 function DeleteCharWithEmail()
 {

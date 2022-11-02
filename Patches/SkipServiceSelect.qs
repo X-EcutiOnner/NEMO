@@ -1,7 +1,4 @@
-// ##############################################
-// # Purpose: Set g_hideAccountList always to 1 #
-// #          assigned above passwordencrypt.   #
-// ##############################################
+
 
 function SkipServiceSelect()
 {

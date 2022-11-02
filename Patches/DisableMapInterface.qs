@@ -1,6 +1,4 @@
-// ##################################################################
-// # Purpose: Skip over all instances of World View Window creation #
-// ##################################################################
+
 
 function DisableMapInterface()
 {

@@ -18,10 +18,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
-// ##############################################################################
-// # Purpose: Change the JZ after comparison to remove equipment preview button #
-// #          on the items description window inside ITEMWNDINFO function.      #
-// ##############################################################################
 
 function RemoveItemsEquipPreview()
 {

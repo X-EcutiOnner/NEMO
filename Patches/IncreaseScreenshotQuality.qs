@@ -1,7 +1,4 @@
-// ###########################################################################################
-// # Purpose: Modify the JPEG_CORE_PROPERTIES structure assignment inside CRenderer::SaveJPG #
-// #          function to set jquality member to user specified value.                       #
-// ###########################################################################################
+
 
 function IncreaseScreenshotQuality()
 {

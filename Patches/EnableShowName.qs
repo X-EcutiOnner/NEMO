@@ -1,7 +1,4 @@
-// #################################################################
-// # Purpose: Change the JZ to JMP after LangType check when using #
-// #          '/showname' inside CSession::SetTextType function    #
-// #################################################################
+
 
 function EnableShowName()
 {

@@ -14,9 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// ################################################################################
-// # Purpose: Hide date based on zero values (1969-01-01) in guilds member window #
-// ################################################################################
 
 function HideZeroDateInGuildMembers()
 {

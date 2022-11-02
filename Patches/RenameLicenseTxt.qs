@@ -1,7 +1,4 @@
-// ##################################################################
-// # Purpose: Change the "..\\licence.txt" reference to custom file #
-// #          specified by user and Update "No EULA " reference     #
-// ##################################################################
+
 
 function RenameLicenseTxt()
 {

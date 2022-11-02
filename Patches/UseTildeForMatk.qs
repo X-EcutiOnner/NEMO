@@ -1,7 +1,4 @@
-// ##########################################################
-// # Purpose: Change the Format string used for Matk values #
-// #          with the one using tilde symbol               #
-// ##########################################################
+
 
 function UseTildeForMatk()
 {

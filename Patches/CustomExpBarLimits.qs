@@ -1,7 +1,4 @@
-// ###############################################################################
-// # Purpose: Modify the Exp Bar Displayer code inside UIBasicInfoWnd::NewHeight #
-// #          to display Job & Base Exp Bars based on user specified limits      #
-// ###############################################################################
+
 
 function CustomExpBarLimits()
 {

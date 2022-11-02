@@ -1,7 +1,4 @@
-// #############################################################################
-// # Purpose: Check for Existing Multiple Window Checker and enforce Disabling #
-// #          If not present, insert custom code to do the check + disable     #
-// #############################################################################
+
 
 function DisableMultipleWindows()
 {

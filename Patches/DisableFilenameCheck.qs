@@ -1,7 +1,4 @@
-// #######################################################################
-// # Purpose: Change the JNZ inside WinMain (or function called from it) #
-// #          to JMP which will skip showing the "Invalid Exe" Message   #
-// #######################################################################
+
 
 function DisableFilenameCheck()
 {

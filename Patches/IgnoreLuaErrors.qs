@@ -18,10 +18,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
-// ##################################################
-// # Purpose: Modify LuaErrorMsg function to return #
-// #          without showing the MessageBox.       #
-// ##################################################
 
 function IgnoreLuaErrors()
 {

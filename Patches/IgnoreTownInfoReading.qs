@@ -18,10 +18,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
-// #######################################################################
-// # Purpose: Modify TownInfoErrorMsg function to return without showing #
-// #          the MessageBox and ignore to reading Towninfo.lub file.    #
-// #######################################################################
 
 function IgnoreTownInfoReading()
 {

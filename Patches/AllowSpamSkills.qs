@@ -14,10 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// #############################################################
-// # Purpose: Allow spam skill by hotkey                       #
-// #############################################################
-// search in CGameMode_virt24 near useskilltoid packet
 
 function AllowSpamSkills()
 {

@@ -1,7 +1,4 @@
-// ##################################################################
-// # Purpose: Change the JZ to JMP after the LangType comparison in #
-// #          CLoginMode::OnUpdate function.                        #
-// ##################################################################
+
 
 function EnforceOfficialLoginBackground()
 {

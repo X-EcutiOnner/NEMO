@@ -1,7 +1,4 @@
-// ###########################################################################
-// # Purpose: Change the JNE after accountID comparison against GM ID to JMP #
-// #          inside CPc::SetSprNameList and CPc::SetActNameList functions   #
-// ###########################################################################
+
 
 function RemoveGMSprite()
 {

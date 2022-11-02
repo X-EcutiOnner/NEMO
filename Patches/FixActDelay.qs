@@ -14,11 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// Patch idea and source bytes by Functor
-// #############################################################
-// # Purpose: Fix delay for act files with big number of frames#
-// #          CRenderObject_virt28                             #
-// #############################################################
 
 function FixActDelay()
 {

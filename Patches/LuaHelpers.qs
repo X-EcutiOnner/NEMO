@@ -1,7 +1,4 @@
-// ############################################################
-// # Purpose: Get Addresses of strings, functions & lua_state #
-// #          used in Lua Function Calls                      #
-// ############################################################
+
 
 delete D2S;
 delete D2D;

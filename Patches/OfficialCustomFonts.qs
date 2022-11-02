@@ -1,7 +1,4 @@
-// #############################################################
-// # Purpose: Change the JNE to NOPs after LangType comparison #
-// #          in EOT font Checker function                     #
-// #############################################################
+
 
 function OfficialCustomFonts_match()
 {

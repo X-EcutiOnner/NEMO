@@ -1,7 +1,4 @@
-// ###################################################################
-// # Purpose: Change all JE/JNE to JMP after LangType comparisons in #
-// #          CLoginMode::CheckExeHashFromAccServer function         #
-// ###################################################################
+
 
 function ForceSendClientHash()
 {

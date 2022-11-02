@@ -1,6 +1,4 @@
-// ##################################################################################
-// # Purpose: Overwrite all entries in the Font Name Array with user specified name #
-// ##################################################################################
+
 
 function UseCustomFont()
 {

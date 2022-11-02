@@ -14,10 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// #############################################################
-// # Purpose: Fix achievement counters in ahievement window in #
-// #          UIAchSummaryWnd_virt68                           #
-// #############################################################
 
 function FixAchievementCounters()
 {

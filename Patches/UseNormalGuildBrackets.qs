@@ -1,6 +1,4 @@
-// #############################################
-// # Purpose: Change the 『 』 brackets to ( ) #
-// #############################################
+
 
 function UseNormalGuildBrackets()
 {

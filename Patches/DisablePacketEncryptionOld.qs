@@ -1,7 +1,4 @@
-// ########################################################################
-// # Purpose: Find call to the encryption function and substitute it with #
-// #          XOR EAX, EAX                                                #
-// ########################################################################
+
 
 function DisablePacketEncryptionOld()
 {

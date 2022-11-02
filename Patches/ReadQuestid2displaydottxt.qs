@@ -1,7 +1,4 @@
-// ##################################################################################
-// # Purpose: NOP out the JNE after LangType Comparison (but before PUSH 0 and      #
-// #          PUSH 'questID2display.txt') in ITEM_INFO::InitItemInfoTables function #
-// ##################################################################################
+
 
 function ReadQuestid2displaydottxt()
 {

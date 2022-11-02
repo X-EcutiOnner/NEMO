@@ -19,10 +19,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
-// ########################################################################
-// # Purpose: Change the CMP after comparison to JMP for direct call only #
-// #          Korea service setting inside ExternSettings function.       #
-// ########################################################################
 
 function AlwaysReadKrExtSettings()
 {

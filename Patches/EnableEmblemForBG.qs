@@ -1,7 +1,4 @@
-// ####################################################################
-// # Purpose: Modify the Siege mode and Battleground mode check jumps #
-// #          to display Emblem when either mode is ON                #
-// ####################################################################
+
 
 function EnableEmblemForBG_Normal(offset)
 {

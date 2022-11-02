@@ -1,7 +1,4 @@
-// ######################################################################
-// # Purpose: Modify the constant used in Comparison inside the vending #
-// #          related function (dont have name for it atm)              #
-// ######################################################################
+
 
 function ChangeVendingLimit()
 {

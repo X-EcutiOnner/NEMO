@@ -1,7 +1,4 @@
-// #############################################################
-// # Purpose: Change the pf argument to CTexMgr::CreateTexture #
-// #          to increase the color depth used to 32 bit       #
-// #############################################################
+
 
 function IncreaseMapQuality()
 {

@@ -1,7 +1,4 @@
-// #########################################################################################
-// # Purpose: Fix the switch and JMP in InitClientInfo and InitDefaultClientInfo functions #
-// #          to make sure both SelectKoreaClientInfo and SelectClientInfo are called.     #
-// #########################################################################################
+
 
 function KoreaServiceTypeXMLFix()
 {

@@ -1,7 +1,4 @@
-// ##########################################################################
-// # Purpose: Change the JNE after LangType comparison when loading Palette #
-// #          prefixes into Palette Table in CSession::InitJobTable         #
-// ##########################################################################
+
 
 function UseOfficialClothPalette()
 {

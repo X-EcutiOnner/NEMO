@@ -18,10 +18,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
-// ###########################################################################
-// # Purpose: Change the JNZ after comparison to disable Blind skills effect #
-// #          from blending darkness screen inside SkillEffect function.     #
-// ###########################################################################
 
 function DisableBlindEffect()
 {

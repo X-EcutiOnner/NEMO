@@ -1,7 +1,4 @@
-// #################################################################
-// # Purpose: Change the JE after comparison of g_useEffect with 0 #
-// #          to JMP in Hallucination Effect maker function        #
-// #################################################################
+
 
 function DisableHallucinationWavyScreen()
 {

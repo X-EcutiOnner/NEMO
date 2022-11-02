@@ -18,10 +18,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
-// #####################################################################
-// # Purpose: NOPs out the JZ following TEST EAX, EAX after Comparison #
-// #          to Show Damage on GvG Maps during the Guild War.         #
-// #####################################################################
 
 function EnableGvGDamage()
 {

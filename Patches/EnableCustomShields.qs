@@ -1,7 +1,4 @@
-// ######################################################################
-// # Purpose: Change the Hardcoded loading & retrieval of Shield prefix #
-// #          to Lua based code                                         #
-// ######################################################################
+
 
 MaxShield = 10;
 function EnableCustomShields()

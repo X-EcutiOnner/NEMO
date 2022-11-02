@@ -1,6 +1,4 @@
-// ========================================================//
-// Patch Functions wrapping over IncreaseZoomOut function //
-// ========================================================//
+
 
 function IncreaseZoomOut(newvalue)
 {

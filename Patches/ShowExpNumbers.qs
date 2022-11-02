@@ -1,8 +1,4 @@
-// ##################################################################
-// # Purpose: Inject code inside UIBasicInfoWnd::OnDraw function to #
-// #          make it also display the exp values like other info   #
-// #          inside the "Basic Info" window when not minimized     #
-// ##################################################################
+
 
 function ShowExpNumbers()
 {

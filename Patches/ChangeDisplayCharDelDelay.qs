@@ -1,13 +1,4 @@
-// ########################################################
-// # Purpose: Change the type of time displaying by which #
-// #          the character deletion is delayed.          #
-// #                                                      #
-// # before: it shows the date and time when the player   #
-// #         will be able to delete character             #
-// #                                                      #
-// # after: it shows the remaining time when the player   #
-// #         will be able to delete character             #
-// ########################################################
+
 
 function ChangeDisplayCharDelDelay()
 {

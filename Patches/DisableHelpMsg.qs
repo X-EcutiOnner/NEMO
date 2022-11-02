@@ -1,7 +1,4 @@
-// ###################################################################
-// # Purpose: Change the JNE after Langtype comparison to JMP in the #
-// #          'On Login' callback which skips loading HelpMsgStr.    #
-// ###################################################################
+
 
 function DisableHelpMsg()
 {

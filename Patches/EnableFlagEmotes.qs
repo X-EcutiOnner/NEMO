@@ -1,7 +1,4 @@
-// #################################################################
-// # Purpose: Change the Flag Emote callers for Ctrl+1 - Ctrl+9 in #
-// #          function called from UIWindowMgr::ProcessPushButton  #
-// #################################################################
+
 
 function EnableFlagEmotes()
 {

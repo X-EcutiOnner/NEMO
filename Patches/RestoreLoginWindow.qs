@@ -1,8 +1,4 @@
-// ###########################################################################
-// # Purpose: Restore the original code that created the Login Window inside #
-// #          CLoginMode::OnChangeState function and Add supporting Changes  #
-// #          to make it work                                                #
-// ###########################################################################
+
 
 function RestoreLoginWindow()
 {

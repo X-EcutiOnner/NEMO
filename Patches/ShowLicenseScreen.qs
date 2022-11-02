@@ -1,7 +1,4 @@
-// ####################################################################
-// # Purpose: Change the Conditional Jump in License screen displayer #
-// #          case of switch to JMP inside WinMain                    #
-// ####################################################################
+
 
 function ShowLicenseScreen()
 {

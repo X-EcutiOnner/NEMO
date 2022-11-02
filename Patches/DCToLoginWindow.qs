@@ -1,7 +1,4 @@
-// ################################################################################################
-// # Purpose: Change the PUSHed argument & mode setting to Mode Setting calls after disconnection #
-// #          to make it return to login window instead of exiting client.                        #
-// ################################################################################################
+
 
 function DCToLoginWindow()
 {

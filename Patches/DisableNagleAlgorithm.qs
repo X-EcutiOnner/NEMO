@@ -1,6 +1,4 @@
-// #####################################################################################
-// # Purpose: Replace all WS2_32.socket() calls with new code that sets up TCP_NODELAY #
-// #####################################################################################
+
 
 function DisableNagleAlgorithm()
 {

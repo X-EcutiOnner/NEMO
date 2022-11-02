@@ -1,7 +1,4 @@
-// ###############################################
-// # Purpose: Modify ErrorMsg function to return #
-// #          without showing the MessageBox     #
-// ###############################################
+
 
 function IgnoreResourceErrors()
 {

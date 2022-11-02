@@ -1,6 +1,4 @@
-// ####################################################################
-// # Purpose: Extract Packet Keys from loaded client and dump to file #
-// ####################################################################
+
 
 function GetPacketKeys()
 {

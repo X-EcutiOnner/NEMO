@@ -1,7 +1,4 @@
-// ########################################################################
-// # Purpose: Disable the CGameMode::m_lastLockOnPcGid assignment         #
-// #          inside CGameMode::ProcessPcPick to ignore shift right click #
-// ########################################################################
+
 
 function DisableAutofollow()
 {

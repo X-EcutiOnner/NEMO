@@ -14,10 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// #####################################################################################
-// # Purpose: Find the indirect table for switch statement inside UILoginWnd::SendMsg, #
-// #          Make Opening button work as return Service Selection                     #
-// #####################################################################################
 
 function OpeningToServiceSelect()
 {

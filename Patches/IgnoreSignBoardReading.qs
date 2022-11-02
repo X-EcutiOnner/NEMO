@@ -18,10 +18,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
-// ###################################################################
-// # Purpose: Change the CALL after comparison for ignore to reading #
-// #          SignBoardList.lub file inside FindFileData function.   #
-// ###################################################################
 
 function IgnoreSignBoardReading()
 {

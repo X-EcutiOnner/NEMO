@@ -1,6 +1,4 @@
-// ########################################################################
-// # Purpose: Fixup all the Langtype comparison Jumps in Mailbox function #
-// ########################################################################
+
 
 function EnableMailBox()
 {

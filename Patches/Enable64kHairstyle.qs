@@ -1,7 +1,4 @@
-// ####################################################
-// # Purpose: Disable hard-coded hair style table and #
-// #          generate hair style IDs ad-hoc instead  #
-// ####################################################
+
 
 function Enable64kHairstyle()
 {

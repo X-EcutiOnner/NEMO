@@ -1,7 +1,4 @@
-// #############################################################
-// # Purpose: Modify the CGameMode::HaveSiegfriedItem function #
-// #          to skip showing the Resurrection Button.         #
-// #############################################################
+
 
 function SkipResurrectionButton()
 {

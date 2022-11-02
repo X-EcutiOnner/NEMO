@@ -1,7 +1,4 @@
-// ###############################################################
-// # Purpose: Change JNE to JMP after the Langtype comparison in #
-// #          the Monster talk loader function                   #
-// ###############################################################
+
 
 function EnableMonsterTables()
 {

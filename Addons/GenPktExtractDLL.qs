@@ -1,7 +1,4 @@
-// ##########################################################################################
-// # Purpose: Generate Packet Length Extractor DLL for loaded client using the template DLL #
-// #          (ws2_pe.dll). Along with the Packet Keys for new clients                      #
-// ##########################################################################################
+
 
 function GenPktExtractDLL()
 {

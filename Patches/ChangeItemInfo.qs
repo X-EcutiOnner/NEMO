@@ -1,7 +1,4 @@
-// ##############################################
-// # Purpose: Change the iteminfo.lub reference #
-// #          to custom file specified by user  #
-// ##############################################
+
 
 function ChangeItemInfo()
 {

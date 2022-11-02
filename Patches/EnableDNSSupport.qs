@@ -1,7 +1,4 @@
-// #############################################################################
-// # Purpose: Make the client call our DNS resolution function before          #
-// #          g_accountAddr is accessed. Function replaces g_accountAddr value #
-// #############################################################################
+
 
 function EnableDNSSupport()
 {

@@ -1,7 +1,4 @@
-// ######################################################################
-// # Purpose: Modify the Cancel Button Case in UISelectCharWnd::SendMsg #
-// #         to disconnect and show the Login Window                    #
-// ######################################################################
+
 
 function CancelToLoginWindow()
 {

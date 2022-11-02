@@ -18,10 +18,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
-// ##############################################################################################
-// # Purpose: Replace are Arrows Keys offset to fix wrong display Font Charset after comparison #
-// #          in Hotkey Setting UI for ASCII Langtype inside UIHotkeyGuideWnd_virt6B function.  #
-// ##############################################################################################
 
 function FixArrowsCharset()
 {

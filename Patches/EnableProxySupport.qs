@@ -1,7 +1,4 @@
-// ###############################################################################
-// # Purpose: Divert connect() call in CConnection::Connect() function to save   #
-// #          the first IP used and use it for any following connection attempts #
-// ###############################################################################
+
 
 function EnableProxySupport()
 {

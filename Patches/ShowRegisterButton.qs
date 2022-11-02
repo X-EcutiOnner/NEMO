@@ -1,8 +1,4 @@
-// ################################################################################
-// # Purpose: Skip the Langtype checks inside UILoginWnd::OnCreate and always     #
-// #          makes the registration page open inside UILoginWnd::SendMsg.        #
-// #          Also modifies the CModeMgr::Quit CALL to actually close the client. #
-// ################################################################################
+
 
 function ShowRegisterButton()
 {

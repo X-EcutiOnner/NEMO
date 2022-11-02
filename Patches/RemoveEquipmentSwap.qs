@@ -18,10 +18,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //
-// ########################################################################################
-// # Purpose: Change the EAX after comparison to remove equipment swap button both on the #
-// #          equipment window and costume window inside SWAPEQUIPMENTWNDINFO function.   #
-// ########################################################################################
 
 function RemoveEquipmentSwap()
 {
