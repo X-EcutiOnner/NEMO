@@ -434,9 +434,9 @@ registerPatch(279, "FixItemDescBug", "Fix item description bug", "Custom", 0, "J
 
 registerPatch(280, "ChangeGuildExpLimit", "Change guild exp limit", "Custom", 0, "4144", "Change guild exp limit percent. Default value is 50.", false);
 
-registerPatch(281, "ChangeHealthBarSize", "Change hp bar size", "Custom", 0, "Jchcc", "Change hp/sp bar size drawed under character", false);
+registerPatch(281, "ChangeHealthBarSize", "Change players hp bar size", "Custom", 0, "Jchcc", "Change hp/sp bar size drawed under character", false);
 
-registerPatch(282, "ChangeMvpHealthBarSize", "Change MVP hp bar size", "Custom", 0, "Jchcc", "Change hp bar size drawed under MVP", false);
+registerPatch(282, "ChangeMvpHealthBarSize", "Change MVP monster hp bar size", "Custom", 0, "Jchcc, 4144", "Change health bar size drawed under MVP (boss) monster", false);
 
 registerPatch(283, "ChangeFadeOutDelay", "Change fade in/out delay", "Custom", 0, "4144", "Change fade in/out time in warps on same map", false);
 
@@ -751,5 +751,13 @@ registerPatch(460, "AddCLSTitle", "Add custom lua support [Title]", "Translation
 registerPatch(461, "AddCLSWeapon", "Add custom lua support [Weapon]", "Translation", 23, "llchrisll, 4144", "Add the custom lua support by llchrisll for weapons.\nCheck his wiki for more info.", false);
 
 registerPatch(462, "AddCLSWorldView", "Add custom lua support [World Map]", "Translation", 23, "llchrisll, 4144", "Add the custom lua support by llchrisll for world map.\nCheck his wiki for more info.", false);
+
+registerPatch(464, "LoadCustomIcon", "Load custom icon in running client", "Icon", 0, "4144", "Allow set game icon after client started", false);
+
+registerPatch(465, "ChangeBossHealthBarSize", "Change boss monster hp bar size", "Custom", 0, "Jchcc, 4144", "Change health bar size drawed under boss (mini boss) monster", false);
+
+registerPatch(466, "ChangeNormalHealthBarSize", "Change normal monster hp bar size", "Custom", 0, "Jchcc, 4144", "Change health bar size drawed under normal monster", false);
+
+registerPatch(470, "AllowHomunSkills", "Unlock all valid skills for homunculus and mercenary AI", "AI", 0, "4144", "Unlock all valid skills for homunculus and mercenary AI", false);
 
 GlobalPostInit();

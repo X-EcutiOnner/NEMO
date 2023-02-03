@@ -1,3 +1,21 @@
+# 2023-02-03 Different updates
+
+## Patches
+
+- Fix patch [Change MVP monster hp bar size](http://nemo.herc.ws/patches/ChangeMvpHealthBarSize/#success-clients). (fix by @4144).
+- Fix patch [Set custom message for error if client started without launcher](http://nemo.herc.ws/patches/ChangeMissingLauncherError/#success-clients). (fix by @4144).
+- Fix patch [Disable Ragexe Filename Check](http://nemo.herc.ws/patches/DisableFilenameCheck/#success-clients). (fix by @4144).
+- Fix patch [Change adventurer agency level range](http://nemo.herc.ws/patches/ChangeAdventureAgencyLevelRange/#success-clients). (fix by @4144).
+- Add patch [Load custom icon in running client](http://nemo.herc.ws/patches/LoadCustomIcon/#success-clients). (by @4144).
+- Add patch [Change boss monster hp bar size](http://nemo.herc.ws/patches/ChangeBossHealthBarSize/#success-clients). (by @4144).
+- Add patch [Change normal monster hp bar size](http://nemo.herc.ws/patches/ChangeNormalHealthBarSize/#success-clients). (by @4144).
+- Add patch [Unlock all valid skills for homunculus and mercenary AI](http://nemo.herc.ws/patches/AllowHomunSkills/#success-clients). (by @4144).
+
+## Other
+
+- Update tables.
+
+
 # 2022-11-02 Update tables
 
 - Update tables.
@@ -8,7 +26,7 @@
 ## Patches
 
 - Fix patch [Change Max Friends Value](http://nemo.herc.ws/patches/ChangeMaxFriendsValue/#success-clients). (fix by @4144).
-- Fix patch [Check is servertype in xml file was set to correct value](http://nemo.herc.ws/patches/ValidateClientType/#success-clients). (fix by 4144).
+- Fix patch [Check is servertype in xml file was set to correct value](http://nemo.herc.ws/patches/ValidateClientType/#success-clients). (fix by @4144).
 - Fix patch [Remove hardcoded address/port](http://nemo.herc.ws/patches/RemoveHardcodedAddress/#success-clients). (fix by @4144).
 
 ## Other
@@ -20,8 +38,8 @@
 
 ## Patches
 
-- Fix patch [Disable Official Custom Fonts](http://nemo.herc.ws/patches/DisableOfficialCustomFonts/#success-clients) for 2022-10-05. (fix by 4144).
-- Fix patch [Enable Official Custom Fonts](http://nemo.herc.ws/patches/EnableOfficialCustomFonts/#success-clients) for 2022-10-05. (fix by 4144).
+- Fix patch [Disable Official Custom Fonts](http://nemo.herc.ws/patches/DisableOfficialCustomFonts/#success-clients) for 2022-10-05. (fix by @4144).
+- Fix patch [Enable Official Custom Fonts](http://nemo.herc.ws/patches/EnableOfficialCustomFonts/#success-clients) for 2022-10-05. (fix by @4144).
 
 ## Other
 
@@ -32,18 +50,18 @@
 
 ## Patches
 
-- Add patch [Add custom lua support \[HatEffectInfo\]](http://nemo.herc.ws/patches/AddCLSHatEffect/#success-clients). (by llchrisll, 4144).
-- Add patch [Add custom lua support \[Headgears\]](http://nemo.herc.ws/patches/AddCLSHeadgear/#success-clients). (by llchrisll, 4144).
-- Add patch [Add custom lua support \[Lapine Box\]](http://nemo.herc.ws/patches/AddCLSLapine/#success-clients). (by llchrisll, 4144).
-- Add patch [Add custom lua support \[Navigation\]](http://nemo.herc.ws/patches/AddCLSNavi/#success-clients). (by llchrisll, 4144).
-- Add patch [Add custom lua support \[NPC/Mob/Pet\]](http://nemo.herc.ws/patches/AddCLSNPC/#success-clients). (by llchrisll, 4144).
-- Add patch [Add custom lua support \[Quest\]](http://nemo.herc.ws/patches/AddCLSQuest/#success-clients). (by llchrisll, 4144).
-- Add patch [Add custom lua support \[Random Option\]](http://nemo.herc.ws/patches/AddCLSRandomOption/#success-clients). (by llchrisll, 4144).
-- Add patch [Add custom lua support \[Robe\]](http://nemo.herc.ws/patches/AddCLSRobe/#success-clients). (by llchrisll, 4144).
-- Add patch [Add custom lua support \[Signboard\]](http://nemo.herc.ws/patches/AddCLSSign/#success-clients). (by llchrisll, 4144).
-- Add patch [Add custom lua support \[Title\]](http://nemo.herc.ws/patches/AddCLSTitle/#success-clients). (by llchrisll, 4144).
-- Add patch [Add custom lua support \[Weapon\]](http://nemo.herc.ws/patches/AddCLSWeapon/#success-clients). (by llchrisll, 4144).
-- Add patch [Add custom lua support \[World Map\]](http://nemo.herc.ws/patches/AddCLSWorldView/#success-clients). (by llchrisll, 4144).
+- Add patch [Add custom lua support \[HatEffectInfo\]](http://nemo.herc.ws/patches/AddCLSHatEffect/#success-clients). (by llchrisll, @4144).
+- Add patch [Add custom lua support \[Headgears\]](http://nemo.herc.ws/patches/AddCLSHeadgear/#success-clients). (by llchrisll, @4144).
+- Add patch [Add custom lua support \[Lapine Box\]](http://nemo.herc.ws/patches/AddCLSLapine/#success-clients). (by llchrisll, @4144).
+- Add patch [Add custom lua support \[Navigation\]](http://nemo.herc.ws/patches/AddCLSNavi/#success-clients). (by llchrisll, @4144).
+- Add patch [Add custom lua support \[NPC/Mob/Pet\]](http://nemo.herc.ws/patches/AddCLSNPC/#success-clients). (by llchrisll, @4144).
+- Add patch [Add custom lua support \[Quest\]](http://nemo.herc.ws/patches/AddCLSQuest/#success-clients). (by llchrisll, @4144).
+- Add patch [Add custom lua support \[Random Option\]](http://nemo.herc.ws/patches/AddCLSRandomOption/#success-clients). (by llchrisll, @4144).
+- Add patch [Add custom lua support \[Robe\]](http://nemo.herc.ws/patches/AddCLSRobe/#success-clients). (by llchrisll, @4144).
+- Add patch [Add custom lua support \[Signboard\]](http://nemo.herc.ws/patches/AddCLSSign/#success-clients). (by llchrisll, @4144).
+- Add patch [Add custom lua support \[Title\]](http://nemo.herc.ws/patches/AddCLSTitle/#success-clients). (by llchrisll, @4144).
+- Add patch [Add custom lua support \[Weapon\]](http://nemo.herc.ws/patches/AddCLSWeapon/#success-clients). (by llchrisll, @4144).
+- Add patch [Add custom lua support \[World Map\]](http://nemo.herc.ws/patches/AddCLSWorldView/#success-clients). (by llchrisll, @4144).
 - Remove patch "Add loading custom lua files".
 
 ## Other

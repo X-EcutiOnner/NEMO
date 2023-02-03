@@ -136,11 +136,27 @@ Register define for replace in all code ``VAR`` to ``VALUE``.
 Allow put into assembler any bytes or strings given in arguments.
 
 
+### ascii
+
+``ascii "string without null terminator"``
+
+Allow put string into assembler.
+
+
 ### asciz
 
 ``asciz "string without null terminator"``
 
 Allow put string into assembler. After string add null terminate char.
+
+
+
+
+### zero
+
+``zero SIZE``
+
+Allow allocate zero filled block of bytes.
 
 ### %import
 
@@ -180,7 +196,7 @@ Start condition block and allow use below code only if condition is true.
 Block ends on ``%endif``
 
 
-### %endid
+### %endif
 
 ``%endif``
 

@@ -123,6 +123,29 @@ function DisableFilenameCheck()
 
     if (offset === -1)
     {
+        code =
+            "85 C0 " +
+            "74 10 " +
+            "83 BD ?? ?? ?? FF 01 " +
+            "75 07 " +
+            "E8 ?? ?? ?? FF " +
+            "EB 05 " +
+            "E8 ?? ?? ?? FF " +
+            "84 C0 " +
+            "75 18 " +
+            "6A 00 " +
+            "6A 00 " +
+            "68 ?? ?? ?? 00 " +
+            "FF 35 " + hwndHex +
+            "FF D7 " +
+            "33 C0 " +
+            "E9 ";
+        patchOffset = 27;
+        offset = pe.findCode(code);
+    }
+
+    if (offset === -1)
+    {
         return "Failed in Step 1";
     }
 

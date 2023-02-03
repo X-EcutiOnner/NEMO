@@ -14,7 +14,10 @@ function ChangeQuickSwitchDelay()
 
     if (offsets.length === 0)
     {
-        code = code.replace(" 8B ?? ?? ?? ?? 00", " 8B ?? ?? ?? ?? 01");
+        code =
+            " 3D " + tick_ms.packToHex(4) +
+            " 0F 83 ?? ?? 00 00" +
+            " 8B ?? ?? ?? ?? 01";
         offsets = pe.findCodes(code);
     }
 

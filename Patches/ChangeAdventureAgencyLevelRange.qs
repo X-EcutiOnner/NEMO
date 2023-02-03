@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2018-2022 Andrei Karas (4144)
+// Copyright (C) 2018-2023 Andrei Karas (4144)
 // Copyright (C) 2020 Asheraf
 //
 // Hercules is free software: you can redistribute it and/or modify
@@ -76,6 +76,25 @@ function ChangeAdventureAgencyLevelRange()
             "50" +
             "68" + strHex +
             "6A FF";
+
+        rangeLOffset = [2, 1];
+        offsetsL = pe.findCodes(code);
+    }
+
+    if (offsetsL.length === 0)
+    {
+        code =
+            "8D 46 ?? " +
+            "66 C7 ?? ?? ?? 00 " +
+            "B9 01 00 00 00 " +
+            "0F 57 C0 " +
+            "3B C1 " +
+            "66 0F D6 45 ?? " +
+            "0F 4F C8 " +
+            "8D 45 ?? " +
+            "51 " +
+            "68" + strHex +
+            "6A FF ";
 
         rangeLOffset = [2, 1];
         offsetsL = pe.findCodes(code);

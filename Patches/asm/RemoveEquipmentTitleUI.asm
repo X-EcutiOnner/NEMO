@@ -1,4 +1,4 @@
-; Copyright (C) 2017-2022 Andrei Karas (4144)
+; Copyright (C) 2017-2023 Andrei Karas (4144)
 ;
 ; Patch is licensed under a
 ; Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.

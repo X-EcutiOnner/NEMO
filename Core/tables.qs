@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2020-2022  Andrei Karas (4144)
+// Copyright (C) 2020-2023 Andrei Karas (4144)
 //
 // Hercules is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -97,6 +97,12 @@ function table_var2ToHook(varId)
     return [[offset, [offset, offset2]]];
 }
 
+function table_varToHookArg(varId, value)
+{
+    var offset = table.getRawValidated(varId);
+    return [[offset, [offset, value]]];
+}
+
 function getEcxSessionHex()
 {
     return "B9 " + table.getHex4(table.g_session);
@@ -133,6 +139,7 @@ function registerTableFunctions()
     table.getAnyValidated = table_getAnyValidated;
     table.getSessionAbsHex4 = table_getSessionAbsHex4;
     table.varToHook = table_varToHook;
+    table.varToHookArg = table_varToHookArg;
     table.var2ToHook = table_var2ToHook;
 }
 

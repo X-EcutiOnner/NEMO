@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2022  Andrei Karas (4144)
+// Copyright (C) 2022-2023 Andrei Karas (4144)
 //
 // Hercules is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -108,9 +108,50 @@ function input_getEncryptionKeys(count, defs)
     return rets;
 }
 
+function input_getWidthHeight(varPrefix, title, defWidth, defHeight, min, max)
+{
+    checkArgs("input.getWidthHeight", arguments, [
+        ["String", "String", "Number", "Number", "Number", "Number"],
+    ]);
+
+    var dialog = input.createDialog();
+    dialog.setTitle(title);
+    dialog.addLabel(title);
+
+    dialog.addLabelInt(
+        varPrefix + "Width",
+        _("Width"),
+        defWidth,
+        min,
+        max,
+        1
+    );
+    dialog.addLabelInt(
+        varPrefix + "Height",
+        _("height"),
+        defHeight,
+        min,
+        max,
+        1
+    );
+
+    dialog.addOkCancel();
+    dialog.setMinimumSize(200, 100);
+    if (dialog.show() === 0)
+    {
+        throw _("Cancel button pressed");
+    }
+
+    var rets = {};
+    rets.width = parseInt(input.getVarValue(varPrefix + "Width"));
+    rets.height = parseInt(input.getVarValue(varPrefix + "Height"));
+    return rets;
+}
+
 function registerInput()
 {
     input.getString = input_getString;
     input.getIntHex = input_getIntHex;
     input.getEncryptionKeys = input_getEncryptionKeys;
+    input.getWidthHeight = input_getWidthHeight;
 }

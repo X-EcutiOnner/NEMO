@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2018-2022  Andrei Karas (4144)
+// Copyright (C) 2018-2023 Andrei Karas (4144)
 //
 // Hercules is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -32,13 +32,13 @@ function hooks_initHookInternal(offset, matchFunc, storageKey, data)
     return obj;
 }
 
-function hooks_initHook(offset, matchFunc, searchAddrFunc)
+function hooks_initHook(offset, matchFunc, searchAddrFunc, searchAddrArgs)
 {
     var storageKey = offset;
     var data = offset;
     if (typeof searchAddrFunc !== "undefined")
     {
-        var arr = searchAddrFunc(offset);
+        var arr = searchAddrFunc(offset, searchAddrArgs);
         if (arr.length !== 1)
         {
             throw "Found wrong number of objects in hooks.initHook for offset: 0x" + offset.toString(16) + ": " + arr.length;
@@ -136,6 +136,9 @@ function hooks_applyFinal(obj, dryRun)
                 case hooks.jmpTypes.JMP:
                     pe.setJmpRaw(obj.patchAddr, obj.allEntries[0].free);
                     break;
+                case hooks.jmpTypes.CALL:
+                    pe.setJmpRaw(obj.patchAddr, obj.allEntries[0].free, "call", 5);
+                    break;
                 case hooks.jmpTypes.IMPORT:
                     freeVa = pe.rawToVa(obj.allEntries[0].free);
                     importOffset = pe.insertDWord(freeVa);
@@ -152,6 +155,9 @@ function hooks_applyFinal(obj, dryRun)
             {
                 case hooks.jmpTypes.JMP:
                     pe.setJmpRaw(obj.patchAddr, srcObj.allEntries[0].free);
+                    break;
+                case hooks.jmpTypes.CALL:
+                    pe.setJmpRaw(obj.patchAddr, srcObj.allEntries[0].free, "call", 5);
                     break;
                 case hooks.jmpTypes.IMPORT:
                     if (typeof srcObj.importOffsetPatchedVa === "undefined")
@@ -370,6 +376,15 @@ function hooks_createEntry(text, vars)
     return obj;
 }
 
+function hooks_createEntry2(text, vars)
+{
+    if (text.length > 2 && text[0] === ";")
+    {
+        return hooks.createEntry(text, vars);
+    }
+    return hooks.createEntry(asm.hexToAsm(text), vars);
+}
+
 function hooks_addFunctions(obj)
 {
     obj.addEntry = function addEntry(text, vars, isPost, entries, weight)
@@ -434,7 +449,7 @@ function hooks_initMatchedObject(matchFunc, obj)
     obj.postEntries = [];
     if (obj.stolenCode1 != "")
     {
-        obj.stolenEntry = hooks.createEntry(asm.hexToAsm(obj.stolenCode1), {});
+        obj.stolenEntry = hooks.createEntry2(obj.stolenCode1, {});
     }
     else
     {
@@ -442,7 +457,7 @@ function hooks_initMatchedObject(matchFunc, obj)
     }
     if (obj.retCode != "")
     {
-        obj.finalEntry = hooks.createEntry(asm.hexToAsm(obj.retCode), {});
+        obj.finalEntry = hooks.createEntry2(obj.retCode, {});
         obj.finalEntry.isFinal = true;
     }
     else
@@ -565,6 +580,7 @@ function registerHooks()
     hooks.jmpTypes = {
         "JMP": 0,
         "IMPORT": 1,
+        "CALL": 2,
     };
 
     hooks.matchFunctionStart = hooks_matchFunctionStart;
@@ -585,6 +601,7 @@ function registerHooks()
     hooks.initHookInternal = hooks_initHookInternal;
     hooks.initEndHook = hooks_initEndHook;
     hooks.initTableStartHook = hooks_initTableStartHook;
+    hooks.initTableStartHookSize = hooks_initTableStartHookSize;
     hooks.initTableEndHook = hooks_initTableEndHook;
     hooks.initImportHooks = hooks_initImportHooks;
     hooks.initImportCallHooks = hooks_initImportCallHooks;
@@ -599,6 +616,7 @@ function registerHooks()
     hooks.getMatchedObject = hooks_getMatchedObject;
     hooks.validateMatchedObject = hooks_validateMatchedObject;
     hooks.createEntry = hooks_createEntry;
+    hooks.createEntry2 = hooks_createEntry2;
     hooks.addFunctions = hooks_addFunctions;
     hooks.initMatchedObject = hooks_initMatchedObject;
     hooks.checkMatchedObject = hooks_checkMatchedObject;

@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2022  Andrei Karas (4144)
+// Copyright (C) 2022-2023 Andrei Karas (4144)
 //
 // Hercules is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -99,6 +99,14 @@ function input_createDialog()
     InputLayout.prototype.addLabelText = function addLabelText(varName, label, def, max, mask)
     {
         var box = this.addVBox();
+        box.addLabel(label);
+        box.addTextBox(varName, def, max, mask);
+        return box;
+    };
+
+    InputLayout.prototype.addShortLabelText = function addShortLabelText(varName, label, def, max, mask)
+    {
+        var box = this.addHBox();
         box.addLabel(label);
         box.addTextBox(varName, def, max, mask);
         return box;

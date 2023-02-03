@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2018-2022  Andrei Karas (4144)
+// Copyright (C) 2018-2023 Andrei Karas (4144)
 //
 // Hercules is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -23,6 +23,11 @@ function hooks_initEndHook(patchAddr)
 function hooks_initTableStartHook(varId)
 {
     return hooks_initHook(varId, hooks_matchFunctionTableStart, table.var2ToHook);
+}
+
+function hooks_initTableStartHookSize(varId, value)
+{
+    return hooks_initHook(varId, hooks_matchFunctionTableStart, table.varToHookArg, value);
 }
 
 function hooks_initTableEndHook(varId)

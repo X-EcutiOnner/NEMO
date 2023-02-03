@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2022  Andrei Karas (4144)
+// Copyright (C) 2022-2023 Andrei Karas (4144)
 //
 // Hercules is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 
 function ChangeMissingLauncherError()
 {
-    var hooksList = hooks.initImportHooks("_BinkSetSoundSystem@8", "binkw32.dll");
+    var hooksList = hooks.initImportHooks("SetUnhandledExceptionFilter", "kernel32.dll");
     if (hooksList.length === 0)
     {
         throw "CreateFontA call usages not found";
