@@ -205,6 +205,12 @@ function pe_matchAny(matchObj, addrRaw)
     return false;
 }
 
+function pe_matchVarAny(matchObj, varId)
+{
+    var addrRaw = table.getRawValidated(varId);
+    return pe_matchAny(matchObj, addrRaw);
+}
+
 function pe_stringRaw(str)
 {
     checkArgs("pe.stringRaw", arguments, [["String"]]);
@@ -836,6 +842,7 @@ function registerPe()
     pe.findAny = pe_findAny;
     pe.match = pe_match;
     pe.matchAny = pe_matchAny;
+    pe.matchVarAny = pe_matchVarAny;
     pe.stringVa = pe_stringVa;
     pe.stringRaw = pe_stringRaw;
     pe.halfStringVa = pe_halfStringVa;

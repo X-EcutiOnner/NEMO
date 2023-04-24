@@ -1573,3 +1573,17 @@ M: Find unsupported route
 
 F: C7 D8 B4 E7 20 B8 CA C0 BA 20 B1 E6 C3 A3 B1 E2 B0 A1 20 C1 F6 BF F8 20 B5 C7 C1 F6 20 BE CA B4 C2 20 B8 CA C0 D4 B4 CF B4 D9 2E
 R: 'Find the map route which is not supported.'
+
+-----------------------
+M: Equipment - Dismount Cart
+-----------------------
+
+F: C4 AB C6 AE 20 C7 D8 C1 A6
+R: 'Cart Off'
+
+-----------------------
+M: No Color
+-----------------------
+
+F: BF B0 BB F6 C1 A6 B0 C5
+R: 'No Color'

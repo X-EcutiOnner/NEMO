@@ -24,12 +24,12 @@ function RemoveEquipmentSwap()
     var code =
         "E8 ?? ?? ?? FF " +
         "8B 47 18 " +
-        "8B 8F ?? ?? 00 00 " +
+        "8B 8F ?? ?? ?? 00 " +
         "83 E8 14 " +
         "8B 11 " +
         "50 ";
-
     var repLoc = 15;
+    var onlyOne = false;
     var offset = pe.findCode(code);
 
     if (offset === -1)
@@ -40,6 +40,21 @@ function RemoveEquipmentSwap()
             "8B 8F ?? ?? 00 00 " +
             "83 E8 14 " +
             "50 ";
+        repLoc = 15;
+        onlyOne = false;
+        offset = pe.findCode(code);
+    }
+    if (offset === -1)
+    {
+        code =
+            "E8 ?? ?? ?? 00 " +
+            "8B ?? ?? ?? ?? 00 " +
+            "68 A7 00 00 00 " +
+            "68 C1 00 00 00 " +
+            "8B 01 " +
+            "FF 50 10 ";
+        repLoc = 15;
+        onlyOne = true;
         offset = pe.findCode(code);
     }
 
@@ -49,6 +64,11 @@ function RemoveEquipmentSwap()
     }
 
     pe.replaceByte(offset + repLoc, 0xC0);
+
+    if (onlyOne === true)
+    {
+        return true;
+    }
 
     code =
         "8B 8E ?? ?? 00 00 " +

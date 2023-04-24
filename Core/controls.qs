@@ -120,6 +120,23 @@ function input_createDialog()
         return box;
     };
 
+    InputLayout.prototype.addShortLabelInt = function addShortLabelInt(varName, label, def, min, max, step)
+    {
+        var box = this.addHBox();
+        box.addLabel(label);
+        box.addInt(varName, def, min, max, step);
+        return box;
+    };
+
+    InputLayout.prototype.addShortLabelInt2 = function addShortLabelInt2(varName, label, def1, def2, min, max, step)
+    {
+        var box = this.addHBox();
+        box.addLabel(label);
+        box.addInt(varName + "_1", def1, min, max, step);
+        box.addInt(varName + "_2", def2, min, max, step);
+        return box;
+    };
+
     InputLayout.prototype.addLabelColorPicker = function addLabelColorPicker(varName, label, def)
     {
         var box = this.addVBox();

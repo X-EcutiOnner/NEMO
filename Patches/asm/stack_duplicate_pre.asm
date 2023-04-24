@@ -23,4 +23,5 @@ push func
 ret
 
 _label_ret:
+%insasm addesp
 pop ecx

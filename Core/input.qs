@@ -58,6 +58,29 @@ function input_getIntHex(varName, title, label, def, max)
     return parseInt(input.getVarValue(varName), 16);
 }
 
+function input_getInt(varName, title, label, def, min, max, step)
+{
+    checkArgs("input.getInt", arguments, [
+        ["String", "String", "String", "Number", "Number", "Number", "Number"],
+    ]);
+
+    var dialog = input.createDialog();
+    dialog.setTitle(title);
+    if (typeof max === "undefined")
+    {
+        max = 8;
+    }
+    dialog.addLabelInt(varName, label, def, min, max, step);
+    dialog.addOkCancel();
+    dialog.setMinimumSize(200, 100);
+    if (dialog.show() === 0)
+    {
+        throw _("Cancel button pressed");
+    }
+
+    return parseInt(input.getVarValue(varName), 10);
+}
+
 function input_getEncryptionKeys(count, defs)
 {
     checkArgs("input.getEncryptionKeys", arguments, [
@@ -151,6 +174,7 @@ function input_getWidthHeight(varPrefix, title, defWidth, defHeight, min, max)
 function registerInput()
 {
     input.getString = input_getString;
+    input.getInt = input_getInt;
     input.getIntHex = input_getIntHex;
     input.getEncryptionKeys = input_getEncryptionKeys;
     input.getWidthHeight = input_getWidthHeight;

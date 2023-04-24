@@ -81,7 +81,6 @@ function hooks_matchFunctionStart(storageKey, offset)
             "55 " +
             "8B EC " +
             "8B 55 ?? ";
-
         stolenCodeOffset = [0, 6];
         continueOffset = 6;
         found = pe.match(code, offset);
@@ -93,7 +92,6 @@ function hooks_matchFunctionStart(storageKey, offset)
             "55 " +
             "8B EC " +
             "8B 45 ?? ";
-
         stolenCodeOffset = [0, 6];
         continueOffset = 6;
         found = pe.match(code, offset);
@@ -104,7 +102,50 @@ function hooks_matchFunctionStart(storageKey, offset)
         code =
             "8B 44 24 ?? " +
             "56 ";
+        stolenCodeOffset = [0, 5];
+        continueOffset = 5;
+        found = pe.match(code, offset);
+    }
 
+    if (found !== true)
+    {
+        code =
+            "55 " +
+            "8B EC " +
+            "83 EC ?? ";
+        stolenCodeOffset = [0, 6];
+        continueOffset = 6;
+        found = pe.match(code, offset);
+    }
+
+    if (found !== true)
+    {
+        code =
+            "55 " +
+            "8B EC " +
+            "81 EC ?? ?? ?? 00 ";
+        stolenCodeOffset = [0, 9];
+        continueOffset = 9;
+        found = pe.match(code, offset);
+    }
+
+    if (found !== true)
+    {
+        code =
+            "83 EC ?? " +
+            "53 " +
+            "55 ";
+        stolenCodeOffset = [0, 5];
+        continueOffset = 5;
+        found = pe.match(code, offset);
+    }
+
+    if (found !== true)
+    {
+        code =
+            "83 EC ?? " +
+            "55 " +
+            "56 ";
         stolenCodeOffset = [0, 5];
         continueOffset = 5;
         found = pe.match(code, offset);
@@ -128,11 +169,25 @@ function hooks_matchFunctionTableStart(storageKey, offsets)
 {
     var offset = offsets[0];
     var stackSize = offsets[1];
+    var isCdecl = offsets[2];
+    if (typeof isCdecl === "undefined")
+    {
+        isCdecl = false;
+    }
 
     var obj = hooks_matchFunctionStart(storageKey, offset);
-    obj.stolenCode = hooks.duplicateStackCode(obj.continueOffsetVa, stackSize, obj.stolenCode);
+    obj.stolenCode = hooks.duplicateStackCode(obj.continueOffsetVa, stackSize, isCdecl, obj.stolenCode);
     obj.stolenCode1 = obj.stolenCode;
-    obj.retCode = asm.retHex(stackSize) + obj.retCode;
+    var retSize;
+    if (isCdecl)
+    {
+        retSize = 0;
+    }
+    else
+    {
+        retSize = stackSize;
+    }
+    obj.retCode = asm.retHex(retSize) + obj.retCode;
     obj.endHook = true;
     return obj;
 }

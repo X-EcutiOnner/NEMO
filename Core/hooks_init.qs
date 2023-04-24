@@ -20,14 +20,14 @@ function hooks_initEndHook(patchAddr)
     return hooks_initHook(patchAddr, hooks_matchFunctionEnd);
 }
 
-function hooks_initTableStartHook(varId)
+function hooks_initTableStartHook(varId, isCdecl)
 {
-    return hooks_initHook(varId, hooks_matchFunctionTableStart, table.var2ToHook);
+    return hooks_initHook(varId, hooks_matchFunctionTableStart, table.var2ToHook, isCdecl);
 }
 
-function hooks_initTableStartHookSize(varId, value)
+function hooks_initTableStartHookSize(varId, value, isCdecl)
 {
-    return hooks_initHook(varId, hooks_matchFunctionTableStart, table.varToHookArg, value);
+    return hooks_initHook(varId, hooks_matchFunctionTableStart, table.varToHookArg, [value, isCdecl]);
 }
 
 function hooks_initTableEndHook(varId)

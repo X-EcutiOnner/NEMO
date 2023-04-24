@@ -1,3 +1,28 @@
+# 2023-04-24 Different updates
+
+## Patches
+
+- Fix patch [Change MVP monster hp bar size](http://nemo.herc.ws/patches/ChangeMvpHealthBarSize/#success-clients). (fix by @4144).
+- Fix patch [Change boss monster hp bar size](http://nemo.herc.ws/patches/ChangeBossHealthBarSize/#success-clients). (fix by @4144).
+- Fix patch [Change normal monster hp bar size](http://nemo.herc.ws/patches/ChangeNormalHealthBarSize/#success-clients). (fix by @4144).
+- Fix patch [Change Quick Switch Delay](http://nemo.herc.ws/patches/ChangeQuickSwitchDelay/#success-clients). (by 4144).
+- Fix patch [Change guild exp limit](http://nemo.herc.ws/patches/ChangeGuildExpLimit/#success-clients). (fix by @4144).
+- Fix patch [Remove Equipment Swap Button](http://nemo.herc.ws/patches/RemoveEquipmentSwap/#success-clients). (fix by 4144).
+- Add patch [Fix homunculus hp and sp display in stats window.](http://nemo.herc.ws/patches/FixHomunHpSp/#success-clients). (by 4144).
+- Add patch [Increase human hair style limit in game](http://nemo.herc.ws/patches/IncreaseHairSpritesHuman/#success-clients). (by @4144).
+- Add patch [Increase doram hair style limit in game](http://nemo.herc.ws/patches/IncreaseHairSpritesDoram/#success-clients). (by @4144).
+- Add patch [Remove trait open button from status window](http://nemo.herc.ws/patches/RemoveTraitStatusButton/#success-clients). (by Secret, @4144).
+- Add patch [Use Custom dll in simple way](http://nemo.herc.ws/patches/UseCustomDllSimple/#success-clients). (by 4144).
+- Add patch [Enable debug file PingLog.txt](http://nemo.herc.ws/patches/EnablePingLog/#success-clients). (by 4144).
+
+## Other
+- Improve error message in patch [Check is servertype in xml file was set to correct value](http://nemo.herc.ws/patches/ValidateClientType/#success-clients). (fix by @4144).
+- Improve error message in patch [Load custom icon in running client](http://nemo.herc.ws/patches/LoadCustomIcon/#success-clients). (by @4144).
+- Add into some legacy patches word "legacy".
+- Set as recommended patch [Fix HTTP Emblems in clients](http://nemo.herc.ws/patches/EnableRagHTTPEmblem/#success-clients).
+- Update tables.
+
+
 # 2023-02-03 Different updates
 
 ## Patches

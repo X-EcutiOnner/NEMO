@@ -494,9 +494,9 @@ function hooks_removePatchHooks()
     }
 }
 
-function hooks_duplicateStackCode(offset, stackSize, stolenCode)
+function hooks_duplicateStackCode(offset, stackSize, isCdecl, stolenCode)
 {
-    checkArgs("hooks.duplicateStackCode", arguments, [["Number", "Number", "String"]]);
+    checkArgs("hooks.duplicateStackCode", arguments, [["Number", "Number", "Boolean", "String"]]);
     var count = parseInt(stackSize / 4);
     if (count * 4 !== stackSize)
     {
@@ -509,12 +509,20 @@ function hooks_duplicateStackCode(offset, stackSize, stolenCode)
     {
         pushes = asm_combine(pushes, push);
     }
-    var vars = {
+    var vars;
+    var addesp = "";
+    if (isCdecl === true)
+    {
+        addesp = asm.load("stack_duplicate_addesp");
+    }
+    vars = {
         "func": offset,
         "pushes": pushes,
         "pushOffset": stackSize + 4,
         "retOffset": stackSize + 4,
         "stolenCode": stolenCode,
+        "addSize": stackSize,
+        "addesp": addesp,
     };
     return asm_textToHexVa(0, text, vars);
 }

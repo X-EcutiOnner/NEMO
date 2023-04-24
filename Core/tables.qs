@@ -90,17 +90,17 @@ function table_varToHook(varId)
     return [[offset, offset]];
 }
 
-function table_var2ToHook(varId)
+function table_var2ToHook(varId, value)
 {
     var offset = table.getRawValidated(varId);
     var offset2 = table.get(varId + 1);
-    return [[offset, [offset, offset2]]];
+    return [[offset, [offset, offset2, value]]];
 }
 
-function table_varToHookArg(varId, value)
+function table_varToHookArg(varId, value, value2)
 {
     var offset = table.getRawValidated(varId);
-    return [[offset, [offset, value]]];
+    return [[offset, [offset, value, value2]]];
 }
 
 function getEcxSessionHex()
@@ -171,6 +171,7 @@ function registerTables()
     table.CGameMode_OnUpdate = 23;
     table.g_client_version = 24;
     table.packetVersion = 25;
+    table.trait_button_add_patch = 26;
     table.UIWindowMgr_MakeWindow_ret1 = 31;
     table.UIWindowMgr_MakeWindow_ret2 = 32;
     table.CLua_Load = 38;

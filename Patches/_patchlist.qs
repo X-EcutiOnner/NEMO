@@ -48,6 +48,8 @@ registerGroup(22, "MsgStringTable", true);
 
 registerGroup(23, "LuaCustomization", false);
 
+registerGroup(24, "Human hairs", true);
+
 globalVarTest = 123;
 
 registerPatch(1, "UseTildeForMatk", "Use Tilde for Matk", "UI", 0, "Neo", "Make the client use tilde (~) symbol for Matk in Stats Window instead of Plus (+)", false);
@@ -84,7 +86,7 @@ registerPatch(17, "EnableOfficialCustomFonts", "Enable Official Custom Fonts", "
 
 registerPatch(18, "SkipServiceSelect", "Skip Service Selection Screen", "UI", 0, "Shinryo", "Jumps directly to the login interface without asking to select a service", false);
 
-registerPatch(19, "EnableTitleBarMenu", "Enable Title Bar Menu (legacy)", "UI", 0, "Shinryo", "Replaced by patch 'Add close button to game window'", false);
+registerPatch(19, "EnableTitleBarMenu", "Legacy: Enable Title Bar Menu", "Legacy", 0, "Shinryo", "Replaced by patch 'Add close button to game window'", false);
 
 registerPatch(20, "ExtendChatBox", "Extend Chat Box", "UI", 0, "Shinryo", "Extend the Main/Battle chat box max input chars from 70 to 234", false);
 
@@ -166,7 +168,7 @@ registerPatch(59, "ChatColorPartySelf", "Chat Color - Your Party", "Color", 0, "
 
 registerPatch(60, "ChatColorPlayerSelf", "Chat Color - Self", "Color", 0, "Ai4rei/AN, Shakto", "Changes your character's Chat color and sets it to the specified value. Default value is 00ff00 (Green)", false);
 
-registerPatch(61, "DisablePacketEncryptionOld", "Disable Packet Encryption", "UI", 0, "Ai4rei/AN", "Disable kRO Packet ID Encryption. Also known as Skip Packet Obfuscation", false);
+registerPatch(61, "DisablePacketEncryptionOld", "Legacy: Disable Packet Encryption", "Legacy", 0, "Ai4rei/AN", "Disable kRO Packet ID Encryption. Also known as Skip Packet Obfuscation", false);
 
 registerPatch(62, "DisableLoginEncryption", "Disable Login Encryption", "Fix", 0, "Neo", "Disable Encryption in Login Packet 0x2b0", true);
 
@@ -178,9 +180,9 @@ registerPatch(65, "ChangeItemInfo", "Load Custom lua file instead of iteminfo*.l
 
 registerPatch(66, "LoadItemInfoPerServer", "Load iteminfo with char server", "Data", 0, "Neo", "Load ItemInfo file and call main function with selected char server name as argument", false);
 
-registerPatch(67, "DisableQuakeEffect", "Disable Quake skill effect", "UI", 0, "Ai4rei/AN", " Disables the Earthquake skill effect", false);
+registerPatch(67, "DisableQuakeEffect", "Disable Quake skill effect", "UI", 0, "Ai4rei/AN", "Disables the Earthquake skill effect", false);
 
-registerPatch(68, "Enable64kHairstyle", "Enable 64k Hairstyle", "UI", 19, "Ai4rei/AN", "Increases Max Hairstyle limit to 64k from default 27", false);
+registerPatch(68, "Enable64kHairstyle", "Legacy: Enable 64k Hairstyle", "Legacy", 19, "Ai4rei/AN", "Increases Max Hairstyle limit to 64k from default 27", false);
 
 registerPatch(69, "ExtendNpcBox", "Extend Npc Dialog Box", "UI", 0, "Ai4rei/AN", "Increases Max input chars of NPC Dialog boxes from 2052 to 4096", false);
 
@@ -226,11 +228,11 @@ registerPatch(90, "EnableDNSSupport", "Enable DNS Support", "UI", 0, "Shinryo", 
 
 registerPatch(91, "DCToLoginWindow", "Disconnect to Login Window", "UI", 0, "Neo", "Make the client return to Login Window upon disconnection", false, [40]);
 
-registerPatch(92, "PacketFirstKeyEncryption", "Packet First Key Encryption", "Packet", 0, "Shakto, Neo", "Change the 1st key for packet encryption. Dont select the patch Disable Packet Header Encryption if you are using this. Don't use it if you don't know what you are doing", false);
+registerPatch(92, "PacketFirstKeyEncryption", "Legacy: Packet First Key Encryption", "Legacy", 0, "Shakto, Neo", "Change the 1st key for packet encryption. Dont select the patch Disable Packet Header Encryption if you are using this. Don't use it if you don't know what you are doing", false);
 
-registerPatch(93, "PacketSecondKeyEncryption", "Packet Second Key Encryption", "Packet", 0, "Shakto, Neo", "Change the 2nd key for packet encryption. Dont select the patch Disable Packet Header Encryption if you are using this. Don't use it if you don't know what you are doing", false);
+registerPatch(93, "PacketSecondKeyEncryption", "Legacy: Packet Second Key Encryption", "Legacy", 0, "Shakto, Neo", "Change the 2nd key for packet encryption. Dont select the patch Disable Packet Header Encryption if you are using this. Don't use it if you don't know what you are doing", false);
 
-registerPatch(94, "PacketThirdKeyEncryption", "Packet Third Key Encryption", "Packet", 0, "Shakto, Neo", "Change the 3rd key for packet encryption. Dont select the patch Disable Packet Header Encryption if you are using this. Don't use it if you don't know what you are doing", false);
+registerPatch(94, "PacketThirdKeyEncryption", "Legacy: Packet Third Key Encryption", "Legacy", 0, "Shakto, Neo", "Change the 3rd key for packet encryption. Dont select the patch Disable Packet Header Encryption if you are using this. Don't use it if you don't know what you are doing", false);
 
 registerPatch(95, "UseSSOLoginPacket", "Use SSO Login Packet", "Packet", 10, "Ai4rei/AN", "Enable using SSO packet on all LangType (to use login and pass with a launcher)", false);
 
@@ -358,13 +360,13 @@ registerPatch(241, "AlwaysLoadClientPlugins", "Always Load Client Plugins", "Fix
 
 registerPatch(242, "DisableKROSiteLaunch", "Disable kRO Site Launch", "Fix", 0, "mrjnumber1", "Disable ro.gnjoy.com launching after in-game settings change", false);
 
-registerPatch(243, "ChangeQuickSwitchDelay", "Change Quick Switch Delay", "Fix", 0, "mrjnumber1", "Change quick item switch delay", false);
+registerPatch(243, "ChangeQuickSwitchDelay", "Change Quick Switch Delay", "Fix", 0, "mrjnumber1, 4144", "Change quick item switch delay", false);
 
 registerPatch(244, "DisableCDGuard", "Disable Cheat Defender Game Guard", "Fix", 0, "4144", "Disables Cheat Defender Game Guard from new clients", true);
 
 registerPatch(245, "FixedCharJobCreate", "Set fixed job id in char create dialog", "Custom", 0, "4144", "Override selected job in char creation packet", false);
 
-registerPatch(246, "IncreaseHairSprites", "Increase hair style limit in game", "Custom", 19, "4144", "Allow use more hair styles than default limit", false);
+registerPatch(246, "IncreaseHairSprites", "Legacy: Increase hair style limit in game", "Legacy", 19, "4144", "Allow use more hair styles than default limit", false);
 
 registerPatch(247, "ChangeNewCharNameHeight", "Change new char name field height", "Custom", 0, "4144", "Allow change height in input field in new char creation dialog", false);
 
@@ -456,7 +458,7 @@ registerPatch(290, "HideBuildInfo", "Hide build info in client", "Protection", 0
 
 registerPatch(291, "HidePacketsFromPeek", "Hide packets from peek", "Protection", 0, "4144", "Simple way for hide packets from peek and bpe", true);
 
-registerPatch(293, "IncreaseHairSpritesOld", "Increase hair style limit for human only in game (old)", "Custom", 19, "4144", "Allow use more hair styles than default limit", false);
+registerPatch(293, "IncreaseHairSpritesOld", "Legacy: Increase hair style limit for human only in game (old)", "Legacy", 24, "4144", "Allow use more hair styles than default limit", false);
 
 registerPatch(295, "ChangeMaxPartyValue", "Change Max Party Value", "UI", 0, "Jchcc", "Change max party value displayed on Alt+Z", false);
 
@@ -534,7 +536,7 @@ registerPatch(333, "ChangeMaxFriendsValue", "Change Max Friends Value", "UI", 0,
 
 registerPatch(334, "RemoveHardcodedHttpIP", "Remove Hardcoded HTTP IP", "Fix", 0, "jchcc", "Remove hardcoded HTTP service ip address, Prevent client from sending HTTP request to official server.", false);
 
-registerPatch(335, "EnableRagHTTPEmblem", "Fix HTTP Emblems in clients", "Fix", 0, "jchcc", "Fix HTTP Emblem client clients with cheat defender. HTTP service required.", false);
+registerPatch(335, "EnableRagHTTPEmblem", "Fix HTTP Emblems in clients", "Fix", 0, "jchcc", "Fix HTTP Emblem client clients with cheat defender. HTTP service required.", true);
 
 registerPatch(336, "RemoveItemsEquipPreview", "Remove Equipment Preview Button", "UI", 12, "X-EcutiOnner", "Remove equipment preview button on the items description window", false);
 
@@ -682,7 +684,7 @@ registerPatch(426, "SetWalkToDelayCmd", "Change Walk To Delay from chat.", "Fix"
 
 registerPatch(427, "ValidateClientType", "Check is servertype in xml file was set to correct value", "Validation", 0, "4144", "Show error if xml file configured in wrong way", true);
 
-registerPatch(428, "ChangeNameBalloonFontSize", "Change names font size", "Font", 0, "4144", "Change font height for classes UINameBalloon*", false);
+registerPatch(428, "ChangeNameBalloonFontSize", "Change actor names font size", "Font", 0, "4144", "Change font size for classes UINameBalloon*", false);
 
 registerPatch(429, "DisableSetTextType", "Protect shorten and bold name flags", "Fix", 0, "4144", "Remove code from CSession::SetTextType", false);
 
@@ -759,5 +761,17 @@ registerPatch(465, "ChangeBossHealthBarSize", "Change boss monster hp bar size",
 registerPatch(466, "ChangeNormalHealthBarSize", "Change normal monster hp bar size", "Custom", 0, "Jchcc, 4144", "Change health bar size drawed under normal monster", false);
 
 registerPatch(470, "AllowHomunSkills", "Unlock all valid skills for homunculus and mercenary AI", "AI", 0, "4144", "Unlock all valid skills for homunculus and mercenary AI", false);
+
+registerPatch(472, "FixHomunHpSp", "Fix homunculus hp and sp display in stats window.", "UI", 0, "4144", "Fix homunculus hp and sp display in ALT + R window in 2020-04-01 clients.", false);
+
+registerPatch(473, "IncreaseHairSpritesHuman", "Increase human hair style limit in game", "Hair", 24, "4144", "Allow use amount of hair styles for human job in game", false);
+
+registerPatch(474, "IncreaseHairSpritesDoram", "Increase doram hair style limit in game", "Hair", 0, "4144", "Allow use amount of hair styles for doram job in game", false);
+
+registerPatch(475, "RemoveTraitStatusButton", "Remove trait open button from status window", "UI", 0, "Secret, 4144", "Remote open advanced attributes button from status window", false);
+
+registerPatch(477, "UseCustomDllSimple", "Use Custom dll in simple way", "Import", 0, "4144", "Makes client load the specified DLL in simple way. For tests try dll from Input/testdll.dll", false);
+
+registerPatch(478, "EnablePingLog", "Enable debug file PingLog.txt", "Debug", 0, "4144", "Enabling storing some debug info into PingLog.txt", false);
 
 GlobalPostInit();
